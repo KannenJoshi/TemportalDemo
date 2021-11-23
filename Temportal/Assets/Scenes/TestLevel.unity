@@ -471,6 +471,7 @@ GameObject:
   - component: {fileID: 1717452119}
   - component: {fileID: 1717452118}
   - component: {fileID: 1717452117}
+  - component: {fileID: 1717452122}
   - component: {fileID: 1717452121}
   m_Layer: 0
   m_Name: Capsule
@@ -598,11 +599,35 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents:
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1717452122}
+        m_TargetAssemblyTypeName: RigidbodyMovement, Assembly-CSharp
+        m_MethodName: Move
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: c8c53ae6-8913-445b-9487-fffd41cb9c72
     m_ActionName: Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1717452122}
+        m_TargetAssemblyTypeName: RigidbodyMovement, Assembly-CSharp
+        m_MethodName: Look
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: b7b0008a-6af8-4bdb-b095-23b54688ab66
     m_ActionName: Player/Look[/Mouse/delta]
   - m_PersistentCalls:
@@ -649,11 +674,44 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 8853d9ff-ddc5-4cb3-9974-e82f55edebeb
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1717452122}
+        m_TargetAssemblyTypeName: RigidbodyMovement, Assembly-CSharp
+        m_MethodName: Jump
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 04e8d493-5e6e-4199-bf42-91026ed43de8
+    m_ActionName: Player/Jump[/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1717452122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1717452115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bda86969174cb84c8c3b635241621bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Camera: {fileID: 1687258585}
+  Body: {fileID: 1717452117}
+  speed: 6
+  sensitivity: 1
+  jumpForce: 15
 --- !u!1 &2138677391
 GameObject:
   m_ObjectHideFlags: 0
