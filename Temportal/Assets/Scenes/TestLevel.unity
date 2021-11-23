@@ -314,7 +314,7 @@ GameObject:
   - component: {fileID: 1687258586}
   m_Layer: 0
   m_Name: Main Camera
-  m_TagString: MainCamera
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -334,7 +334,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687258581}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be76e5f14cfee674cb30b491fb72b09b, type: 3}
   m_Name: 
@@ -475,7 +475,7 @@ GameObject:
   - component: {fileID: 1717452121}
   m_Layer: 0
   m_Name: Capsule
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -603,7 +603,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1717452122}
         m_TargetAssemblyTypeName: RigidbodyMovement, Assembly-CSharp
         m_MethodName: Move
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -619,7 +619,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1717452122}
         m_TargetAssemblyTypeName: RigidbodyMovement, Assembly-CSharp
         m_MethodName: Look
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -679,7 +679,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1717452122}
         m_TargetAssemblyTypeName: RigidbodyMovement, Assembly-CSharp
         m_MethodName: Jump
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -709,7 +709,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Camera: {fileID: 1687258585}
   Body: {fileID: 1717452117}
-  speed: 6
+  walkSpeed: 6
+  sprintSpeed: 8
+  crouchSpeed: 4
   sensitivity: 1
   jumpForce: 15
 --- !u!1 &2138677391
