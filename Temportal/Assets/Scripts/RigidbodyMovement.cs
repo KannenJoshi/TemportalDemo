@@ -52,7 +52,7 @@ public class RigidbodyMovement : MonoBehaviour
     private void UpdateMovement()
     {
         moveDirection = transform.TransformDirection(playerMovementInput);
-        Body.AddForce(playerMovementInput * walkSpeed, ForceMode.Acceleration);
+        Body.AddForce(playerMovementInput * walkSpeed, ForceMode.Acceleration); // * first part by Time.fixedDeltaTime
     }
 
     public void Move(InputAction.CallbackContext context)
