@@ -19,17 +19,21 @@ public class RigidbodyMovement : MonoBehaviour
     [Space(5)]
     [Header("Player Variables")]
     [SerializeField] private float walkSpeed = 6f;
-    //[SerializeField] private float maxWalkSpeed = 6f;
 
-    [SerializeField] private float sprintSpeed = 8f;
+    [SerializeField] private float sprintMultiplier = 1.25f;
     //[SerializeField] private float maxSprintSpeed = 8f;
 
-    [SerializeField] private float crouchSpeed = 4f;
+    [SerializeField] private float crouchMultiplier = 0.75f;
     //[SerializeField] private float maxCrouchSpeed = 4f;
 
     [SerializeField] private float sensitivity = 1f; // Mouse sens
     [SerializeField] private float jumpForce = 15f;
 
+    private float speed;
+    private bool sprinting = false;
+    private bool crouching = false;
+
+    private bool grounded = false;
 
     private Vector3 playerMovementInput;
     private Vector2 playerMouseInput;
@@ -52,13 +56,18 @@ public class RigidbodyMovement : MonoBehaviour
     private void UpdateMovement()
     {
         moveDirection = transform.TransformDirection(playerMovementInput);
-        Body.AddForce(playerMovementInput * walkSpeed, ForceMode.Acceleration); // * first part by Time.fixedDeltaTime
+        Body.AddForce(playerMovementInput * speed * 10, ForceMode.Acceleration); // * first part by Time.fixedDeltaTime
+        Body.velocity = Body.velocity.magnitude > 0.001 ? Vector3.ClampMagnitude(Body.velocity, speed) : new Vector3(0f, 0f, 0f);
     }
 
     public void Move(InputAction.CallbackContext context)
     {
         Vector2 inputMovement = context.ReadValue<Vector2>();
         playerMovementInput = new Vector3(inputMovement.x, 0f, inputMovement.y);
+
+        speed = walkSpeed;
+        speed *= crouching ? crouchMultiplier : sprinting ? sprintMultiplier : 1;
+
     }
 
     public void Look(InputAction.CallbackContext context)
