@@ -1,18 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Crosshair : MonoBehaviour
 {
-    [SerializeField]
-    private PortalPair portalPair;
+    [SerializeField] private PortalPair portalPair;
 
-    [SerializeField]
-    private Image inPortalImg;
+    [SerializeField] private Image inPortalImg;
 
-    [SerializeField]
-    private Image outPortalImg;
+    [SerializeField] private Image outPortalImg;
 
     private void Start()
     {
@@ -27,13 +22,9 @@ public class Crosshair : MonoBehaviour
 
     public void SetPortalPlaced(int portalID, bool isPlaced)
     {
-        if(portalID == 0)
-        {
+        if (portalID == 0)
             inPortalImg.gameObject.SetActive(isPlaced);
-        }
         else
-        {
             outPortalImg.gameObject.SetActive(isPlaced);
-        }
     }
 }

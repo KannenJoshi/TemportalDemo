@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 
 public class RigidbodyMovement : MonoBehaviour
@@ -13,13 +12,13 @@ public class RigidbodyMovement : MonoBehaviour
 
     // https://www.youtube.com/watch?v=bwFLLnhm4D4 (Unity 2020 | Rigidbody FPS Movement Tutorial | Pt. 1)
 
-    [Header("Player Components")] 
-    [SerializeField] private Transform Camera;
+    [Header("Player Components")] [SerializeField]
+    private Transform Camera;
+
     [SerializeField] private Rigidbody Body;
 
-    [Space(5)]
-    [Header("Player Variables")]
-    [SerializeField] private float walkSpeed = 6f;
+    [Space(5)] [Header("Player Variables")] [SerializeField]
+    private float walkSpeed = 6f;
 
     [SerializeField] private float sprintMultiplier = 1.25f;
     //[SerializeField] private float maxSprintSpeed = 8f;
@@ -29,23 +28,22 @@ public class RigidbodyMovement : MonoBehaviour
 
     [SerializeField] private float sensitivity = 1f; // Mouse sens
     [SerializeField] private float jumpForce = 15f;
-
-    private float speed;
-    private bool sprinting = false;
-    private bool crouching = false;
+    private readonly bool crouching = false;
 
     private bool grounded = false;
     private Vector3 jump;
 
-    private Vector3 playerMovementInput;
+    private Vector3 moveDirection;
     private Vector2 playerMouseInput;
 
-    private Vector3 moveDirection;
+    private Vector3 playerMovementInput;
+
+    private float speed;
+    private bool sprinting;
 
 
-    void Update()
+    private void Update()
     {
-        
     }
 
     private void FixedUpdate()
@@ -60,40 +58,35 @@ public class RigidbodyMovement : MonoBehaviour
         speed = walkSpeed;
         speed *= crouching ? crouchMultiplier : sprinting ? sprintMultiplier : 1;
         Body.AddForce(playerMovementInput * speed * 10, ForceMode.Acceleration); // * first part by Time.fixedDeltaTime
-        Body.velocity = Body.velocity.magnitude > 0.001 ? Vector3.ClampMagnitude(Body.velocity, speed) : new Vector3(0f, 0f, 0f);
+        Body.velocity = Body.velocity.magnitude > 0.001
+            ? Vector3.ClampMagnitude(Body.velocity, speed)
+            : new Vector3(0f, 0f, 0f);
     }
 
-    public void Move(InputAction.CallbackContext context)
+    public void Move(CallbackContext context)
     {
-        Vector2 inputMovement = context.ReadValue<Vector2>();
+        var inputMovement = context.ReadValue<Vector2>();
         playerMovementInput = new Vector3(inputMovement.x, 0f, inputMovement.y);
     }
 
-    public void Look(InputAction.CallbackContext context)
+    public void Look(CallbackContext context)
     {
-
     }
 
-    public void Jump(InputAction.CallbackContext context)
-    { 
+    public void Jump(CallbackContext context)
+    {
         jump = new Vector3(0f, jumpForce * Body.mass, 0f);
         Body.AddForce(jump, ForceMode.Impulse);
     }
 
-    public void Sprint_Hold(InputAction.CallbackContext context)
+    public void Sprint_Hold(CallbackContext context)
     {
         if (context.performed)
-        {
             sprinting = true;
-        }
-        else if (context.canceled)
-        {
-            sprinting = false;
-        }
+        else if (context.canceled) sprinting = false;
     }
-    public void Crouch_Hold(InputAction.CallbackContext context)
+
+    public void Crouch_Hold(CallbackContext context)
     {
-
     }
-
 }
