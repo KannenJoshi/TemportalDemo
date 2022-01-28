@@ -34,7 +34,6 @@ public class PlayerController : MonoBehaviour
 
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
-    [SerializeField] private CapsuleCollider collider;
     [SerializeField] private Transform head;
     //[SerializeField] private Transform orientation;
 
@@ -45,7 +44,6 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        collider = GetComponent<CapsuleCollider>();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false; 
@@ -71,25 +69,39 @@ public class PlayerController : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        _inputMovement = context.ReadValue<Vector2>().normalized;
+        if (context.performed)
+        {
+            _inputMovement = context.ReadValue<Vector2>().normalized;
+            isWalking = true;
+        }
+        else if (context.canceled)
+        {
+            //_speed = 0;
+            _inputMovement = Vector2.zero;
+            isWalking = false;
+        }
     }
 
     private void UpdateMove()
     {
         moveDir = new Vector3(_inputMovement.x, 0f, _inputMovement.y);
+        
         moveDir = transform.TransformDirection(moveDir);
+        //var transform1 = transform;
+        //moveDir = Quaternion.AngleAxis(transform1.eulerAngles.y, transform1.up) * moveDir;
+        
         _speed = moveSpeed;
         _speed *= isCrouching ? crouchMultiplier : isRunning ? runMultiplier : 1;
-        rb.AddForce(moveDir * 10 , ForceMode.Acceleration);
+        rb.AddForce(moveDir * 10, ForceMode.Acceleration); //ForceMode.Acceleration
         rb.velocity = rb.velocity.magnitude > 0.001
             ? Vector3.ClampMagnitude(rb.velocity, _speed)
             : Vector3.zero;
     }
 
 
-    public void OnLook(InputAction.CallbackContext callbackContext)
+    public void OnLook(InputAction.CallbackContext context)
     {
-        lookDelta = callbackContext.ReadValue<Vector2>() / Time.deltaTime;
+        lookDelta = context.ReadValue<Vector2>() / Time.deltaTime;
     }
 
     private void UpdateLook()
@@ -103,6 +115,19 @@ public class PlayerController : MonoBehaviour
             Quaternion.Euler(new Vector3(upDownAngle, localRotation.eulerAngles.y, localRotation.eulerAngles.z));
         head.localRotation = localRotation;
         transform.Rotate(new Vector3(0, leftRightAngle, 0));
+    }
+    
+    
+    public void OnRun(InputAction.CallbackContext context)
+    {
+        if (context.performed) isRunning = true;
+        else if (context.canceled) isRunning = false;
+    }
+
+    public void OnCrouch(InputAction.CallbackContext context)
+    {
+        if (context.performed) isCrouching = true;
+        else if (context.canceled) isCrouching = false;
     }
     
     // public void OnJump(InputAction.CallbackContext callbackContext)
