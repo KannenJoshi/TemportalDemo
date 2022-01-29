@@ -154,7 +154,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: cd21683f9f99da248bcbaf2f937d7a06, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 2
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -595,8 +595,8 @@ MonoBehaviour:
   isCrouching: 0
   isGrounded: 0
   moveSpeed: 6
-  runMultiplier: 1.25
-  crouchMultiplier: 0.75
+  runMultiplier: 1.5
+  crouchMultiplier: 0.5
   lookSpeed: 1
   lookClamp: {x: -85, y: 85}
   jumpForce: 10
@@ -940,6 +940,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 9d33df2d5caae9a488c5200d05e1c268, type: 3}
       propertyPath: m_Name
       value: Model
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9d33df2d5caae9a488c5200d05e1c268, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9d33df2d5caae9a488c5200d05e1c268, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d33df2d5caae9a488c5200d05e1c268, type: 3}
