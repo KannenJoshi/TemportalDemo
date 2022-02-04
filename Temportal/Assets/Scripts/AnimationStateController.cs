@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Animator))]
 public class AnimationStateController : MonoBehaviour
 {
     [SerializeField] Animator animator;
@@ -8,6 +9,7 @@ public class AnimationStateController : MonoBehaviour
     private static readonly int _isWalkingHash = Animator.StringToHash("isWalking");
     private static readonly int _isSprintingHash = Animator.StringToHash("isSprinting");
     private static readonly int _isCrouchingHash = Animator.StringToHash("isCrouching");
+    private static readonly int _isAttackingHash = Animator.StringToHash("isAttacking");
 
 
     // Start is called before the first frame update
@@ -38,4 +40,12 @@ public class AnimationStateController : MonoBehaviour
         if (context.performed) animator.SetBool(_isCrouchingHash, true);
         else if (context.canceled) animator.SetBool(_isCrouchingHash, false);;
     }
+    
+    public void animateAttack(InputAction.CallbackContext context)
+    {
+        if (context.performed) animator.SetTrigger(_isAttackingHash);
+        else if (context.canceled) animator.ResetTrigger(_isAttackingHash);
+    }
+    
+    
 }

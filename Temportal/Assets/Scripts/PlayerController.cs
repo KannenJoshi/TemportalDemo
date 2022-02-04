@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -34,11 +35,13 @@ public class PlayerController : MonoBehaviour
 
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
+
+    [SerializeField] private CapsuleCollider capsuleCollider;
     [SerializeField] private Transform head;
-    //[SerializeField] private Transform orientation;
 
     private float _speed;
     private Vector2 _inputMovement;
+    private float _airResistance = 0.2f;
 
     // Start is called before the first frame update
     private void Start()
@@ -52,13 +55,14 @@ public class PlayerController : MonoBehaviour
     // FixedUpdate is called one per physics frame
     private void FixedUpdate()
     {
+        GroundedCheck();
+        if (!isGrounded)
+        {
+            HeadCheck();
+        }
         //isGrounded = Physics.CheckCapsule(bounds.center,new Vector3(bounds.center.x,bounds.min.y-0.1f,bounds.center.z),0.18f));
 
         UpdateMove();
-        // if ((characterController.collisionFlags & CollisionFlags.Above) != 0)
-        // {
-        //     HeadCheck();
-        // }
     }
     
     // Update is called once per frame
@@ -69,15 +73,14 @@ public class PlayerController : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        _inputMovement = context.ReadValue<Vector2>().normalized;
         if (context.performed)
         {
-            _inputMovement = context.ReadValue<Vector2>().normalized;
             isWalking = true;
         }
         else if (context.canceled)
         {
             //_speed = 0;
-            _inputMovement = Vector2.zero;
             isWalking = false;
         }
     }
@@ -85,17 +88,15 @@ public class PlayerController : MonoBehaviour
     private void UpdateMove()
     {
         moveDir = new Vector3(_inputMovement.x, 0f, _inputMovement.y);
-        
         moveDir = transform.TransformDirection(moveDir);
-        //var transform1 = transform;
-        //moveDir = Quaternion.AngleAxis(transform1.eulerAngles.y, transform1.up) * moveDir;
+        
         
         _speed = moveSpeed;
         _speed *= isCrouching ? crouchMultiplier : isRunning ? runMultiplier : 1;
-        rb.AddForce(moveDir * 10, ForceMode.Acceleration); //ForceMode.Acceleration
-        rb.velocity = rb.velocity.magnitude > 0.001
-            ? Vector3.ClampMagnitude(rb.velocity, _speed)
-            : Vector3.zero;
+        float airControl = isGrounded ? 1 : _airResistance;
+        
+        rb.AddForce(moveDir * rb.mass * 3 * _speed * airControl, ForceMode.Force); //ForceMode.Acceleration
+        rb.velocity = new Vector3(0, rb.velocity.y, 0) + Vector3.ClampMagnitude(new Vector3(rb.velocity.x, 0, rb.velocity.z), _speed);
     }
 
 
@@ -110,37 +111,59 @@ public class PlayerController : MonoBehaviour
         upDownAngle += lookDelta.y * -lookSpeed * Time.deltaTime;
         upDownAngle = Mathf.Clamp(upDownAngle, lookClamp.x, lookClamp.y);
 
-        var localRotation = head.localRotation;
+        var localRotation = head.transform.localRotation;
         localRotation =
             Quaternion.Euler(new Vector3(upDownAngle, localRotation.eulerAngles.y, localRotation.eulerAngles.z));
-        head.localRotation = localRotation;
+        head.transform.localRotation = localRotation;
         transform.Rotate(new Vector3(0, leftRightAngle, 0));
     }
     
     
     public void OnRun(InputAction.CallbackContext context)
     {
-        if (context.performed) isRunning = true;
-        else if (context.canceled) isRunning = false;
+        if (context.performed) 
+            isRunning = true;
+        else if (context.canceled) 
+            isRunning = false;
     }
 
     public void OnCrouch(InputAction.CallbackContext context)
     {
-        if (context.performed) isCrouching = true;
-        else if (context.canceled) isCrouching = false;
+        if (context.performed) 
+            isCrouching = true;
+        else if (context.canceled) 
+            isCrouching = false;
     }
     
-    // public void OnJump(InputAction.CallbackContext callbackContext)
-    // {
-    //     if (callbackContext.performed)
-    //         rb.AddForce(new Vector3(0f, jumpForce * rb.mass, 0f), ForceMode.Impulse);
-    // }
+    public void OnJump(InputAction.CallbackContext callbackContext)
+    {
+        if (callbackContext.performed && isGrounded)
+        {   
+            rb.AddForce(new Vector3(0f, jumpForce * rb.mass, 0f), ForceMode.Impulse);
+            //isGrounded = false;
+        }
+    }
     
-    // public void HeadCheck()
-    // {
-    //     var offSetHeight = new Vector3(0, characterController.center.y + characterController.height / 2f, 0);
-    //     var hitHead = Physics.CheckSphere(characterController.transform.position + offSetHeight, groundRadius,
-    //         groundMask, QueryTriggerInteraction.Ignore);
-    //     if (hitHead) jumpVelocity = Mathf.Clamp(jumpVelocity, jumpVelocity, 0);
-    // }
+    private void GroundedCheck()
+    {
+        var offSetHeight = new Vector3(0, capsuleCollider.center.y - capsuleCollider.height / 2f, 0);
+        var hitGround = Physics.CheckSphere(transform.position + offSetHeight, groundRadius,
+            groundMask, QueryTriggerInteraction.Ignore);
+        Debug.DrawRay(capsuleCollider.center, new Vector3(0, capsuleCollider.center.y - capsuleCollider.height / 2f, 0));
+        isGrounded = hitGround;
+    }
+    private void HeadCheck()
+    {
+        var offSetHeight = new Vector3(0, capsuleCollider.center.y + capsuleCollider.height / 2f, 0);
+        RaycastHit hit;
+        
+        // var hitHead = Physics.Raycast(transform.position + offSetHeight, groundRadius,
+        //     groundMask, QueryTriggerInteraction.Ignore);
+        //if (hitHead)
+        if (Physics.Raycast(transform.position + offSetHeight, Vector3.up, out hit, groundRadius, groundMask))
+        {
+            //jumpForce = Mathf.Clamp(jumpForce, jumpForce, 0);
+            rb.velocity.Set(rb.velocity.x, 0, rb.velocity.y);
+        }
+    }
 }
