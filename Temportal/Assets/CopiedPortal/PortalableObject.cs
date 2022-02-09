@@ -10,10 +10,10 @@ public class PortalableObject : MonoBehaviour
     private GameObject cloneObject;
     protected new Collider collider;
 
-    private Portal inPortal;
+    private PortalOld inPortal;
 
     private int inPortalCount;
-    private Portal outPortal;
+    private PortalOld outPortal;
 
     private new Rigidbody rigidbody;
 
@@ -57,7 +57,7 @@ public class PortalableObject : MonoBehaviour
         }
     }
 
-    public void SetIsInPortal(Portal inPortal, Portal outPortal, Collider wallCollider)
+    public void SetIsInPortal(PortalOld inPortal, PortalOld outPortal, Collider wallCollider)
     {
         this.inPortal = inPortal;
         this.outPortal = outPortal;

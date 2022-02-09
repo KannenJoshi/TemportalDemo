@@ -4,49 +4,43 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : PortalTraveller
 {
     [Header("Tracking Variables")]
     // Current Movement
     [SerializeField] private Vector3 moveDir;
-    [SerializeField] private float speeds;
-    // Change in look angle
-    [SerializeField] private Vector2 lookDelta;
-    // Current camera angle (up/down)
-    [SerializeField] private float upDownAngle;
     [SerializeField] private bool isWalking;
     [SerializeField] private bool isRunning;
     [SerializeField] private bool isCrouching;
     // Is on the ground (true) or jumping (false)
     [SerializeField] private bool isGrounded;
 
-    [Header("Stats")]
+    [Header("Movement")]
+    // Movement
     [SerializeField] private float moveSpeed = 8f;
     [SerializeField] private float runMultiplier = 1.25f;
     [SerializeField] private float crouchMultiplier = 0.75f;
-    [SerializeField] private float lookSpeed = 1f;
-    // Max angle look up/down
-    [SerializeField] private Vector2 lookClamp = new Vector2(-85, 85);
-    // Jump Force
+    // Jump
     [SerializeField] private float jumpForce = 10f;
-    [SerializeField] private float groundRadius = 0.3f;
-    // Ground Layer
+    [SerializeField] private float airResistance = 0.2f;
+    // Ground
     [SerializeField] private LayerMask groundMask;
+    [SerializeField] private float groundRadius = 0.3f;
 
     [Header("Components")]
-    [SerializeField] private Rigidbody rb;
+    //[SerializeField] private new Rigidbody rb;
+    //private Rigidbody rb;
 
     [SerializeField] private CapsuleCollider capsuleCollider;
     [SerializeField] private Transform head;
 
     private float _speed;
     private Vector2 _inputMovement;
-    private float _airResistance = 0.2f;
 
     // Start is called before the first frame update
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        //rb = base.GetComponent<Rigidbody>();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false; 
@@ -68,7 +62,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        UpdateLook();
+        //UpdateLook();
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -87,25 +81,46 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateMove()
     {
+        // Get input movement in world space
         moveDir = new Vector3(_inputMovement.x, 0f, _inputMovement.y);
         moveDir = transform.TransformDirection(moveDir);
         
-        
+        // Speed of Player by applying the multipliers
         _speed = moveSpeed;
         _speed *= isCrouching ? crouchMultiplier : isRunning ? runMultiplier : 1;
-        float airControl = isGrounded ? 1 : _airResistance;
         
-        rb.AddForce(moveDir * rb.mass * 3 * _speed * airControl, ForceMode.Force); //ForceMode.Acceleration
-        rb.velocity = new Vector3(0, rb.velocity.y, 0) + Vector3.ClampMagnitude(new Vector3(rb.velocity.x, 0, rb.velocity.z), _speed);
+        
+        // Less Airborne movement 
+        float airControl = isGrounded ? 1 : airResistance; // Change only when new input while in air
+        
+        // Accelerate the Player
+        rb.AddForce(moveDir * _speed * airControl, ForceMode.Acceleration); //ForceMode.Acceleration
+        
+        // Max Speed
+        rb.velocity = new Vector3(0, rb.velocity.y, 0) + Vector3.ClampMagnitude(new Vector3(rb.velocity.x, 0, rb.velocity.z), _speed); // Should not be done via velocity
+
+        /*if (Vector3.Magnitude(new Vector3(rb.velocity.x, 0, rb.velocity.z)) > _speed)
+        {
+            rb.velocity = (new Vector3(0, rb.velocity.y, 0) + Vector3.ClampMagnitude(new Vector3(rb.velocity.x, 0, rb.velocity.z), _speed));
+        }*/
+        
+        // Brake force - https://answers.unity.com/questions/9985/limiting-rigidbody-velocity.html
+        /*float currentSpeed = rb.velocity.magnitude;
+        if (currentSpeed > _speed)
+        {
+            float brakeSpeed = _speed - currentSpeed;
+            Vector3 brakeVelocity = rb.velocity.normalized * brakeSpeed;
+            rb.AddRelativeForce(brakeVelocity, ForceMode.Acceleration);
+        }*/
     }
 
 
-    public void OnLook(InputAction.CallbackContext context)
+    /*public void OnLook(InputAction.CallbackContext context)
     {
         lookDelta = context.ReadValue<Vector2>() / Time.deltaTime;
-    }
+    }*/
 
-    private void UpdateLook()
+    /*private void UpdateLook()
     {
         var leftRightAngle = lookDelta.x * lookSpeed * Time.deltaTime;
         upDownAngle += lookDelta.y * -lookSpeed * Time.deltaTime;
@@ -116,7 +131,7 @@ public class PlayerController : MonoBehaviour
             Quaternion.Euler(new Vector3(upDownAngle, localRotation.eulerAngles.y, localRotation.eulerAngles.z));
         head.transform.localRotation = localRotation;
         transform.Rotate(new Vector3(0, leftRightAngle, 0));
-    }
+    }*/
     
     
     public void OnRun(InputAction.CallbackContext context)

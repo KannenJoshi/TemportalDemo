@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveCamera : MonoBehaviour
+public class RotatePlayer : MonoBehaviour
 {
     [SerializeField] private Transform cameraPos;
     

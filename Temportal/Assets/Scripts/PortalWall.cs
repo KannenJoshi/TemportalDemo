@@ -1,15 +1,10 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PortalCamera : MonoBehaviour
+public class PortalWall : MonoBehaviour
 {
-    private void Awake()
-    {
-        return;
-    }
-
+    // Start is called before the first frame update
     void Start()
     {
         

@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class PortalPair : MonoBehaviour
 {
-    public Portal[] Portals { private set; get; }
+    public PortalOld[] Portals { private set; get; }
 
     private void Awake()
     {
-        Portals = GetComponentsInChildren<Portal>();
+        Portals = GetComponentsInChildren<PortalOld>();
 
         if (Portals.Length != 2)
             Debug.LogError("PortalPair children must contain exactly two Portal components in total.");
