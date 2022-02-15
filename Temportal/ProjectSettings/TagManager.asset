@@ -6,6 +6,9 @@ TagManager:
   tags:
   - PortalCamera
   - Portal
+  - Projectile
+  - Weapon
+  - Enemy
   layers:
   - Default
   - TransparentFX
