@@ -21,27 +21,29 @@ public class Firearm : MonoBehaviour
     [SerializeField] private float adsFireRate = 5.0f;
     [SerializeField] private bool holdFire = true;
     [SerializeField] private int projectileSpeed = 1000; //ms-1
+    [SerializeField] private float timeToLive = 10.0f;
 
     // Recoil Pattern Plugin?
 
-    protected int ammoCount;
+    [SerializeField] protected int ammoCount;
     private float _timeBetweenShots;
     // TODO: Set bullet prefab to be default here
 
     void Start()
     {
         _timeBetweenShots = 1 / fireRate;
+        ammoCount = magazineSize;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (ammoCount == 0 && !IsReloading)
+        if (ammoCount <= 0 && !IsReloading)
         {
             Reload();
         }
 
-        if (IsShooting)
+        if (IsShooting && !IsReloading)
         {
             if (IsReady)
             {
@@ -69,19 +71,19 @@ public class Firearm : MonoBehaviour
         if (context.performed) Reload();
     }
 
-    public void Fire(InputAction.CallbackContext context)
-    {
-        if (context.performed && IsReady && !IsReloading && !IsShooting)
-        {
-            IsShooting = true;
-        }
-
-        if (context.canceled)
-        {
-            IsShooting = false;
-        }
-    }
-
+    // public void Fire(InputAction.CallbackContext context)
+    // {
+    //     if (context.performed && IsReady && !IsReloading && !IsShooting)
+    //     {
+    //         IsShooting = true;
+    //     }
+    //
+    //     if (context.canceled)
+    //     {
+    //         IsShooting = false;
+    //     }
+    // }
+    
     public void ADS(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -89,7 +91,7 @@ public class Firearm : MonoBehaviour
             _timeBetweenShots = 1 / adsFireRate;
             // Have ADS in Player Controller which uses the gun's aim value
         }
-
+    
         if (context.canceled)
         {
             _timeBetweenShots = 1 / fireRate;
@@ -124,7 +126,12 @@ public class Firearm : MonoBehaviour
     {
         //new Bullet(projectileSpeed, projectileRange); //: Needs collider, die on collision with any surface, die when past range
         GameObject newBullet = Instantiate(projectile, barrel.position, barrel.rotation);
-        newBullet.GetComponent<Rigidbody>().AddForce(newBullet.transform.forward.normalized * projectileSpeed);
+        newBullet.GetComponent<Bullet>().SetStats(this.damage, transform.parent.tag);
+        
+        Rigidbody brb = newBullet.GetComponent<Rigidbody>();
+        brb.AddForce(newBullet.transform.forward.normalized * projectileSpeed * brb.mass);
+        
+        Destroy(newBullet, timeToLive);
     }
     
     /*
@@ -146,9 +153,9 @@ public class Firearm : MonoBehaviour
     /*
      * PROPERTIES
      */
-    protected bool IsReady { get; set; } = false;
-    protected bool IsShooting { get; set; }
-    protected bool IsReloading { get; set; }
+    public bool IsReady { get; set; } = false;
+    public bool IsShooting { get; set; }
+    public bool IsReloading { get; set; }
 
     public float AdsZoom => adsZoom;
 }

@@ -25,26 +25,26 @@ public class AnimationStateController : MonoBehaviour
 
     public void animateWalk(InputAction.CallbackContext context)
     {
-        if (context.performed) animator.SetBool(_isWalkingHash, true);
-        else if (context.canceled) animator.SetBool(_isWalkingHash, false);
+        /*if (context.performed) animator.SetBool(_isWalkingHash, true);
+        else if (context.canceled) animator.SetBool(_isWalkingHash, false);*/
     }
     
     public void animateRun(InputAction.CallbackContext context)
     {
-        if (context.performed) animator.SetBool(_isSprintingHash, true);
-        else if (context.canceled) animator.SetBool(_isSprintingHash, false);
+        /*if (context.performed) animator.SetBool(_isSprintingHash, true);
+        else if (context.canceled) animator.SetBool(_isSprintingHash, false);*/
     }
     
     public void animateCrouch(InputAction.CallbackContext context)
     {
-        if (context.performed) animator.SetBool(_isCrouchingHash, true);
-        else if (context.canceled) animator.SetBool(_isCrouchingHash, false);;
+        /*if (context.performed) animator.SetBool(_isCrouchingHash, true);
+        else if (context.canceled) animator.SetBool(_isCrouchingHash, false);*/
     }
     
     public void animateAttack(InputAction.CallbackContext context)
     {
-        if (context.performed) animator.SetTrigger(_isAttackingHash);
-        else if (context.canceled) animator.ResetTrigger(_isAttackingHash);
+        /*if (context.performed) animator.SetTrigger(_isAttackingHash);
+        else if (context.canceled) animator.ResetTrigger(_isAttackingHash);*/
     }
     
     

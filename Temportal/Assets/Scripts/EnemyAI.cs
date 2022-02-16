@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : Entity
 {
     // Start is called before the first frame update
     void Start()
@@ -14,6 +14,7 @@ public class EnemyAI : MonoBehaviour
     void Update()
     {
         // Detect Player
+        Heal();
     }
 
     private void Fire()

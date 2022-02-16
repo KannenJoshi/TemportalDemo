@@ -15,13 +15,7 @@ public class Shotgun : Firearm
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
-    
     protected override void Fire()
     {
         if (slugShot)

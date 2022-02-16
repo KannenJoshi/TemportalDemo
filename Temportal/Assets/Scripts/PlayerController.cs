@@ -32,10 +32,14 @@ public class PlayerController : PortalTraveller
     //private Rigidbody rb;
 
     [SerializeField] private CapsuleCollider capsuleCollider;
-    [SerializeField] private Transform head;
+    //[SerializeField] private Transform head;
 
     private float _speed;
     private Vector2 _inputMovement;
+
+    private Transform hand;
+    private Firearm weapon;
+    
 
     // Start is called before the first frame update
     private void Start()
@@ -43,7 +47,11 @@ public class PlayerController : PortalTraveller
         //rb = base.GetComponent<Rigidbody>();
 
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false; 
+        Cursor.visible = false;
+
+        hand = transform.GetChild(2);
+        weapon = hand.GetChild(0).GetComponent<Firearm>();
+        weapon.IsReady = true;
     }
 
     // FixedUpdate is called one per physics frame
@@ -158,6 +166,21 @@ public class PlayerController : PortalTraveller
             //isGrounded = false;
         }
     }
+
+    public void OnFire(InputAction.CallbackContext context)
+    {
+        if (context.performed && weapon.IsReady && !weapon.IsReloading && !weapon.IsShooting)
+        {
+            weapon.IsShooting = true;
+        }
+
+        if (context.canceled)
+        {
+            weapon.IsShooting = false;
+        }
+    }
+    
+    
     
     private void GroundedCheck()
     {
