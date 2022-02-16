@@ -26,6 +26,7 @@ public class Entity : MonoBehaviour
     void Update()
     {
         Heal();
+        // UpdateBehaviour(); This gets overriden in subclasses to make do stuff 
     }
 
     protected void Heal()
