@@ -26,7 +26,7 @@ public class Entity : MonoBehaviour
     void Update()
     {
         Heal();
-        // UpdateBehaviour(); This gets overriden in subclasses to make do stuff 
+        // UpdateBehaviour(); This gets overriden in subclasses to make do stuff ???
     }
 
     protected void Heal()
@@ -35,8 +35,8 @@ public class Entity : MonoBehaviour
         {
             if (Time.time > _lastHeal + healTime)
             {
-                hp += healAmount * (Time.time - _lastHeal)/healTime;
-                Mathf.Min(hp, 100.0f);
+                hp += healAmount * healTime;//(Time.time - _lastHeal)*healTime;
+                hp = Mathf.Min(hp, hpMax);
                 
                 _lastHeal = Time.time;
             }
@@ -45,10 +45,19 @@ public class Entity : MonoBehaviour
 
     public void ApplyDamage(int damage)
     {
-        hp -= damage;
-        Mathf.Max(hp, 0.0f);
+        hp = Mathf.Max(hp - damage, 0.0f);
         
         _lastHit = Time.time;
         print($"{name} : currentHp {hp}");
+    }
+
+    public int HpMax
+    {
+        get => hpMax;
+    }
+
+    public float Hp
+    {
+        get => hp;
     }
 }
