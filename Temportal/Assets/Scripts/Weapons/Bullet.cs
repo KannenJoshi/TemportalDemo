@@ -13,7 +13,7 @@ public class Bullet : MonoBehaviour
     private string tag;
     private TrailRenderer tr;
 
-    private bool ignorePlayerTag = true;
+    private bool _ignoreShooterTag = true;
 
     void Awake()
     {
@@ -22,17 +22,19 @@ public class Bullet : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(DelayPlayer());
+        StartCoroutine(DelayFirstShotCollision());
     }
 
     void OnCollisionEnter(Collision collision)
     {
         // TODO: Edit ignore tag to ignore at first shoot if tag is same, not just for player so Enemy can use
-        if ((collision.gameObject.tag.Equals("Player") && !ignorePlayerTag) || collision.gameObject.tag.Equals("Enemy"))
+        if (_ignoreShooterTag && collision.gameObject.tag.Equals(tag)) return;
+        if (collision.gameObject.tag.Equals("Player") || collision.gameObject.tag.Equals("Enemy"))
         {
             collision.gameObject.GetComponent<Entity>().ApplyDamage(damage);
-            Destroy(gameObject);
         }
+        Destroy(gameObject);
+
     }
 
     public void SetStats(int damage, string tag)
@@ -40,12 +42,13 @@ public class Bullet : MonoBehaviour
         this.damage = Mathf.RoundToInt(damage * damageMultiplier);
         this.tag = tag;
 
-        tr.material.color = tag.Equals("Player") ? playerColour : enemyColour;
+        //tr.material.color = tag.Equals("Player") ? playerColour : enemyColour;
+        tr.material.SetColor("_Base", tag.Equals("Player") ? playerColour : enemyColour);
     }
 
-    IEnumerator DelayPlayer()
+    IEnumerator DelayFirstShotCollision()
     {
         yield return new WaitForSeconds(0.1f);
-        ignorePlayerTag = false;
+        _ignoreShooterTag = false;
     }
 }

@@ -78,8 +78,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
-  playerColour: {r: 0.27699995, g: 0.82508045, b: 1, a: 0.39215687}
-  enemyColour: {r: 1, g: 0.40392157, b: 0.0627451, a: 0.39215687}
+  playerColour: {r: 0.27699995, g: 0.82508045, b: 1, a: 1}
+  enemyColour: {r: 1, g: 0.40392157, b: 0.0627451, a: 1}
 --- !u!96 &3342557165005077989
 TrailRenderer:
   serializedVersion: 2
@@ -121,7 +121,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 5
+  m_Time: 0.2
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.25561795
@@ -138,7 +138,7 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.23222207
+        time: 0.44806528
         value: 0
         inSlope: -0.14036499
         outSlope: -0.14036499
