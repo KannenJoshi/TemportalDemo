@@ -33,6 +33,8 @@ public class Bullet : MonoBehaviour
         {
             collision.gameObject.GetComponent<Entity>().ApplyDamage(damage);
         }
+
+        if (collision.gameObject.tag.Equals("Portal")) return;
         Destroy(gameObject);
 
     }

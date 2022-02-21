@@ -40,6 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1433376874190242317}
   - component: {fileID: 616252417537970720}
+  - component: {fileID: -8192125459207210057}
   m_Layer: 7
   m_Name: Lock_prefab
   m_TagString: Weapon
@@ -87,6 +88,32 @@ MonoBehaviour:
   holdFire: 0
   projectileSpeed: 3000
   timeToLive: 5
+  ammoCount: 0
+--- !u!114 &-8192125459207210057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4115301380646426663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da8b9cb6912275845ae06bdf94fb17c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  barrel: {fileID: 0}
+  projectile: {fileID: 0}
+  damage: 10
+  magazineSize: 30
+  reloadTime: 2
+  fireRate: 5
+  adsZoom: 2
+  recoilForce: 2
+  adsFireRate: 5
+  holdFire: 1
+  projectileSpeed: 1000
+  timeToLive: 10
+  ammoCount: 0
 --- !u!1001 &1534036138428950179
 PrefabInstance:
   m_ObjectHideFlags: 0

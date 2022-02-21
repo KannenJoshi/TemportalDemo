@@ -11,15 +11,14 @@ public class EnemyAI : Entity
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void UpdateBehaviour()
     {
-        // Detect Player
-        Heal();
+        
     }
 
     private void Fire()
     {
-        
+        // Call Weapon Fire
     }
 
     private void Warp()

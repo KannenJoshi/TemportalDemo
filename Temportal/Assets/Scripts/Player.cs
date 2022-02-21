@@ -12,7 +12,7 @@ public class Player : Entity
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void UpdateBehaviour()
     {
         
     }

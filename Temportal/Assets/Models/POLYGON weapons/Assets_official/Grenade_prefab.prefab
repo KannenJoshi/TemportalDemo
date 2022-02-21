@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1165027852434803049}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Grenade_prefab
-  m_TagString: Weapon
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,6 +97,10 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 3ca8f11cc7fca9747b2bf3be79dac021, type: 3}
       propertyPath: m_Name
       value: Grenade
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 3ca8f11cc7fca9747b2bf3be79dac021, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ca8f11cc7fca9747b2bf3be79dac021, type: 3}

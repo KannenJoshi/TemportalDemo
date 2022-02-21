@@ -37,6 +37,7 @@ public class PlayerController : PortalTraveller
     private float _speed;
     private Vector2 _inputMovement;
 
+    private Transform head;
     private Transform hand;
     private Firearm weapon;
     
@@ -49,7 +50,8 @@ public class PlayerController : PortalTraveller
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        hand = transform.GetChild(2);
+        head = transform.GetChild(1);
+        hand = head.GetChild(0);
         weapon = hand.GetChild(0).GetComponent<Firearm>();
         weapon.IsReady = true;
     }
@@ -178,6 +180,11 @@ public class PlayerController : PortalTraveller
         {
             weapon.IsShooting = false;
         }
+    }
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        
     }
     
     

@@ -8,6 +8,7 @@ public class Firearm : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Transform barrel;
     [SerializeField] private GameObject projectile;
+    [SerializeField] private Rigidbody holder;
     
     [Header("Basic")]
     [SerializeField] private int damage = 10;
@@ -101,6 +102,7 @@ public class Firearm : MonoBehaviour
     /*
      * PRIVATE METHODS
      */
+
     private void Reload()
     {
         // TODO: NEED TO CHECK ???
@@ -129,7 +131,7 @@ public class Firearm : MonoBehaviour
         newBullet.GetComponent<Bullet>().SetStats(this.damage, transform.parent.tag);
         
         Rigidbody brb = newBullet.GetComponent<Rigidbody>();
-        brb.AddForce(newBullet.transform.forward.normalized * projectileSpeed * brb.mass);
+        brb.AddForce(newBullet.transform.forward.normalized * projectileSpeed * brb.mass + holder.transform.forward);
         
         Destroy(newBullet, timeToLive);
     }

@@ -10,6 +10,7 @@ public class Entity : MonoBehaviour
     [SerializeField] private float healAfterDamageDelay = 3.0f;
     [SerializeField] private float healTime = 0.1f; //(hp)s-1
     [SerializeField] private int healAmount = 5;
+    [SerializeField] private float resistanceMultiplier = 1.0f; // e.g. takes 0.8x damage if set to 0.8
     
     private float _lastHit;
     private float _lastHeal;
@@ -25,8 +26,11 @@ public class Entity : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (hp <= 0) Die();
+        
+        UpdateBehaviour();
+        
         Heal();
-        // UpdateBehaviour(); This gets overriden in subclasses to make do stuff ???
     }
 
     protected void Heal()
@@ -43,9 +47,19 @@ public class Entity : MonoBehaviour
         }
     }
 
+    protected virtual void Die()
+    {
+        Destroy(gameObject);
+    }
+
+    protected virtual void UpdateBehaviour()
+    {
+        
+    }
+
     public void ApplyDamage(int damage)
     {
-        hp = Mathf.Max(hp - damage, 0.0f);
+        hp = Mathf.Max(hp - (damage * resistanceMultiplier), 0.0f);
         
         _lastHit = Time.time;
         print($"{name} : currentHp {hp}");

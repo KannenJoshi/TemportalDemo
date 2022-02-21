@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Explosive : Firearm
+public class Launcher : Firearm
 {
     [Header("Explosive")]
     [SerializeField] private float radius = 0.0f;

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3841670277934641095}
+  - component: {fileID: 3199723023136638979}
   m_Layer: 0
   m_Name: rocket_launcher_prefab
   m_TagString: Weapon
@@ -31,6 +32,33 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3199723023136638979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8085246352978153365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6d218b63982f2a4f984f4aa4c10143a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  barrel: {fileID: 0}
+  projectile: {fileID: 0}
+  holder: {fileID: 0}
+  damage: 10
+  magazineSize: 30
+  reloadTime: 2
+  fireRate: 5
+  adsZoom: 2
+  recoilForce: 2
+  adsFireRate: 5
+  holdFire: 1
+  projectileSpeed: 1000
+  timeToLive: 10
+  ammoCount: 0
+  radius: 0
 --- !u!1001 &8130811033537059476
 PrefabInstance:
   m_ObjectHideFlags: 0

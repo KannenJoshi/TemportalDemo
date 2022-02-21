@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3403979390387565790}
   - component: {fileID: 5967876287305797561}
   - component: {fileID: 3342557165005077989}
+  - component: {fileID: -2835395631655894844}
   m_Layer: 7
   m_Name: 9mm_prefab
   m_TagString: Projectile
@@ -64,7 +65,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 3
+  m_CollisionDetection: 2
 --- !u!114 &5967876287305797561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,6 +188,19 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &-2835395631655894844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5429017516198186652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee1a288f33a89fe459d16c7daaf93728, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 3403979390387565790}
 --- !u!1001 &1332857438980722296
 PrefabInstance:
   m_ObjectHideFlags: 0

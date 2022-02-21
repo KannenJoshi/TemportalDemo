@@ -92,6 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4165770523757623382}
+  - component: {fileID: 9222961248685146843}
   m_Layer: 0
   m_Name: HunterRifle_prefab
   m_TagString: Weapon
@@ -114,6 +115,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9222961248685146843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4165770523757623383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da8b9cb6912275845ae06bdf94fb17c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  barrel: {fileID: 0}
+  projectile: {fileID: 0}
+  damage: 10
+  magazineSize: 30
+  reloadTime: 2
+  fireRate: 5
+  adsZoom: 2
+  recoilForce: 2
+  adsFireRate: 5
+  holdFire: 1
+  projectileSpeed: 1000
+  timeToLive: 10
+  ammoCount: 0
 --- !u!1001 &4165770522489033921
 PrefabInstance:
   m_ObjectHideFlags: 0
