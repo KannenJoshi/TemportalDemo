@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
-public class PlayerController : PortalTraveller
+public class PlayerController : MonoBehaviour
 {
     [Header("Tracking Variables")]
     // Current Movement
@@ -28,7 +28,7 @@ public class PlayerController : PortalTraveller
     [SerializeField] private float groundRadius = 0.3f;
 
     [Header("Components")]
-    //[SerializeField] private new Rigidbody rb;
+    [SerializeField] private Rigidbody rb;
     //private Rigidbody rb;
 
     [SerializeField] private CapsuleCollider capsuleCollider;
