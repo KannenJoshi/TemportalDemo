@@ -44,12 +44,11 @@ public class Portal : MonoBehaviour
             var traveller = _travellers[i];
             
             Vector3 relativeObjPos = transform.InverseTransformPoint(traveller.transform.position);
-            var portalCameraPosition = OtherPortal.transform.localToWorldMatrix * transform.worldToLocalMatrix *
-                                                                    traveller.transform.localToWorldMatrix;
+            //var portalCameraPosition = OtherPortal.transform.localToWorldMatrix * transform.worldToLocalMatrix * traveller.transform.localToWorldMatrix;
 
             if (relativeObjPos.z > 0.0f)
             {
-                traveller.Teleport(transform, OtherPortal.transform, portalCameraPosition.GetColumn(3), portalCameraPosition.rotation);
+                traveller.Teleport(transform, OtherPortal.transform);
                 _travellers.RemoveAt(i);
                 i--;
             }

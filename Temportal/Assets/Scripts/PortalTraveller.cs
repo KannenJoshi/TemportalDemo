@@ -6,7 +6,7 @@ using UnityEngine;
 public class PortalTraveller : MonoBehaviour
 {
     [SerializeField] public Rigidbody rb;
-    [SerializeField] private Transform orientation;
+    //[SerializeField] private Transform orientation;
     
     void Awake()
     {
@@ -36,21 +36,21 @@ public class PortalTraveller : MonoBehaviour
         // Deactivate clone
     }
 
-    public virtual void Teleport(Transform inPortal, Transform outPortal, Vector3 pos, Quaternion rot)
+    public virtual void Teleport(Transform start, Transform end)
     {
         //transform.position = pos;
         //transform.rotation = rot;
         
-        //rb.velocity = outPortal.TransformVector (inPortal.InverseTransformVector (rb.velocity));
-        //rb.angularVelocity = outPortal.TransformVector (inPortal.InverseTransformVector (rb.angularVelocity));
+        //rb.velocity = end.TransformVector (start.InverseTransformVector (rb.velocity));
+        //rb.angularVelocity = end.TransformVector (start.InverseTransformVector (rb.angularVelocity));
         
-        transform.position = outPortal.TransformPoint(Quaternion.Euler(0.0f, 180.0f, 0.0f) * inPortal.InverseTransformPoint(transform.position));
+        transform.position = end.TransformPoint(Quaternion.Euler(0.0f, 180.0f, 0.0f) * start.InverseTransformPoint(transform.position));
         
-        //transform.rotation = outPortal.rotation * (Quaternion.Euler(0.0f, 180.0f, 0.0f) * Quaternion.Inverse(inPortal.rotation) * transform.rotation);
-        orientation.rotation = outPortal.rotation * (Quaternion.Euler(0.0f, 180.0f, 0.0f) * Quaternion.Inverse(inPortal.rotation) * orientation.rotation);
+        transform.rotation = end.rotation * (Quaternion.Euler(0.0f, 180.0f, 0.0f) * Quaternion.Inverse(start.rotation) * transform.rotation);
+        //orientation.rotation = end.rotation * (Quaternion.Euler(0.0f, 180.0f, 0.0f) * Quaternion.Inverse(start.rotation) * orientation.rotation);
         
-        rb.velocity = outPortal.TransformVector(Quaternion.Euler(0.0f, 180.0f, 0.0f) * inPortal.InverseTransformVector(rb.velocity));
-        //rb.velocity = outPortal.TransformVector(inPortal.InverseTransformVector(rb.velocity));
+        rb.velocity = end.TransformVector(Quaternion.Euler(0.0f, 180.0f, 0.0f) * start.InverseTransformVector(rb.velocity));
+        //rb.velocity = end.TransformVector(start.InverseTransformVector(rb.velocity));
         Physics.SyncTransforms();
     }
 }
