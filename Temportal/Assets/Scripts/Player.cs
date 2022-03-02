@@ -23,9 +23,9 @@ public class Player : Entity
     {
         transform.position =
             end.TransformPoint(Quaternion.Euler(0.0f, 180.0f, 0.0f) * start.InverseTransformPoint(transform.position));
-
-        orientation.rotation = end.rotation * (Quaternion.Euler(0.0f, 180.0f, 0.0f) *
-                                               Quaternion.Inverse(start.rotation) * orientation.rotation);
+        
+        //transform.rotation = end.rotation * (Quaternion.Euler(0.0f, 180.0f, 0.0f) * Quaternion.Inverse(start.rotation) * transform.rotation);
+        orientation.rotation = end.rotation * (Quaternion.Euler(0.0f, 180.0f, 0.0f) * Quaternion.Inverse(start.rotation) * orientation.rotation);
 
         rb.velocity =
             end.TransformVector(Quaternion.Euler(0.0f, 180.0f, 0.0f) * start.InverseTransformVector(rb.velocity));
