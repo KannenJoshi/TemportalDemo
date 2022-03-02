@@ -27,6 +27,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private float groundRadius = 0.3f;
 
+    [Header("Look")]
+    [SerializeField] private float lookSpeed = 1f;
+
+    [SerializeField] private Vector2 lookClamp = new Vector2(-70,70);
+
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
     //private Rigidbody rb;
@@ -36,6 +41,8 @@ public class PlayerController : MonoBehaviour
 
     private float _speed;
     private Vector2 _inputMovement;
+    private Vector2 lookDelta;
+    private float upDownAngle;
 
     private Transform head;
     private Transform hand;
@@ -72,12 +79,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        //UpdateLook();
+        UpdateLook();
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
         _inputMovement = context.ReadValue<Vector2>().normalized;
+        // Less Airborne movement input
+        _inputMovement *= isGrounded ? 1 : airResistance;
         if (context.performed)
         {
             isWalking = true;
@@ -98,50 +107,35 @@ public class PlayerController : MonoBehaviour
         // Speed of Player by applying the multipliers
         _speed = moveSpeed;
         _speed *= isCrouching ? crouchMultiplier : isRunning ? runMultiplier : 1;
-        
-        
+
         // Less Airborne movement 
-        float airControl = isGrounded ? 1 : airResistance; // Change only when new input while in air
+        //float airControl = isGrounded ? 1 : airResistance; // Change only when new input while in air
         
         // Accelerate the Player
-        rb.AddForce(moveDir * _speed * airControl, ForceMode.Acceleration); //ForceMode.Acceleration
+        rb.AddForce(moveDir * _speed, ForceMode.Acceleration); //ForceMode.Acceleration
         
         // Max Speed
         rb.velocity = new Vector3(0, rb.velocity.y, 0) + Vector3.ClampMagnitude(new Vector3(rb.velocity.x, 0, rb.velocity.z), _speed); // Should not be done via velocity
-
-        /*if (Vector3.Magnitude(new Vector3(rb.velocity.x, 0, rb.velocity.z)) > _speed)
-        {
-            rb.velocity = (new Vector3(0, rb.velocity.y, 0) + Vector3.ClampMagnitude(new Vector3(rb.velocity.x, 0, rb.velocity.z), _speed));
-        }*/
-        
-        // Brake force - https://answers.unity.com/questions/9985/limiting-rigidbody-velocity.html
-        /*float currentSpeed = rb.velocity.magnitude;
-        if (currentSpeed > _speed)
-        {
-            float brakeSpeed = _speed - currentSpeed;
-            Vector3 brakeVelocity = rb.velocity.normalized * brakeSpeed;
-            rb.AddRelativeForce(brakeVelocity, ForceMode.Acceleration);
-        }*/
     }
 
 
-    /*public void OnLook(InputAction.CallbackContext context)
-    {
-        lookDelta = context.ReadValue<Vector2>() / Time.deltaTime;
-    }*/
+     public void OnLook(InputAction.CallbackContext context)
+     {
+         lookDelta = context.ReadValue<Vector2>() / Time.deltaTime;
+     }
 
-    /*private void UpdateLook()
-    {
-        var leftRightAngle = lookDelta.x * lookSpeed * Time.deltaTime;
-        upDownAngle += lookDelta.y * -lookSpeed * Time.deltaTime;
-        upDownAngle = Mathf.Clamp(upDownAngle, lookClamp.x, lookClamp.y);
+     private void UpdateLook()
+     {
+         var leftRightAngle = lookDelta.x * lookSpeed * Time.deltaTime;
+         upDownAngle += lookDelta.y * -lookSpeed * Time.deltaTime;
+         upDownAngle = Mathf.Clamp(upDownAngle, lookClamp.x, lookClamp.y);
 
-        var localRotation = head.transform.localRotation;
-        localRotation =
-            Quaternion.Euler(new Vector3(upDownAngle, localRotation.eulerAngles.y, localRotation.eulerAngles.z));
-        head.transform.localRotation = localRotation;
-        transform.Rotate(new Vector3(0, leftRightAngle, 0));
-    }*/
+         var localRotation = head.transform.localRotation;
+         localRotation =
+             Quaternion.Euler(new Vector3(upDownAngle, localRotation.eulerAngles.y, localRotation.eulerAngles.z));
+         head.transform.localRotation = localRotation;
+         transform.Rotate(new Vector3(0, leftRightAngle, 0));
+     }
     
     
     public void OnRun(InputAction.CallbackContext context)
