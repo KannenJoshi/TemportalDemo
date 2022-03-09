@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Player : Entity
 {
-    [SerializeField] private Transform orientation;
-
     // Start is called before the first frame update
     void Start()
     {
