@@ -54,14 +54,14 @@ public class PortalCamera : MonoBehaviour
         if (portals[0].Renderer.isVisible)
         {
             portalCamera.targetTexture = tempTexL;
-            
             portals[1].Renderer.material.SetInt("displayMask", 1);
+            
             for (var i = recursions - 1; i >= 0; --i)
             {
                 //portals[0].Renderer.enabled = false; 
                 portals[0].Renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+                portals[1].Renderer.material.SetTexture("_MainTex", tempTexL);
                 
-            portals[1].Renderer.material.SetTexture("_MainTex", tempTexL);
                 portalCamera.transform.position = transform.position;
                 portalCamera.transform.rotation = transform.rotation;
                 
@@ -82,14 +82,14 @@ public class PortalCamera : MonoBehaviour
         if (portals[1].Renderer.isVisible)
         {
             portalCamera.targetTexture = tempTexR;
-            
             portals[0].Renderer.material.SetInt("displayMask", 1);
+            
             for (var i = recursions - 1; i >= 0; --i)
             {
                 //portals[1].Renderer.enabled = false;
                 portals[1].Renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+                portals[0].Renderer.material.SetTexture("_MainTex", tempTexR);
                 
-            portals[0].Renderer.material.SetTexture("_MainTex", tempTexR);
                 portalCamera.transform.position = transform.position;
                 portalCamera.transform.rotation = transform.rotation;
                 
