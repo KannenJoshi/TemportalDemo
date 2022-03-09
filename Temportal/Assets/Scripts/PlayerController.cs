@@ -180,9 +180,29 @@ public class PlayerController : MonoBehaviour
     {
         
     }
+
+    public void OnPortalPlaceLeft(InputAction.CallbackContext context)
+    {
+        
+    }
     
+    public void OnPortalPlaceRight(InputAction.CallbackContext context)
+    {
+
+    }
     
+    public void OnPortalRemoveLeft(InputAction.CallbackContext context)
+    {
+
+    }
     
+    public void OnPortalRemoveRight(InputAction.CallbackContext context)
+    {
+
+    }
+
+
+
     private void GroundedCheck()
     {
         var offSetHeight = new Vector3(0, capsuleCollider.center.y - capsuleCollider.height / 2f, 0);
