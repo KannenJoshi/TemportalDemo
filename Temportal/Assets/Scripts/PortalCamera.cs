@@ -65,7 +65,7 @@ public class PortalCamera : MonoBehaviour
                 portalCamera.transform.position = transform.position;
                 portalCamera.transform.rotation = transform.rotation;
                 
-                var clipPlaneCameraSpace = portals[0].Render(i, portalCamera, SRC);
+                var clipPlaneCameraSpace = portals[1].Render(i, portalCamera, SRC);
 
                 var newMatrix = mainCamera.CalculateObliqueMatrix(clipPlaneCameraSpace);
                 portalCamera.projectionMatrix = newMatrix;
@@ -93,7 +93,7 @@ public class PortalCamera : MonoBehaviour
                 portalCamera.transform.position = transform.position;
                 portalCamera.transform.rotation = transform.rotation;
                 
-                var clipPlaneCameraSpace = portals[1].Render(i, portalCamera, SRC);
+                var clipPlaneCameraSpace = portals[0].Render(i, portalCamera, SRC);
     
                 var newMatrix = mainCamera.CalculateObliqueMatrix(clipPlaneCameraSpace);
                 portalCamera.projectionMatrix = newMatrix;

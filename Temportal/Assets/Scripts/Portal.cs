@@ -76,7 +76,7 @@ public class Portal : MonoBehaviour
         // Get Position of this iteration by applying transform repeatedly
         for (var i = 0; i <= iterationID; ++i)
         {
-            portalCam.transform.position = transform.TransformPoint(Quaternion.Euler(0.0f, 180.0f, 0.0f) * OtherPortal.transform.InverseTransformPoint(portalCam.transform.position));
+            portalCam.transform.position = OtherPortal.transform.TransformPoint(Quaternion.Euler(0.0f, 180.0f, 0.0f) * transform.InverseTransformPoint(portalCam.transform.position));
             portalCam.transform.rotation = OtherPortal.transform.rotation * (Quaternion.Euler(0.0f, 180.0f, 0.0f) * (Quaternion.Inverse(transform.rotation) * portalCam.transform.rotation));
         }
 
@@ -102,6 +102,7 @@ public class Portal : MonoBehaviour
     // Enter Hitbox
     private void OnTriggerEnter(Collider other)
     {
+        print("PortalTrigger: " + other.tag);
         var traveller = other.GetComponent<PortalTraveller>();
         if (traveller != null)
         {
