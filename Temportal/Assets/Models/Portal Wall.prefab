@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 7563241981897743086}
   - component: {fileID: 3790784821559499095}
   - component: {fileID: 3212664478464557892}
-  - component: {fileID: 3820033691723951665}
-  - component: {fileID: 4054413366709198934}
+  - component: {fileID: 3518699675492056441}
   m_Layer: 3
   m_Name: Portal Wall
   m_TagString: PortalWall
@@ -291,25 +290,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &3820033691723951665
-MeshFilter:
+--- !u!65 &3518699675492056441
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2502559216215718344}
-  m_Mesh: {fileID: 0}
---- !u!64 &4054413366709198934
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2502559216215718344}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 34660e6b312a0154aa24d9ef6b6c36eb, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  serializedVersion: 2
+  m_Size: {x: 3, y: 3, z: 1}
+  m_Center: {x: 1.5, y: 1.5, z: -0.5}
