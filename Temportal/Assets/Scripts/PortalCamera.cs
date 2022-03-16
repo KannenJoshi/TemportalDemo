@@ -39,9 +39,10 @@ public class PortalCamera : MonoBehaviour
     void Start()
     {
         portals[0].Renderer.material.mainTexture = tempTexL;
-        portals[1].Renderer.material.mainTexture = tempTexR;
         
-        enabled = true;
+        portals[1].Renderer.material.mainTexture = tempTexR;
+
+        //enabled = true;
     }
 
     // Update is called once per frame

@@ -14,13 +14,16 @@ public class Entity : PortalTraveller
     
     private float _lastHit;
     private float _lastHeal;
-    //private float _healTime;
+    private float _rotationProgress;
+    private Quaternion _rotationStart;
+    private Quaternion _rotationEnd;
+    private bool _rotationCorrectFlag = false;
+
     void Awake()
     {
         hp = hpMax;
         _lastHit = Time.time;
         _lastHeal = Time.time;
-        //_healTime = 1 / healRate;
     }
 
     // Update is called once per frame
@@ -54,7 +57,25 @@ public class Entity : PortalTraveller
 
     protected virtual void UpdateBehaviour()
     {
-        
+        if (_rotationCorrectFlag)
+        {
+            print(_rotationProgress);
+            transform.rotation = Quaternion.Slerp(_rotationStart, _rotationEnd, _rotationProgress += 5.0f * Time.deltaTime);
+            if (_rotationProgress >= 1.0f)
+            {
+                _rotationProgress = 0.0f;
+                _rotationCorrectFlag = false;
+            }
+        }
+    }
+
+    public override void Teleport(Transform start, Transform end)
+    {
+        base.Teleport(start, end);
+        _rotationStart = transform.rotation;
+        //_rotationEnd = Quaternion.Euler(0.0f, 180.0f, 0.0f) * end.rotation * Quaternion.Inverse(start.rotation) * transform.rotation;
+        _rotationEnd =  start.rotation * Quaternion.Euler(0.0f, 180.0f, 0.0f) *Quaternion.Inverse(end.rotation) * transform.rotation;
+        StartCoroutine(correctRotation());
     }
 
     public void ApplyDamage(int damage)
@@ -73,5 +94,11 @@ public class Entity : PortalTraveller
     public float Hp
     {
         get => hp;
+    }
+
+    private IEnumerator correctRotation()
+    {
+        yield return new WaitForSecondsRealtime(0.2f);
+        _rotationCorrectFlag = true;
     }
 }

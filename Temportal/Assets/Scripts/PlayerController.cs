@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
     {
         _inputMovement = context.ReadValue<Vector2>().normalized;
         // Less Airborne movement input
-        _inputMovement *= isGrounded ? 1 : airResistance;
+        //_inputMovement *= isGrounded ? 1 : airResistance;
         if (context.performed)
         {
             isWalking = true;
@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
         _speed *= isCrouching ? crouchMultiplier : isRunning ? runMultiplier : 1;
 
         // Less Airborne movement 
-        //float airControl = isGrounded ? 1 : airResistance; // Change only when new input while in air
+        moveDir *= isGrounded ? 1 : airResistance; // Change only when new input while in air
         
         // Accelerate the Player
         rb.AddForce(moveDir * _speed, ForceMode.Acceleration); //ForceMode.Acceleration

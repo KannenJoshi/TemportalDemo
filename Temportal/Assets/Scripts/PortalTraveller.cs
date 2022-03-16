@@ -10,7 +10,7 @@ public class PortalTraveller : MonoBehaviour
     
     void Awake()
     {
-        //rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
     }
     
     void Start()
