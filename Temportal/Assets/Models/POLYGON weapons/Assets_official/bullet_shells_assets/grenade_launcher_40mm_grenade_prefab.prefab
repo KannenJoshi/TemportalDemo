@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 225919685321925076}
   - component: {fileID: 7181856918447044043}
   - component: {fileID: 6835603204409455975}
-  - component: {fileID: -3851531924182946211}
   - component: {fileID: -6355981363969257683}
   m_Layer: 7
   m_Name: grenade_launcher_40mm_grenade_prefab
@@ -173,19 +172,6 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!114 &-3851531924182946211
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6566939590726195741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee1a288f33a89fe459d16c7daaf93728, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 7181856918447044043}
 --- !u!114 &-6355981363969257683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,6 +184,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aece796fd95520d4d9efc4d176496562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 7181856918447044043}
+  <teleportThreshholdTransform>k__BackingField: {fileID: 7797195227441854544}
   damageMultiplier: 1
   playerColour: {r: 0.2784314, g: 0.8235294, b: 1, a: 0}
   enemyColour: {r: 1, g: 0.40392157, b: 0.0627451, a: 0}

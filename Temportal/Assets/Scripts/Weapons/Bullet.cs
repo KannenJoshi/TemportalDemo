@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Bullet : PortalTraveller
 {
     [SerializeField] private float damageMultiplier = 1.0f;
     [SerializeField] private Color playerColour;// = new Color(69, 210, 255);
@@ -40,17 +40,20 @@ public class Bullet : MonoBehaviour
         }
         
         //print(collision.gameObject.tag);
-        if (collision.gameObject.tag.Equals("PortalWall"))
+        if (collision.gameObject.tag.Equals("Portal"))
         {
-            //print("Bullet hit " + collision.gameObject.tag);
-            StartCoroutine(DisableTrailOnTeleport());
-            //Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), collision.collider);
-            //var portal = collision.gameObject.GetComponent<Portal>();
-            //pt.Teleport(portal.transform, portal.OtherPortal.transform);
+            //StartCoroutine(DisableTrailOnTeleport());
         }
-        else
-            Destroy(gameObject);
+    }
 
+    public override void EnterPortal()
+    {
+        tr.enabled = false;
+    }
+
+    public override void ExitPortal()
+    {
+        tr.enabled = true;
     }
 
     public void SetStats(int damage, string tag)
@@ -68,10 +71,10 @@ public class Bullet : MonoBehaviour
         _ignoreShooterTag = false;
     }
 
-    IEnumerator DisableTrailOnTeleport()
+    /*IEnumerator DisableTrailOnTeleport()
     {
         tr.enabled = false;
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(0.1f);
         tr.enabled = true;
-    }
+    }*/
 }
