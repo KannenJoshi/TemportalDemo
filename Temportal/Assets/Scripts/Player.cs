@@ -16,4 +16,9 @@ public class Player : Entity
     {
         base.UpdateBehaviour();
     }
+
+    protected override void Die()
+    {
+        
+    }
 }
