@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent (typeof (Rigidbody))]
-public class PortalTraveller : MonoBehaviour
+public abstract class PortalTraveller : MonoBehaviour
 {
     [SerializeField] public Rigidbody rb;
+    [field: SerializeField] public Transform teleportThreshholdTransform { get; private set; }
     //[SerializeField] private Transform orientation;
     
     void Awake()
@@ -15,7 +16,7 @@ public class PortalTraveller : MonoBehaviour
     
     void Start()
     {
-        
+        if (teleportThreshholdTransform == null) teleportThreshholdTransform = transform;
     }
     
     void Update()
@@ -24,14 +25,14 @@ public class PortalTraveller : MonoBehaviour
     }
 
     // When Touch Portal
-    public void EnterPortal()
+    public virtual void EnterPortal()
     {
         // Instantiate Clone if not
         // Set active if is
     }
 
     // When Exit (Not on Teleport)
-    public void ExitPortal()
+    public virtual void ExitPortal()
     {
         // Deactivate clone
     }

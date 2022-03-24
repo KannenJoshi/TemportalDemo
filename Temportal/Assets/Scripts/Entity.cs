@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
-public class Entity : PortalTraveller
+public abstract class Entity : PortalTraveller
 {
     [SerializeField] private int hpMax = 100;
     [SerializeField] private float hp = 100.0f;
@@ -26,7 +28,6 @@ public class Entity : PortalTraveller
         _lastHeal = Time.time;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (hp <= 0) Die();
@@ -59,8 +60,7 @@ public class Entity : PortalTraveller
     {
         if (_rotationCorrectFlag)
         {
-            print(_rotationProgress);
-            transform.rotation = Quaternion.Slerp(_rotationStart, _rotationEnd, _rotationProgress += 5.0f * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(_rotationStart, _rotationEnd, _rotationProgress += 15.0f * Time.deltaTime);
             if (_rotationProgress >= 1.0f)
             {
                 _rotationProgress = 0.0f;
@@ -71,11 +71,19 @@ public class Entity : PortalTraveller
 
     public override void Teleport(Transform start, Transform end)
     {
-        base.Teleport(start, end);
+        transform.position = end.TransformPoint(Quaternion.Euler(0.0f, 180.0f, 0.0f) * start.InverseTransformPoint(transform.position));
+
         _rotationStart = transform.rotation;
-        //_rotationEnd = Quaternion.Euler(0.0f, 180.0f, 0.0f) * end.rotation * Quaternion.Inverse(start.rotation) * transform.rotation;
-        _rotationEnd =  start.rotation * Quaternion.Euler(0.0f, 180.0f, 0.0f) *Quaternion.Inverse(end.rotation) * transform.rotation;
-        StartCoroutine(correctRotation());
+        var rot = end.rotation * (Quaternion.Euler(0.0f, 180.0f, 0.0f) * Quaternion.Inverse(start.rotation) * _rotationStart);
+        _rotationEnd = Quaternion.Euler(new Vector3(0, rot.eulerAngles.y, 0));
+        if (Mathf.Abs(rb.velocity.y) <= 0.1f) transform.rotation = _rotationEnd;
+        //else StartCoroutine(correctRotation());
+        
+        rb.velocity = end.TransformVector(Quaternion.Euler(0.0f, 180.0f, 0.0f) * start.InverseTransformVector(rb.velocity));
+        
+        Physics.SyncTransforms();
+        
+        
     }
 
     public void ApplyDamage(int damage)
@@ -98,7 +106,8 @@ public class Entity : PortalTraveller
 
     private IEnumerator correctRotation()
     {
-        yield return new WaitForSecondsRealtime(0.2f);
+        yield return new WaitForSecondsRealtime(0.1f);
+        //yield return new WaitForFixedUpdate();
         _rotationCorrectFlag = true;
     }
 }
