@@ -197,11 +197,10 @@ public class PlayerController : MonoBehaviour
     
     public void OnReload(InputAction.CallbackContext context)
     {
-        if (context.performed && !weapon.IsReloading)
+        if (context.performed && !weapon.IsReloading && !weapon.IsMagazineFull)
         {
             //weapon.IsReloading = true;
             weapon.Reload();
-            hud.ShowReload(weapon.ReloadTime);
         }
     }
 

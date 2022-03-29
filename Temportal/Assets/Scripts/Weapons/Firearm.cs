@@ -31,10 +31,14 @@ public class Firearm : MonoBehaviour
     private float _timeBetweenShots;
     // TODO: Set bullet prefab to be default here
 
+    private PlayerHUD hud;
+    
     void Start()
     {
         _timeBetweenShots = 1 / fireRate;
         ammoCount = magazineSize;
+
+        hud = GameObject.Find("HUD").GetComponent<PlayerHUD>();
     }
 
     // Update is called once per frame
@@ -45,9 +49,12 @@ public class Firearm : MonoBehaviour
         {
             Reload();
         }
-        
+
         if (IsReloading)
-        
+        {
+            
+        }
+
         // AIMING
         if (IsAiming) _timeBetweenShots = 1 / adsFireRate;
         else _timeBetweenShots = 1 / fireRate;
@@ -87,6 +94,7 @@ public class Firearm : MonoBehaviour
     {
         // TODO: NEED TO CHECK ???
         IsReloading = true;
+        hud.ShowReload(ReloadTime);
         StartCoroutine(ReloadDelay());
     }
 
@@ -140,6 +148,7 @@ public class Firearm : MonoBehaviour
     public bool IsShooting { get; set; }
     public bool IsReloading { get; set; }
     public bool IsAiming { get; set; }
+    public bool IsMagazineFull => ammoCount == magazineSize;
     public int AmmoMax => magazineSize;
     public int AmmoCount => ammoCount;
     public float AdsZoom => adsZoom;

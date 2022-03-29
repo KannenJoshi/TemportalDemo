@@ -118,6 +118,7 @@ public abstract class Entity : PortalTraveller
     {
         yield return new WaitForSecondsRealtime(0.25f);
         //yield return new WaitForFixedUpdate();
-        _rotationCorrectFlag = true;
+        //_rotationCorrectFlag = true;
+        transform.rotation = _rotationEnd;
     }
 }

@@ -173,10 +173,10 @@ public abstract class EnemyAI : Entity
 
     protected virtual void PredictPlayerMovement()
     {
-        //transform.LookAt(lastSeenPlayerPos);
+        transform.LookAt(lastSeenPlayerPos);
         //body.LookAt(new Vector3(0, lastSeenPlayerPos.y));
-        var rot = Quaternion.RotateTowards(transform.rotation, Quaternion.FromToRotation(transform.forward, lastSeenPlayerPos), Time.deltaTime);
-        transform.Rotate(rot.eulerAngles);
+        //var rot = Quaternion.RotateTowards(transform.rotation, Quaternion.FromToRotation(transform.forward, lastSeenPlayerPos), Time.deltaTime);
+        //transform.Rotate(rot.eulerAngles);
     }
 
     protected virtual void CheckLostPlayer()
