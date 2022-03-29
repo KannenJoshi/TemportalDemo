@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3aceb59a1b642e3a986eef279463065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Colour>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  <Colour>k__BackingField: {r: 1, g: 0.5921569, b: 0, a: 0}
   <OtherPortal>k__BackingField: {fileID: 7043835935806862637, guid: 344b3f738dc162f4aa048d5a99a6fa7c, type: 3}
   <Wall>k__BackingField: {fileID: 0}
 --- !u!54 &3835652827170970419

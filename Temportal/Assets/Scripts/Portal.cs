@@ -9,25 +9,22 @@ using UnityEngine.Rendering;
  *  ALL LOGIC FOR CONTROLLING INTERACTIONS WITH PORTAL
  *  FOR RENDERING SEE PORTAL CAMERA
  */
-[RequireComponent(typeof(BoxCollider))]
+[RequireComponent(typeof(Collider))]
 public class Portal : MonoBehaviour
 {
+    [field: SerializeField] public Color Colour { get; private set; }
     [field: SerializeField] public Portal OtherPortal { get; private set; }
-    [SerializeField] private Color outlineColour;
-    
-    private BoxCollider _wall;
+    [field: SerializeField] public Collider Wall { get; set; }
     public Renderer Renderer { get; private set; }
     private MeshFilter ScreenMeshFilter { get; set; }
-
     private GameObject _clone;
     private List<PortalTraveller> _travellers = new List<PortalTraveller>();
-    
+
     public bool IsPlaced { get; private set; }
-    
+
 
     private void Awake()
     {
-        _wall = GetComponent<BoxCollider>();
         Renderer = GetComponent<Renderer>();
         ScreenMeshFilter = GetComponent<MeshFilter>();
     }
@@ -36,18 +33,18 @@ public class Portal : MonoBehaviour
     {
         gameObject.SetActive(true);
         IsPlaced = true;
+        
     }
-    
+
     private void Update()
     {
-        Renderer.enabled = OtherPortal.IsPlaced;
-        
+        Renderer.enabled = IsPlaced;
         // Tried foreach but got `InvalidOperationException: Collection was modified; enumeration operation may not execute.`
         //foreach (var traveller in _travellers)
         for (int i = 0; i < _travellers.Count; ++i)
         {
             var traveller = _travellers[i];
-            
+
             // If traveller killed before exited remove
             if (traveller == null)
             {
@@ -56,7 +53,7 @@ public class Portal : MonoBehaviour
                 continue;
             }
 
-            Vector3 relativeObjPos = transform.InverseTransformPoint(traveller.transform.position);
+            Vector3 relativeObjPos = transform.InverseTransformPoint(traveller.teleportThreshholdTransform.position);
             //var portalCameraPosition = OtherPortal.transform.localToWorldMatrix * transform.worldToLocalMatrix * traveller.transform.localToWorldMatrix;
 
             if (relativeObjPos.z > 0.0f)
@@ -66,6 +63,8 @@ public class Portal : MonoBehaviour
                 i--;
             }
         }
+        Debug.DrawLine(this.transform.position, this.transform.position + this.transform.forward);
+
     }
 
     public Vector4 Render(int iterationID, Camera portalCam, ScriptableRenderContext SRC)
@@ -76,8 +75,11 @@ public class Portal : MonoBehaviour
         // Get Position of this iteration by applying transform repeatedly
         for (var i = 0; i <= iterationID; ++i)
         {
-            portalCam.transform.position = OtherPortal.transform.TransformPoint(Quaternion.Euler(0.0f, 180.0f, 0.0f) * transform.InverseTransformPoint(portalCam.transform.position));
-            portalCam.transform.rotation = OtherPortal.transform.rotation * (Quaternion.Euler(0.0f, 180.0f, 0.0f) * (Quaternion.Inverse(transform.rotation) * portalCam.transform.rotation));
+            portalCam.transform.position = OtherPortal.transform.TransformPoint(Quaternion.Euler(0.0f, 180.0f, 0.0f) *
+                transform.InverseTransformPoint(portalCam.transform.position));
+            portalCam.transform.rotation = OtherPortal.transform.rotation * (Quaternion.Euler(0.0f, 180.0f, 0.0f) *
+                                                                             (Quaternion.Inverse(transform.rotation) *
+                                                                              portalCam.transform.rotation));
         }
 
         Plane p = new Plane(-OtherPortal.transform.forward, OtherPortal.transform.position);
@@ -89,14 +91,21 @@ public class Portal : MonoBehaviour
 
     public void PlacePortal()
     {
+        //Wall = GetComponentInParent<Collider>();
         gameObject.SetActive(true);
+        //Renderer.material.SetColor("_MainTex", Colour);
         IsPlaced = true;
+        
     }
 
     public void RemovePortal()
     {
+        Wall = null;
         gameObject.SetActive(false);
         IsPlaced = false;
+        
+        // Reset Rotation
+        transform.rotation = Quaternion.identity;
     }
 
     // Enter Hitbox
@@ -106,8 +115,9 @@ public class Portal : MonoBehaviour
         var traveller = other.GetComponent<PortalTraveller>();
         if (traveller != null)
         {
-            _travellers.Add(traveller);
+            Physics.IgnoreCollision(other, Wall, true);
             traveller.EnterPortal();
+            _travellers.Add(traveller);
         }
     }
 
@@ -117,38 +127,14 @@ public class Portal : MonoBehaviour
         var traveller = other.GetComponent<PortalTraveller>();
         if (traveller && _travellers.Contains(traveller))
         {
-            _travellers.Remove(traveller);
+            Physics.IgnoreCollision(other, Wall, false);
             traveller.ExitPortal();
+            _travellers.Remove(traveller);
         }
     }
-    
+
     // PreRender for Slices
     // Render Portal Manually
     // PostRender for Slices
     
-    /*
-     *  UTILITY
-     */
-    
-    // https://github.com/SebLague/Portals/blob/53ff52abc836837eb248ffce980345fa645d817f/Assets/Scripts/Core/Portal.cs#L66
-    public static bool BoundsOverlap (MeshFilter nearObject, MeshFilter farObject, Camera camera) {
-
-        var near = CameraUtility.GetScreenRectFromBounds (nearObject, camera);
-        var far = CameraUtility.GetScreenRectFromBounds (farObject, camera);
-
-        // ensure far object is indeed further away than near object
-        if (far.zMax > near.zMin) {
-            // Doesn't overlap on x axis
-            if (far.xMax < near.xMin || far.xMin > near.xMax) {
-                return false;
-            }
-            // Doesn't overlap on y axis
-            if (far.yMax < near.yMin || far.yMin > near.yMax) {
-                return false;
-            }
-            // Overlaps
-            return true;
-        }
-        return false;
-    }
 }

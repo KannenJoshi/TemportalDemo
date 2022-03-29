@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private CapsuleCollider capsuleCollider;
+    [SerializeField] private PlayerHUD hud;
     
     private Portal leftPortal;
     private Portal rightPortal;
@@ -59,6 +60,8 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
+        hud.enabled = true;
+        
         var portals = GameObject.FindGameObjectsWithTag("Portal");
         leftPortal = portals[0].GetComponent<Portal>();
         rightPortal = portals[1].GetComponent<Portal>();
@@ -67,6 +70,9 @@ public class PlayerController : MonoBehaviour
         hand = head.GetChild(0);
         weapon = hand.GetChild(0).GetComponent<Firearm>();
         weapon.IsReady = true;
+        
+        hud.SetAmmo(weapon.AmmoCount);
+        hud.SetAmmoMax(weapon.AmmoMax);
     }
 
     // FixedUpdate is called one per physics frame
@@ -86,6 +92,8 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         UpdateLook();
+        
+        hud.SetAmmo(weapon.AmmoCount);
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -189,7 +197,12 @@ public class PlayerController : MonoBehaviour
     
     public void OnReload(InputAction.CallbackContext context)
     {
-        
+        if (context.performed && !weapon.IsReloading)
+        {
+            //weapon.IsReloading = true;
+            weapon.Reload();
+            hud.ShowReload(weapon.ReloadTime);
+        }
     }
 
     public void OnInteract(InputAction.CallbackContext context)

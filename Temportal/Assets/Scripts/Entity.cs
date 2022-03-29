@@ -6,6 +6,7 @@ using UnityEngine;
 
 public abstract class Entity : PortalTraveller
 {
+    [Header("Health")]
     [SerializeField] private int hpMax = 100;
     [SerializeField] private float hp = 100.0f;
     [SerializeField] private bool regenerate = true;
@@ -60,11 +61,13 @@ public abstract class Entity : PortalTraveller
     {
         if (_rotationCorrectFlag)
         {
-            transform.rotation = Quaternion.Lerp(_rotationStart, _rotationEnd, _rotationProgress += 15.0f * Time.deltaTime);
+            //transform.rotation = 
+                Quaternion.Lerp(_rotationStart, _rotationEnd, _rotationProgress += 15.0f * Time.deltaTime);
             if (_rotationProgress >= 1.0f)
             {
                 _rotationProgress = 0.0f;
                 _rotationCorrectFlag = false;
+                transform.rotation = _rotationEnd;
             }
         }
     }
@@ -76,8 +79,10 @@ public abstract class Entity : PortalTraveller
         _rotationStart = transform.rotation;
         var rot = end.rotation * (Quaternion.Euler(0.0f, 180.0f, 0.0f) * Quaternion.Inverse(start.rotation) * _rotationStart);
         _rotationEnd = Quaternion.Euler(new Vector3(0, rot.eulerAngles.y, 0));
-        if (Mathf.Abs(rb.velocity.y) <= 0.1f) transform.rotation = _rotationEnd;
-        //else StartCoroutine(correctRotation());
+        //if (Mathf.Abs(rb.velocity.y) <= 0.1f)
+            transform.rotation = _rotationEnd;
+        //else
+            //StartCoroutine(correctRotation());
         
         rb.velocity = end.TransformVector(Quaternion.Euler(0.0f, 180.0f, 0.0f) * start.InverseTransformVector(rb.velocity));
         
@@ -94,6 +99,11 @@ public abstract class Entity : PortalTraveller
         print($"{name} : currentHp {hp}");
     }
 
+    public virtual void ApplyRecoilTorque(float torque)
+    {
+        //rb.AddRelativeTorque(-torque * rb.mass, 0, 0, ForceMode.Impulse);
+    }
+
     public int HpMax
     {
         get => hpMax;
@@ -106,7 +116,7 @@ public abstract class Entity : PortalTraveller
 
     private IEnumerator correctRotation()
     {
-        yield return new WaitForSecondsRealtime(0.1f);
+        yield return new WaitForSecondsRealtime(0.25f);
         //yield return new WaitForFixedUpdate();
         _rotationCorrectFlag = true;
     }

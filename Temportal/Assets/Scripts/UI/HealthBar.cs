@@ -7,13 +7,14 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour
 {
     [SerializeField] private Transform cam;
-    private Entity entity;
+    [SerializeField] private Entity entity;
+    [SerializeField] private bool isEnemyBar = true;
     private Slider slider;
 
     void Awake()
     {
         slider = GetComponent<Slider>();
-        entity = GetComponentInParent<Entity>();
+        if (entity == null) entity = GetComponentInParent<Entity>();
 
         slider.maxValue = entity.HpMax;
         slider.minValue = 0;
@@ -26,6 +27,9 @@ public class HealthBar : MonoBehaviour
     
     void LateUpdate()
     {
-        transform.LookAt(transform.position + cam.forward);
+        if (isEnemyBar)
+        {
+            transform.LookAt(transform.position + cam.forward);
+        }
     }
 }
