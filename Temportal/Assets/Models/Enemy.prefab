@@ -71,7 +71,6 @@ GameObject:
   - component: {fileID: 7929147968586574950}
   - component: {fileID: 6746399992090562076}
   - component: {fileID: 8111381004729412675}
-  - component: {fileID: 5580769594145967451}
   m_Layer: 7
   m_Name: Model
   m_TagString: Untagged
@@ -120,7 +119,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 4efcffd7ae23f1e41943fd914b18da10, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -142,20 +141,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &5580769594145967451
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7910830976667866534}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8233994158276174665
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,6 +257,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 0}
+  entity: {fileID: 0}
+  isEnemyBar: 1
 --- !u!114 &8233994158276174675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,6 +321,7 @@ GameObject:
   - component: {fileID: 8233994158755322724}
   - component: {fileID: 8233994158755322720}
   - component: {fileID: 8055085462768265876}
+  - component: {fileID: 2123394767432547477}
   - component: {fileID: 8233994158755322725}
   m_Layer: 7
   m_Name: Enemy
@@ -389,7 +377,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 8233994158755322720}
-  <teleportThreshholdTransform>k__BackingField: {fileID: 8233994158755322724}
+  <TeleportThresholdTransform>k__BackingField: {fileID: 8233994158755322724}
   hpMax: 100
   hp: 100
   regenerate: 1
@@ -397,10 +385,11 @@ MonoBehaviour:
   healTime: 0.1
   healAmount: 5
   resistanceMultiplier: 1
-  body: {fileID: 7929147968586574950}
-  upThrust: 0.5
+  teleportOffsetPosition: 0.1
+  rotateXZDelay: 0.1
+  rotateSpeed: 0.5
   hoverHeight: 2
-  startState: 1
+  startState: 0
   sightRange: 20
   attackRange: 15
   angle: 120
@@ -410,8 +399,23 @@ MonoBehaviour:
     m_Bits: 256
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 137
+    m_Bits: 329
+  portalTrackThroughPortalTime: 1
   attackSpeed: 2
+--- !u!136 &2123394767432547477
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8233994158755322722}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 0
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!195 &8233994158755322725
 NavMeshAgent:
   m_ObjectHideFlags: 0

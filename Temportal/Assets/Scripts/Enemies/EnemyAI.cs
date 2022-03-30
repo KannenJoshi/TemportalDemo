@@ -9,8 +9,8 @@ using UnityEngine.SocialPlatforms;
 [RequireComponent(typeof(Rigidbody))]
 public abstract class EnemyAI : Entity
 {
-    [Header("Components")]
-    [SerializeField] private Transform body;
+    /*[Header("Components")]
+    [SerializeField] private Transform body;*/
     
     [Header("Movement")]
     //[SerializeField] private float moveSpeed = 10.0f;
@@ -27,8 +27,12 @@ public abstract class EnemyAI : Entity
     [SerializeField] private float alertTime = 5.0f; // Will try to chase for 5 seconds after losing player
     [SerializeField] private LayerMask playerMask;
     [SerializeField] private LayerMask obstacleMask;
+    [SerializeField] private LayerMask portalsMask;
+    [SerializeField] private float portalTrackThroughPortalTime = 1.0f;
     private bool canSeePlayer; // In range to see
     private bool canAttackPlayer; // In range to attack
+    private Vector3 targetPosition;
+    private float stoppingDistance;
 
     [Header("Combat")]
     [SerializeField] private float attackSpeed = 0.5f;
@@ -95,7 +99,8 @@ public abstract class EnemyAI : Entity
                 //if (!canSeePlayer) currentState = startState;
                 //RotateToPlayer();
                 MoveToPlayer();
-                if (!canSeePlayer) CheckLostPlayer();
+                if (!canSeePlayer && Time.time - lastSeenPlayerTime > portalTrackThroughPortalTime)
+                    CheckLostPlayer();
                 break;
             case State.ATTACK:
                 // Attack Player
@@ -111,38 +116,25 @@ public abstract class EnemyAI : Entity
                 break;
         }
         
-        Debug.DrawLine(this.transform.position, this.transform.position + this.transform.forward, Color.green, 1, false);
+        //Debug.DrawLine(this.transform.position, this.transform.position + this.transform.forward, Color.green, 1, false);
 
     }
 
-    /*private void FixedUpdate()
+    public override void EnterPortal()
     {
-        switch (currentState)
-        {
-            case State.IDLE:
-                break;
-            case State.PATROL:
-                // Move between points
-                break;
-            case State.CHASE:
-                // Move and Rotate to Player
-                break;
-            case State.ATTACK:
-                // Attack Player
-                break;
-        }
         
-        if (gravityEnabled) ApplyHoverForce();
-    }*/
+    }
+
+    public override void ExitPortal()
+    {
+        
+    }
 
     protected virtual void MoveToPlayer()
     {
         var dirToPlayer = (lastSeenPlayerPos - transform.position).normalized;
         var distToPlayer = Vector3.Distance(transform.position, lastSeenPlayerPos);
 
-        Vector3 targetPosition;
-        float stoppingDistance;
-        
         // Player is in sight currently and not in attack range
         if (canSeePlayer)
         {
@@ -152,12 +144,38 @@ public abstract class EnemyAI : Entity
         // Player not in sight but still is alerted
         else
         {
+            // If player disappeared within set time
+            if (Time.time - lastSeenPlayerTime <= portalTrackThroughPortalTime)
+            {
+                Vector3 directionToTarget = (lastSeenPlayerPos - transform.position).normalized;
+
+                RaycastHit hit;
+                Debug.DrawLine(transform.position, transform.position + directionToTarget * sightRange, Color.magenta, 0.5f);
+                if (Physics.Raycast(transform.position, directionToTarget, out hit, sightRange, portalsMask,
+                        QueryTriggerInteraction.Ignore))
+                {
+                    print("Lost Portal Raycast");
+                    // If looking at Portal
+                    if (hit.collider.tag.Equals("Portal"))
+                    {
+                        // Set dest to be slightly behind portal
+                        lastSeenPlayerPos = hit.transform.position + 2f * hit.transform.forward;
+                        print("Portal");
+                        //stoppingDistance = 0.5f;
+                    }
+                }
+                else if (hit.collider != null)
+                {
+                    print(hit.collider.name);
+                }
+            }
+
+            stoppingDistance = 0f;
             targetPosition = lastSeenPlayerPos;
-            stoppingDistance = 0;
         }
         
         // Don't want to keep resetting destination if will be the same
-        targetPosition += new Vector3(0, hoverHeight);
+        targetPosition += new Vector3(0, hoverHeight, 0);
         if (!agent.destination.Equals(targetPosition))
         {
             agent.destination = targetPosition;
@@ -174,9 +192,6 @@ public abstract class EnemyAI : Entity
     protected virtual void PredictPlayerMovement()
     {
         transform.LookAt(lastSeenPlayerPos);
-        //body.LookAt(new Vector3(0, lastSeenPlayerPos.y));
-        //var rot = Quaternion.RotateTowards(transform.rotation, Quaternion.FromToRotation(transform.forward, lastSeenPlayerPos), Time.deltaTime);
-        //transform.Rotate(rot.eulerAngles);
     }
 
     protected virtual void CheckLostPlayer()
@@ -185,10 +200,11 @@ public abstract class EnemyAI : Entity
             currentState = startState;
             return; // If no Timeout, always hunt for player. Failsafe for forgetting to override this as empty
         }
-        transform.Rotate(0, alertTime*rotateSpeed*Time.deltaTime, 0);
+        transform.Rotate(0, 360f / alertTime * Time.deltaTime, 0);
         if (Time.time - lastSeenPlayerTime >= alertTime && !canSeePlayer)
         {
             currentState = startState;
+            agent.ResetPath();
         }
     }
 
