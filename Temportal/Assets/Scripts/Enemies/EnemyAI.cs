@@ -168,6 +168,8 @@ public abstract class EnemyAI : Entity
                 {
                     print(hit.collider.name);
                 }
+
+                print(hit.transform.name);
             }
 
             stoppingDistance = 0f;
@@ -201,7 +203,7 @@ public abstract class EnemyAI : Entity
             return; // If no Timeout, always hunt for player. Failsafe for forgetting to override this as empty
         }
         transform.Rotate(0, 360f / alertTime * Time.deltaTime, 0);
-        if (Time.time - lastSeenPlayerTime >= alertTime && !canSeePlayer)
+        if (Time.time - lastSeenPlayerTime >= alertTime + portalTrackThroughPortalTime && !canSeePlayer)
         {
             currentState = startState;
             agent.ResetPath();
@@ -279,7 +281,7 @@ public abstract class EnemyAI : Entity
                         {
                             canAttackPlayer = distanceToTarget <= attackRange;
                             canSeePlayer = true;
-                            lastSeenPlayerPos = target.transform.position + new Vector3(0, 1);
+                            lastSeenPlayerPos = target.transform.position + new Vector3(0, 2, 0);
                             lastSeenPlayerTime = Time.time;
                         }
                     }
