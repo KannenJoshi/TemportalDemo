@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public abstract class Entity : PortalTraveller
 {
@@ -80,11 +81,16 @@ public abstract class Entity : PortalTraveller
         var rot = end.rotation * (Quaternion.Euler(0.0f, 180.0f, 0.0f) * Quaternion.Inverse(start.rotation) * _rotationStart);
         _rotationEnd = Quaternion.Euler(new Vector3(0, rot.eulerAngles.y, 0));
         //if (Mathf.Abs(rb.velocity.y) <= 0.1f)
+        /*if (Mathf.Abs(rb.velocity.y) <= 0.1f)
             transform.rotation = _rotationEnd;
-        //else
-            //StartCoroutine(correctRotation());
+        else
+            StartCoroutine(correctRotation());*/
         
         rb.velocity = end.TransformVector(Quaternion.Euler(0.0f, 180.0f, 0.0f) * start.InverseTransformVector(rb.velocity));
+        if (start.up.Equals(Vector3.up) && end.up.Equals(Vector3.up))
+            transform.rotation = _rotationEnd;
+        else
+            StartCoroutine(CorrectRotation());
         
         Physics.SyncTransforms();
         
