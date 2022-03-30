@@ -15,6 +15,10 @@ public abstract class Entity : PortalTraveller
     [SerializeField] private float healTime = 0.1f; //(hp)s-1
     [SerializeField] private int healAmount = 5;
     [SerializeField] private float resistanceMultiplier = 1.0f; // e.g. takes 0.8x damage if set to 0.8
+
+    [Header("Teleportation Settings")]
+    [SerializeField] private float teleportOffsetPosition = 0.1f;
+    [SerializeField] private float rotateXZDelay = 0.1f;
     
     private float _lastHit;
     private float _lastHeal;
@@ -23,8 +27,9 @@ public abstract class Entity : PortalTraveller
     private Quaternion _rotationEnd;
     private bool _rotationCorrectFlag = false;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         hp = hpMax;
         _lastHit = Time.time;
         _lastHeal = Time.time;
@@ -62,13 +67,15 @@ public abstract class Entity : PortalTraveller
     {
         if (_rotationCorrectFlag)
         {
-            //transform.rotation = 
-                Quaternion.Lerp(_rotationStart, _rotationEnd, _rotationProgress += 15.0f * Time.deltaTime);
+            transform.rotation = 
+                Quaternion.Slerp(_rotationStart, _rotationEnd, _rotationProgress += 5.0f * Time.deltaTime);
+            
             if (_rotationProgress >= 1.0f)
             {
                 _rotationProgress = 0.0f;
                 _rotationCorrectFlag = false;
-                transform.rotation = _rotationEnd;
+                //transform.rotation = _rotationEnd;
+                //transform.rotation = Quaternion.Euler(_rotationEnd.eulerAngles.x, transform.eulerAngles.y, _rotationEnd.eulerAngles.z);
             }
         }
     }
@@ -76,25 +83,36 @@ public abstract class Entity : PortalTraveller
     public override void Teleport(Transform start, Transform end)
     {
         transform.position = end.TransformPoint(Quaternion.Euler(0.0f, 180.0f, 0.0f) * start.InverseTransformPoint(transform.position));
+        transform.position -= end.forward * teleportOffsetPosition;
 
-        _rotationStart = transform.rotation;
-        var rot = end.rotation * (Quaternion.Euler(0.0f, 180.0f, 0.0f) * Quaternion.Inverse(start.rotation) * _rotationStart);
-        _rotationEnd = Quaternion.Euler(new Vector3(0, rot.eulerAngles.y, 0));
-        //if (Mathf.Abs(rb.velocity.y) <= 0.1f)
-        /*if (Mathf.Abs(rb.velocity.y) <= 0.1f)
-            transform.rotation = _rotationEnd;
-        else
-            StartCoroutine(correctRotation());*/
         
-        rb.velocity = end.TransformVector(Quaternion.Euler(0.0f, 180.0f, 0.0f) * start.InverseTransformVector(rb.velocity));
+        var rot = end.rotation * (Quaternion.Euler(0.0f, 180.0f, 0.0f) * Quaternion.Inverse(start.rotation) * transform.rotation);
+        _rotationStart = rot;
+        _rotationEnd = Quaternion.Euler(new Vector3(0, rot.eulerAngles.y, 0));;
+
         if (start.up.Equals(Vector3.up) && end.up.Equals(Vector3.up))
+        {
             transform.rotation = _rotationEnd;
+        }
         else
+        {
+            transform.rotation = rot;
             StartCoroutine(CorrectRotation());
-        
+        }
+
+        rb.velocity = end.TransformVector(Quaternion.Euler(0.0f, 180.0f, 0.0f) * start.InverseTransformVector(rb.velocity));
+
         Physics.SyncTransforms();
+    }
+
+    public override void EnterPortal()
+    {
         
-        
+    }
+
+    public override void ExitPortal()
+    {
+        //_rotationCorrectFlag = true;
     }
 
     public void ApplyDamage(int damage)
@@ -120,11 +138,9 @@ public abstract class Entity : PortalTraveller
         get => hp;
     }
 
-    private IEnumerator correctRotation()
+    private IEnumerator CorrectRotation()
     {
-        yield return new WaitForSecondsRealtime(0.25f);
-        //yield return new WaitForFixedUpdate();
-        //_rotationCorrectFlag = true;
-        transform.rotation = _rotationEnd;
+        yield return new WaitForSecondsRealtime(rotateXZDelay);
+        _rotationCorrectFlag = true;
     }
 }

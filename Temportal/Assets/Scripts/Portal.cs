@@ -53,7 +53,7 @@ public class Portal : MonoBehaviour
                 continue;
             }
 
-            Vector3 relativeObjPos = transform.InverseTransformPoint(traveller.teleportThreshholdTransform.position);
+            Vector3 relativeObjPos = transform.InverseTransformPoint(traveller.TeleportThresholdTransform.position);
             //var portalCameraPosition = OtherPortal.transform.localToWorldMatrix * transform.worldToLocalMatrix * traveller.transform.localToWorldMatrix;
 
             if (relativeObjPos.z > 0.0f)
@@ -111,9 +111,8 @@ public class Portal : MonoBehaviour
     // Enter Hitbox
     private void OnTriggerEnter(Collider other)
     {
-        print("PortalTrigger: " + other.tag);
         var traveller = other.GetComponent<PortalTraveller>();
-        if (traveller != null)
+        if (traveller != null && OtherPortal.IsPlaced)
         {
             Physics.IgnoreCollision(other, Wall, true);
             traveller.EnterPortal();

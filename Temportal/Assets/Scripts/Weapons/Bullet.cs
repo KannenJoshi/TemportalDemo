@@ -17,8 +17,9 @@ public class Bullet : PortalTraveller
     // So Doesn't hit entity shooting when created
     private bool _ignoreShooterTag = true;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         tr = GetComponent<TrailRenderer>();
         pt = GetComponent<PortalTraveller>();
     }

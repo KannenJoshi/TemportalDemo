@@ -231,17 +231,12 @@ public class PlayerController : MonoBehaviour
             
             var forwardsCheck = Vector3.Dot(portalWallFwd, rotation * portal.transform.forward);
             //forwardsCheck /= Mathf.Abs(forwardsCheck); // To get Sign Value
-            
-            print("portalSide");
-            print(Mathf.Sign(portalSide));
-            print("forwardsCheck");
-            print(Mathf.Sign(forwardsCheck));
+
             
             // If hit front and portal fwd in same direction, or hits back and PFwd opposite
             if (Mathf.Sign(portalSide).Equals(Mathf.Sign(forwardsCheck)))
             {
                 // Rotate so forward faces into wall
-                print("rotate");
                 portal.transform.Rotate(Quaternion.Inverse(rotation) * new Vector3(0, 180, 0));
             }
             portal.transform.Rotate(rotation.eulerAngles);
