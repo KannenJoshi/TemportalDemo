@@ -154,6 +154,7 @@ public abstract class EnemyAI : Entity
                 if (Physics.Raycast(transform.position, directionToTarget, out hit, sightRange, portalsMask,
                         QueryTriggerInteraction.Ignore))
                 {
+                    // TODO: NOT COLLIDING?????
                     print("Lost Portal Raycast");
                     // If looking at Portal
                     if (hit.collider.tag.Equals("Portal"))
@@ -168,8 +169,6 @@ public abstract class EnemyAI : Entity
                 {
                     print(hit.collider.name);
                 }
-
-                print(hit.transform.name);
             }
 
             stoppingDistance = 0f;
