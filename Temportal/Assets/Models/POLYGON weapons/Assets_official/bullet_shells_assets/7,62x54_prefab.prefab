@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: -9104094361064871877}
   - component: {fileID: -1836561469852066717}
   - component: {fileID: -3844431050868290102}
-  - component: {fileID: 5271869259136834705}
   m_Layer: 7
   m_Name: 7,62x54_prefab
   m_TagString: Projectile
@@ -78,6 +77,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8eb4ec4bce04e0b87b7da84eff3d07f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: -9104094361064871877}
+  <teleportThreshholdTransform>k__BackingField: {fileID: 8581877381303272417}
   damageMultiplier: 1
   playerColour: {r: 0.27699995, g: 0.82508045, b: 1, a: 1}
   enemyColour: {r: 1, g: 0.40392157, b: 0.0627451, a: 1}
@@ -188,19 +189,6 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!114 &5271869259136834705
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8091934342544867244}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee1a288f33a89fe459d16c7daaf93728, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: -9104094361064871877}
 --- !u!1001 &9041414797740369850
 PrefabInstance:
   m_ObjectHideFlags: 0

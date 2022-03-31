@@ -27,23 +27,39 @@ public class Firearm : MonoBehaviour
     // Recoil Pattern Plugin?
 
     [SerializeField] protected int ammoCount;
+
     private float _timeBetweenShots;
     // TODO: Set bullet prefab to be default here
 
+    private PlayerHUD hud;
+    
     void Start()
     {
         _timeBetweenShots = 1 / fireRate;
         ammoCount = magazineSize;
+
+        hud = GameObject.Find("HUD").GetComponent<PlayerHUD>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // AMMO
         if (ammoCount <= 0 && !IsReloading)
         {
             Reload();
         }
 
+        if (IsReloading)
+        {
+            
+        }
+
+        // AIMING
+        if (IsAiming) _timeBetweenShots = 1 / adsFireRate;
+        else _timeBetweenShots = 1 / fireRate;
+
+        // SHOOTING
         if (IsShooting && !IsReloading)
         {
             if (IsReady)
@@ -64,49 +80,21 @@ public class Firearm : MonoBehaviour
         }
     }
     
-    /*
-     * INPUT ACTIONS
-     */
-    public void Reload(InputAction.CallbackContext context)
+    private void ADS()
     {
-        if (context.performed) Reload();
-    }
-
-    // public void Fire(InputAction.CallbackContext context)
-    // {
-    //     if (context.performed && IsReady && !IsReloading && !IsShooting)
-    //     {
-    //         IsShooting = true;
-    //     }
-    //
-    //     if (context.canceled)
-    //     {
-    //         IsShooting = false;
-    //     }
-    // }
-    
-    public void ADS(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            _timeBetweenShots = 1 / adsFireRate;
-            // Have ADS in Player Controller which uses the gun's aim value
-        }
-    
-        if (context.canceled)
-        {
-            _timeBetweenShots = 1 / fireRate;
-        }
+        if (IsAiming) _timeBetweenShots = 1 / adsFireRate;
+        else _timeBetweenShots = 1 / fireRate;
     }
     
     /*
      * PRIVATE METHODS
      */
 
-    private void Reload()
+    public void Reload()
     {
         // TODO: NEED TO CHECK ???
         IsReloading = true;
+        hud.ShowReload(ReloadTime);
         StartCoroutine(ReloadDelay());
     }
 
@@ -117,6 +105,7 @@ public class Firearm : MonoBehaviour
         // 
         --ammoCount;
         // TODO: Apply Recoil
+        holder.gameObject.GetComponent<Entity>().ApplyRecoilTorque(recoilForce);
         
         // TODO: NEED TO CHECK ???
         IsReady = false;
@@ -158,6 +147,10 @@ public class Firearm : MonoBehaviour
     public bool IsReady { get; set; } = false;
     public bool IsShooting { get; set; }
     public bool IsReloading { get; set; }
-
+    public bool IsAiming { get; set; }
+    public bool IsMagazineFull => ammoCount == magazineSize;
+    public int AmmoMax => magazineSize;
+    public int AmmoCount => ammoCount;
     public float AdsZoom => adsZoom;
+    public float ReloadTime => reloadTime;
 }

@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Player : Entity
 {
-    [SerializeField] private Transform orientation;
-
+    [SerializeField] private Transform head;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,20 +16,20 @@ public class Player : Entity
     // Update is called once per frame
     protected override void UpdateBehaviour()
     {
-
+        base.UpdateBehaviour();
     }
 
-    public override void Teleport(Transform start, Transform end)
+    protected override void Die()
     {
-        transform.position =
-            end.TransformPoint(Quaternion.Euler(0.0f, 180.0f, 0.0f) * start.InverseTransformPoint(transform.position));
-
-        orientation.rotation = end.rotation * (Quaternion.Euler(0.0f, 180.0f, 0.0f) *
-                                               Quaternion.Inverse(start.rotation) * orientation.rotation);
-
-        rb.velocity =
-            end.TransformVector(Quaternion.Euler(0.0f, 180.0f, 0.0f) * start.InverseTransformVector(rb.velocity));
-
-        Physics.SyncTransforms();
+        
     }
+
+    public override void ApplyRecoilTorque(float torque)
+    {
+        //base.ApplyRecoilTorque(torque);
+        // TODO: ROTATE OVER TIME?
+        //var localRot = head.localRotation.eulerAngles;
+        //head.localRotation = Quaternion.Euler(localRot - new Vector3(torque, 0, 0));
+    }
+
 }

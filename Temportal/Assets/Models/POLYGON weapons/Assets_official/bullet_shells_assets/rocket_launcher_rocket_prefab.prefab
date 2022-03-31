@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 658574237081287082}
   - component: {fileID: 223633626149746518}
   - component: {fileID: 5643356270057648311}
-  - component: {fileID: 7822052804405417352}
   - component: {fileID: 2776078235767748819}
   m_Layer: 7
   m_Name: rocket_launcher_rocket_prefab
@@ -173,19 +172,6 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!114 &7822052804405417352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5534813618486378921}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee1a288f33a89fe459d16c7daaf93728, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 223633626149746518}
 --- !u!114 &2776078235767748819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,6 +184,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aece796fd95520d4d9efc4d176496562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 223633626149746518}
+  <teleportThreshholdTransform>k__BackingField: {fileID: 1200407861040370067}
   damageMultiplier: 1
   playerColour: {r: 0.2784314, g: 0.8235294, b: 1, a: 0}
   enemyColour: {r: 1, g: 0.40392157, b: 0.0627451, a: 0}

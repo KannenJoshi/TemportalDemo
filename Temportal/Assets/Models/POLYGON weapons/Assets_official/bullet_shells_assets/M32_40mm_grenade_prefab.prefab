@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 7393710920232382900}
   - component: {fileID: 7467586195365469277}
   - component: {fileID: 6107969981271018265}
-  - component: {fileID: -5026647330756956127}
   m_Layer: 7
   m_Name: M32_40mm_grenade_prefab
   m_TagString: Projectile
@@ -78,6 +77,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8eb4ec4bce04e0b87b7da84eff3d07f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 7393710920232382900}
+  <teleportThreshholdTransform>k__BackingField: {fileID: 3863634146400483919}
   damageMultiplier: 1
   playerColour: {r: 0.27699995, g: 0.82508045, b: 1, a: 1}
   enemyColour: {r: 1, g: 0.40392157, b: 0.0627451, a: 1}
@@ -188,19 +189,6 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!114 &-5026647330756956127
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 318900897771986961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee1a288f33a89fe459d16c7daaf93728, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 7393710920232382900}
 --- !u!1001 &468887114685944863
 PrefabInstance:
   m_ObjectHideFlags: 0

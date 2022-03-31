@@ -1,64 +1,55 @@
 Shader "Portals/PortalMask"
 {
-	Properties
-	{
-		_MainTex("Main Texture", 2D) = "white" {}
-	}
-		SubShader
-	{
-		Tags
-		{
-			"RenderType" = "Opaque"
-			"Queue" = "Geometry"
-			"RenderPipeline" = "UniversalPipeline"
-		}
+    Properties
+    {
+        _InactiveColour ("Inactive Colour", Color) = (1, 1, 1, 1)
+        _MainTex("Main Texture", 2D) = "white" {}
+    }
+    SubShader
+    {
+        Tags { "RenderType"="Opaque" }
+        LOD 100
+        Cull Off
 
-		HLSLINCLUDE
-			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-		ENDHLSL
+        Pass
+        {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "UnityCG.cginc"
 
-		Pass
-		{
-			Name "Mask"
+            struct appdata
+            {
+                float4 vertex : POSITION;
+            };
 
-			Stencil
-			{
-				Ref 1
-				Pass replace
-			}
+            struct v2f
+            {
+                float4 vertex : SV_POSITION;
+                float4 screenPos : TEXCOORD0;
+            };
 
-			HLSLPROGRAM
-				#pragma vertex vert
-				#pragma fragment frag
+            sampler2D _MainTex;
+            float4 _InactiveColour;
+            int displayMask; // set to 1 to display texture, otherwise will draw test colour
+            
 
-				struct appdata
-				{
-					float4 vertex : POSITION;
-				};
+            v2f vert (appdata v)
+            {
+                v2f o;
+                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.screenPos = ComputeScreenPos(o.vertex);
+                return o;
+            }
 
-				struct v2f
-				{
-					float4 vertex : SV_POSITION;
-					float4 screenPos : TEXCOORD0;
-				};
-
-				v2f vert(appdata v)
-				{
-					v2f o;
-					o.vertex = TransformObjectToHClip(v.vertex.xyz);
-					o.screenPos = ComputeScreenPos(o.vertex);
-					return o;
-				}
-
-				uniform sampler2D _MainTex;
-
-				float4 frag(v2f i) : SV_Target
-				{
-					float2 uv = i.screenPos.xy / i.screenPos.w;
-					float4 col = tex2D(_MainTex, uv);
-					return col;
-				}
-			ENDHLSL
-		}
-	}
+            fixed4 frag (v2f i) : SV_Target
+            {
+                float2 uv = i.screenPos.xy / i.screenPos.w;
+                fixed4 portalCol = tex2D(_MainTex, uv);
+                return portalCol * displayMask + _InactiveColour * (1-displayMask);
+            }
+            ENDCG
+        }
+    }
+    Fallback "Standard" // for shadows
 }
