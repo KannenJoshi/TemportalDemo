@@ -100,6 +100,11 @@ public class Portal : MonoBehaviour
 
     public void RemovePortal()
     {
+        if (Wall)
+        {
+            if (Equals(Wall.Front)) Wall.Front = null;
+            else Wall.Back = null;
+        }
         Wall = null;
         gameObject.SetActive(false);
         IsPlaced = false;

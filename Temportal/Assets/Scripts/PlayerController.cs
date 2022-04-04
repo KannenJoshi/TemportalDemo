@@ -276,8 +276,6 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed && leftPortal.IsPlaced)
         {
-            if (leftPortal.Wall.Front) leftPortal.Wall.Front = null;
-            else leftPortal.Wall.Back = null;
             leftPortal.RemovePortal();
         }
     }
@@ -286,8 +284,6 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed && rightPortal.IsPlaced)
         {
-            if (rightPortal.Wall.Front) rightPortal.Wall.Front = null;
-            else rightPortal.Wall.Back = null;
             rightPortal.RemovePortal();
         }
     }
