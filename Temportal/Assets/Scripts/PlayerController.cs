@@ -214,42 +214,46 @@ public class PlayerController : MonoBehaviour
         if (!Physics.Raycast(head.position, head.forward, out var hit)) return;
         if (!hit.transform.CompareTag("PortalWall")) return;
         
+        var portalWall = hit.collider.gameObject;
+        var wall = portalWall.GetComponent<PortalWall>();
+        var portalWallFwd = portalWall.transform.forward;
+        var portalSide = PortalSideCheck(hit.normal, portalWallFwd);
+        
+        // PORTAL CHECK IF HIT SIDE
+        if (portalSide == 0.0f) return;
+        
         // CHECK INSTEAD IF PORTAL ALREADY IN POSITION
-        if (!hit.collider.Equals(leftPortal.Wall) && !hit.collider.Equals(rightPortal.Wall))
+        if ((portalSide > 0.0f && wall.Front) || (portalSide < 0.0f && wall.Back)) return;
+        
+        
+        var rotation = portalWall.transform.rotation;
+        
+        // REMOVE THE OLD
+        portal.RemovePortal();
+            
+        var forwardsCheck = Vector3.Dot(portalWallFwd, rotation * portal.transform.forward);
+        //forwardsCheck /= Mathf.Abs(forwardsCheck); // To get Sign Value
+
+            
+        // If hit front and portal fwd in same direction, or hits back and PFwd opposite
+        if (Mathf.Sign(portalSide).Equals(Mathf.Sign(forwardsCheck)))
         {
-            // POSITION THE NEW
-            var portalWall = hit.collider.gameObject;
-            var portalWallFwd = portalWall.transform.forward;
-            var rotation = portalWall.transform.rotation;
-            var portalSide = PortalSideCheck(hit.normal, portalWallFwd);
-
-            // PORTAL DIRECTION
-            if (portalSide == 0.0f) return;
-            
-            // REMOVE THE OLD
-            portal.RemovePortal();
-            
-            var forwardsCheck = Vector3.Dot(portalWallFwd, rotation * portal.transform.forward);
-            //forwardsCheck /= Mathf.Abs(forwardsCheck); // To get Sign Value
-
-            
-            // If hit front and portal fwd in same direction, or hits back and PFwd opposite
-            if (Mathf.Sign(portalSide).Equals(Mathf.Sign(forwardsCheck)))
-            {
-                // Rotate so forward faces into wall
-                portal.transform.Rotate(Quaternion.Inverse(rotation) * new Vector3(0, 180, 0));
-            }
-            portal.transform.Rotate(rotation.eulerAngles);
+            // Rotate so forward faces into wall
+            portal.transform.Rotate(Quaternion.Inverse(rotation) * new Vector3(0, 180, 0));
+        }
+        portal.transform.Rotate(rotation.eulerAngles);
             
                         
-            // PORTAL LOCATION
-            portal.transform.position = portalWall.transform.position + (rotation * new Vector3(1.5f, 1.5f, portalSide*portalWall.transform.localScale.z));
+        // PORTAL LOCATION
+        portal.transform.position = portalWall.transform.position + (rotation * new Vector3(1.5f, 1.5f, portalSide*portalWall.transform.localScale.z));
             
-            // PORTAL WALL COLLIDER
-            portal.Wall = hit.collider;
+            
+        // UPDATE PORTAL WALL
+        if (portalSide > 0) wall.Front = portal;
+        else wall.Back = portal;
+        portal.Wall = wall;
 
-            portal.PlacePortal();
-        }
+        portal.PlacePortal();
     }
     public void OnPortalPlaceLeft(InputAction.CallbackContext context)
     {
@@ -270,16 +274,20 @@ public class PlayerController : MonoBehaviour
     
     public void OnPortalRemoveLeft(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && leftPortal.IsPlaced)
         {
+            if (leftPortal.Wall.Front) leftPortal.Wall.Front = null;
+            else leftPortal.Wall.Back = null;
             leftPortal.RemovePortal();
         }
     }
     
     public void OnPortalRemoveRight(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && rightPortal.IsPlaced)
         {
+            if (rightPortal.Wall.Front) rightPortal.Wall.Front = null;
+            else rightPortal.Wall.Back = null;
             rightPortal.RemovePortal();
         }
     }

@@ -713,7 +713,7 @@ MonoBehaviour:
   losLayer:
     serializedVersion: 2
     m_Bits: 329
-  sightRange: 20
+  sightRange: 15
   sightAngle: 80
   attackRange: 10
   alertTime: 5
