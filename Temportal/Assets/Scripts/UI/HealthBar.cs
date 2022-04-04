@@ -14,6 +14,7 @@ public class HealthBar : MonoBehaviour
     void Awake()
     {
         slider = GetComponent<Slider>();
+        if (Camera.main != null) cam = Camera.main.transform;
         if (entity == null) entity = GetComponentInParent<Entity>();
 
         slider.maxValue = entity.HpMax;
