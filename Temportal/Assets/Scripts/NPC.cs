@@ -128,7 +128,8 @@ public abstract class NPC : Entity
                 // Head into the portal
                 _lastSeenTargetPos = hit.transform.position;
                 // Without, might timeout before reaches portal
-                _lastSeenTargetTime = Time.time;
+                //_lastSeenTargetTime = Time.time;
+                _lastSeenTargetTime += Time.deltaTime;
                 agent.stoppingDistance = 0.0f;
             }
         }
@@ -156,7 +157,6 @@ public abstract class NPC : Entity
 
     protected void Chase()
     {
-        agent.stoppingDistance = attackRange;
         ChangeState(AIState.CHASE);
     }
 
@@ -197,6 +197,7 @@ public abstract class NPC : Entity
             case AIState.CHASE:
                 if (_canAttackTarget) Attack();
                 else if (!_trackingTarget) Patrol();
+                // HAVE AN ENEMY WHICH ADDS LAST SEEN TO PATROL POINTS, UP TO X MANY STORED
                 else ChaseThink();
                 
                 break;
@@ -246,6 +247,7 @@ public abstract class NPC : Entity
 
     protected virtual void ChaseThink()
     {
+        agent.stoppingDistance = _canSeeTarget ? attackRange : 0.0f;
         agent.SetDestination(RoundedPosition(_lastSeenTargetPos));
     }
 
@@ -307,10 +309,11 @@ public abstract class NPC : Entity
 
     public override void Teleport(Transform start, Transform end)
     {
+        agent.enabled = false;
         base.Teleport(start, end);
-        agent.velocity = end.TransformVector(Quaternion.Euler(0.0f, 180.0f, 0.0f) * start.InverseTransformVector(agent.velocity));
-        agent.velocity = Vector3.Max(agent.velocity, 5 * agent.velocity.normalized);
-
+        agent.enabled = true;
+        var vel = Vector3.Max(agent.velocity, 4 * agent.velocity.normalized);
+        agent.velocity = end.TransformVector(Quaternion.Euler(0.0f, 180.0f, 0.0f) * start.InverseTransformVector(vel));
     }
 
     protected override void Die()
