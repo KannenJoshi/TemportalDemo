@@ -309,9 +309,11 @@ public abstract class NPC : Entity
 
     public override void Teleport(Transform start, Transform end)
     {
-        agent.enabled = false;
+        //agent.enabled = false;
         base.Teleport(start, end);
-        agent.enabled = true;
+        //agent.enabled = true;
+        
+        // Minimum Velocity
         var vel = Vector3.Max(agent.velocity, 4 * agent.velocity.normalized);
         agent.velocity = end.TransformVector(Quaternion.Euler(0.0f, 180.0f, 0.0f) * start.InverseTransformVector(vel));
     }
