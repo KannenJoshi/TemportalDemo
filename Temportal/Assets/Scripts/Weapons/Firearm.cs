@@ -32,6 +32,11 @@ public class Firearm : MonoBehaviour
     // TODO: Set bullet prefab to be default here
 
     private PlayerHUD hud;
+
+    void Awake()
+    {
+        holder = transform.root.gameObject.GetComponent<Rigidbody>();
+    }
     
     void Start()
     {
@@ -48,11 +53,6 @@ public class Firearm : MonoBehaviour
         if (ammoCount <= 0 && !IsReloading)
         {
             Reload();
-        }
-
-        if (IsReloading)
-        {
-            
         }
 
         // AIMING

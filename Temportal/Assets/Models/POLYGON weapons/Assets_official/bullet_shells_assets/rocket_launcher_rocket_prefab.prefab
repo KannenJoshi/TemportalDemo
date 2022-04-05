@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 5534813618486378921}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 6670670673180381006}
   m_Father: {fileID: 0}
@@ -45,10 +45,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.005
-  m_Height: 0.025
+  m_Radius: 0.05
+  m_Height: 0.7
   m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 0.00016115792}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &223633626149746518
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -185,10 +185,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 223633626149746518}
-  <teleportThreshholdTransform>k__BackingField: {fileID: 1200407861040370067}
+  <TeleportThresholdTransform>k__BackingField: {fileID: 0}
   damageMultiplier: 1
   playerColour: {r: 0.2784314, g: 0.8235294, b: 1, a: 0}
   enemyColour: {r: 1, g: 0.40392157, b: 0.0627451, a: 0}
+  emission: 0.37
 --- !u!1001 &1866829374864614484
 PrefabInstance:
   m_ObjectHideFlags: 0
