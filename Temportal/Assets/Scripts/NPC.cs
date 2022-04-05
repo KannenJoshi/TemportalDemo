@@ -94,20 +94,19 @@ public abstract class NPC : Entity
         var targetCollider = target.GetComponent<CapsuleCollider>();
         // Distance and Direction to Previous Position
         var distance = Vector3.Distance(transform.position, target.transform.position);
-        var direction = (target.transform.position + targetCollider.center - transform.position).normalized;;
+        var direction = transform.forward;
+        var directionToPlayer = (target.transform.position + targetCollider.center - transform.position).normalized;
 
         _canSeeTarget = false;
         _canAttackTarget = false;
         
         // If out of sight range or not within the angle
-        if (distance > sightRange || Vector3.Angle(transform.forward, direction) > sightAngle / 2)
+        if (distance <= sightRange && Vector3.Angle(transform.forward, directionToPlayer) <= sightAngle / 2)
         {
-            
-            //return; // Can't return as will stop checking for portal after
-            direction = transform.forward;
+            direction = directionToPlayer;
         }
         
-        Debug.DrawRay(head.position, direction*sightRange, Color.green, 0.5f);
+        Debug.DrawRay(head.position, direction*sightRange, Color.green, thinkRate);
 
         if (Physics.Raycast(head.position, direction, out RaycastHit hit, sightRange, losLayer, QueryTriggerInteraction.Collide))
         {
@@ -305,6 +304,16 @@ public abstract class NPC : Entity
         }
 
         AIBehaviour();
+
+        var direction = transform.forward;
+        var t = Time.deltaTime;
+        var a = new Vector3(0, sightAngle/2,0);
+        var angle = Quaternion.Euler( a);
+        var angle2 = Quaternion.Euler( -a);
+        Debug.DrawRay(head.position, direction, Color.red, t);
+        Debug.DrawRay(head.position, angle*direction*sightRange, Color.white, t);
+        Debug.DrawRay(head.position, angle2*direction*sightRange, Color.white, t);
+
     }
 
     public override void Teleport(Transform start, Transform end)
