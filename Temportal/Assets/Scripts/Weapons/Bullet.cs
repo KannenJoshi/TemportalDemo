@@ -17,7 +17,7 @@ public class Bullet : PortalTraveller
     private MeshRenderer model;
     
     // So Doesn't hit entity shooting when created
-    private bool _ignoreShooterTag = true;
+    protected bool _ignoreShooterTag = true;
 
     protected override void Awake()
     {

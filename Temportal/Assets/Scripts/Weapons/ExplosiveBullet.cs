@@ -13,6 +13,7 @@ public class ExplosiveBullet : Bullet
     
     [Header("Advanced")]
     [SerializeField] private float selfDamageMultiplier = 0.2f;
+    [Range(0.1f, 5f)]
     [SerializeField] private float damageAtEdgeScale = 2f;
 
     private void OnDestroy()
@@ -55,6 +56,24 @@ public class ExplosiveBullet : Bullet
                 objRb.AddExplosionForce(explosiveForce, pos, radius, 0.5f, ForceMode.Impulse);
 
             }
+        }
+    }
+    
+    void OnCollisionEnter(Collision collision)
+    {
+        // TODO: Edit ignore _parentTag to ignore at first shoot if _parentTag is same, not just for player so Enemy can use
+        if (_ignoreShooterTag && collision.gameObject.tag.Equals(_parentTag)) return;
+        
+        if (collision.gameObject.tag.Equals("Player") || collision.gameObject.tag.Equals("Enemy"))
+        {
+            collision.gameObject.GetComponent<Entity>().ApplyDamage(Mathf.RoundToInt(damage/damageAtEdgeScale));
+            Destroy(gameObject);
+        }
+        
+        //print(collision.gameObject.tag);
+        if (collision.gameObject.tag.Equals("Portal"))
+        {
+            //StartCoroutine(DisableTrailOnTeleport());
         }
     }
 }
