@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Cinemachine;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -22,6 +21,15 @@ public class Player : Entity
     protected override void Die()
     {
         
+    }
+    
+    protected override void Heal()
+    {
+        if (regenerate && Hp < HpMax && Time.time > _lastHit + healAfterDamageDelay)
+        {
+            Hp += healAmount * Time.unscaledDeltaTime;
+            Hp = Mathf.Min(Hp, HpMax);
+        }
     }
 
     public override void ApplyRecoilTorque(float torque)

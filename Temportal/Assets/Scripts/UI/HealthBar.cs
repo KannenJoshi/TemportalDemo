@@ -11,6 +11,9 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private bool isEnemyBar = true;
     private Slider slider;
 
+    private float sliderVal;
+    private float hpVal;
+
     void Awake()
     {
         slider = GetComponent<Slider>();
@@ -23,7 +26,15 @@ public class HealthBar : MonoBehaviour
 
     void Update()
     {
-        slider.value = entity.Hp;
+        //slider.value = entity.Hp;
+        if (!Mathf.Approximately(entity.Hp,slider.value))
+        {
+            hpVal = entity.Hp;
+            sliderVal = slider.value;
+        }
+        
+        slider.value = Mathf.Lerp(sliderVal, hpVal, 10f * Time.unscaledDeltaTime);
+        //slider.value = slider.value +  ;
     }
     
     void LateUpdate()
