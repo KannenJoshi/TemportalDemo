@@ -19,6 +19,8 @@ public enum AIState
 [RequireComponent(typeof(Rigidbody))]
 public abstract class NPC : Entity
 {
+    private readonly float TOLERANCE = 0.00001f;
+    
     [Header("AI State")]
     [SerializeField] private AIState initialState;
     [SerializeField] private AIState currentState;
@@ -87,7 +89,30 @@ public abstract class NPC : Entity
     {
         // https://answers.unity.com/questions/324589/how-can-i-tell-when-a-navmesh-has-reached-its-dest.html
         // Distance was E-07 so using approximately compare remain and stop dist
-        return (Mathf.Approximately(agent.remainingDistance, agent.stoppingDistance) || Mathf.Approximately(Vector3.Distance(transform.position, RoundedPosition(_currentPatrolPoint)),agent.stoppingDistance)) && (!agent.hasPath || Mathf.Approximately(agent.velocity.sqrMagnitude, 0f));
+        // WAS BROKEN BECAUSE OF HEIGHT DIFFERENCE
+        //return (Mathf.Approximately(agent.remainingDistance, agent.stoppingDistance) || Mathf.Approximately(Vector3.Distance(transform.position, RoundedPosition(_currentPatrolPoint)),agent.stoppingDistance)) && (!agent.hasPath || Mathf.Approximately(agent.velocity.sqrMagnitude, 0f));
+
+        var agentDest = _currentPatrolPoint;
+        agentDest.y = 3;
+
+        var A = Math.Abs(agent.remainingDistance - agent.stoppingDistance) < TOLERANCE;
+        var B = Math.Abs(Vector3.Distance(transform.position, RoundedPosition(agentDest)) - agent.stoppingDistance) < TOLERANCE;
+
+        var C = !agent.hasPath;
+        var D = Mathf.Approximately(agent.velocity.sqrMagnitude, 0f);
+        
+        return (A || B) && (C || D);
+        //return (Mathf.Approximately(agent.remainingDistance, agent.stoppingDistance) || Mathf.Approximately(Vector3.Distance(transform.position, RoundedPosition(agentDest)),agent.stoppingDistance)) && (!agent.hasPath || Mathf.Approximately(agent.velocity.sqrMagnitude, 0f));
+    }
+
+    private void RotateWeapons(Vector3 targetPos)
+    {
+        foreach (var weapon in weapons)
+        {
+            var dir = (targetPos - weapon.transform.position).normalized;
+            var rot = Quaternion.LookRotation(dir);
+            weapon.transform.rotation = rot;
+        }
     }
 
     private void ScanForTarget()
