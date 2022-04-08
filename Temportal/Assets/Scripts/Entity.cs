@@ -1,9 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Animations;
 
 public abstract class Entity : PortalTraveller
 {
@@ -140,7 +136,7 @@ public abstract class Entity : PortalTraveller
     public int HpMax => hpMax;
     //public int Hp => Mathf.RoundToInt(hp);
     //public float Hp => hp;
-    public float Hp { get; protected set; }
+    public float Hp { get => hp; protected set => hp = value; }
 
     /*
      * COROUTINES
