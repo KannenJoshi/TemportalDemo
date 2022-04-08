@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Management.Instrumentation;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
 using Weapons;
@@ -22,7 +20,7 @@ public abstract class NPC : Entity
     private readonly float TOLERANCE = 0.00001f;
     
     [Header("AI State")]
-    [SerializeField] private AIState initialState;
+    [SerializeField] protected AIState initialState;
     [SerializeField] private AIState currentState;
     [SerializeField] private AIState previousState;
 
@@ -48,9 +46,16 @@ public abstract class NPC : Entity
     private float _idleRotateProgress;
     private int _patrolPointIndex;
     private Vector3 _currentPatrolPoint;
+
+    [Header("Weapons")]
+    [SerializeField] private float weaponOffsetDelay;
+    private float _lastWeaponShotTime;
+    private int _lastWeaponShotIndex;
     
     private NavMeshAgent agent;
     private List<Firearm> weapons;
+    private float fireDelay = 0.0f;
+    private List<Quaternion> defaultWeaponRotations;
     
     protected override void Awake()
     {
@@ -64,7 +69,17 @@ public abstract class NPC : Entity
         
         target = target == null ? GameObject.FindGameObjectWithTag("Player") : target;
         weapons = GetComponentsInChildren<Firearm>().ToList();
+        defaultWeaponRotations = new List<Quaternion>(weapons.Count);
 
+        //
+        foreach (var weapon in weapons)
+        {
+            fireDelay += weapon.FireDelay;
+            defaultWeaponRotations.Add(weapon.transform.rotation);
+        }
+        fireDelay /= weapons.Count;
+        
+        //
         if (patrolPoints.Count == 0)
         {
             _currentPatrolPoint = transform.position;
@@ -167,26 +182,34 @@ public abstract class NPC : Entity
         return RoundedPosition( patrolPoints[_patrolPointIndex] );
     }
 
-    protected void Idle()
+    protected virtual void Idle()
     {
         _idleRotateProgress = 0;
         ChangeState(AIState.IDLE);
     }
 
-    protected void Patrol()
+    protected virtual void Patrol()
     {
         agent.stoppingDistance = 0.0f;
         agent.SetDestination(RoundedPosition(_currentPatrolPoint));
         ChangeState(AIState.PATROL);
     }
 
-    protected void Chase()
+    protected virtual void Chase()
     {
+        for(int i = 0; i < weapons.Count; i++)
+        {
+            weapons[i].transform.localRotation = defaultWeaponRotations[i];
+        }
         ChangeState(AIState.CHASE);
     }
 
-    protected void Attack()
+    protected virtual void Attack()
     {
+        foreach (var w in weapons)
+        {
+            w.IsReady = true;
+        }
         agent.stoppingDistance = attackRange;
         ChangeState(AIState.ATTACK);
     }
@@ -305,7 +328,8 @@ public abstract class NPC : Entity
         // Rotate to Player and Fire Weapons
         //transform.LookAt(target.transform);
         var pos = target.transform.position; //_lastSeenTargetPos;
-        pos.y = transform.position.y;
+        //pos.y = transform.position.y;
+        pos.y = target.GetComponent<Entity>().TeleportThresholdTransform.position.y;
         transform.LookAt(pos);
 
         //https://stackoverflow.com/questions/35861951/unity-navmeshagent-wont-face-the-target-object-when-reaches-stopping-distance
@@ -313,6 +337,16 @@ public abstract class NPC : Entity
         pos.y = 0;
         var rot = Quaternion.LookRotation(pos);
         transform.rotation = Quaternion.Slerp(transform.rotation, rot, agent.angularSpeed*Time.deltaTime);*/
+
+        RotateWeapons(pos);
+        var weapon = weapons[_lastWeaponShotIndex];
+        if (Time.time - _lastWeaponShotTime > fireDelay && weapon.IsReady && !weapon.IsReloading && !weapon.IsShooting)
+        {
+            weapon.IsShooting = true;
+            _lastWeaponShotIndex++;
+            _lastWeaponShotIndex %= weapons.Count;
+            _lastWeaponShotTime = Time.time;
+        }
     }
     
 
