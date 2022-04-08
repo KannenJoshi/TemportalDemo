@@ -1,6 +1,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Weapons;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]

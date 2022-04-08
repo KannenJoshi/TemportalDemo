@@ -5,6 +5,7 @@ using System.Management.Instrumentation;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
+using Weapons;
 
 public enum AIState
 {
