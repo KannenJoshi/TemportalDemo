@@ -9,13 +9,15 @@ public class ExplosiveBullet : Bullet
     [Header("Explosive")]
     [SerializeField] private float radius = 10.0f;
     [SerializeField] private float explosiveForce = 700.0f;
-    [SerializeField] private GameObject explosionEffect;
+    [SerializeField] private ParticleSystem explosionEffect;
     
     [Header("Advanced")]
     [SerializeField] private float selfDamageMultiplier = 0.2f;
     [Range(0.1f, 5f)]
     [SerializeField] private float damageAtEdgeScale = 2f;
 
+    private bool exploded;
+    
     private void OnDestroy()
     {
         // Create Explosion
@@ -23,7 +25,14 @@ public class ExplosiveBullet : Bullet
         var pos = transform.position;
         
         // Show Explosion
-        //Instantiate(explosionEffect, pos, transform.rotation);
+        if (explosionEffect != null && !exploded)
+        {
+            var eff = Instantiate(explosionEffect, pos, transform.rotation);
+            //Destroy(eff, eff.main.duration);
+            //eff.Simulate(0.25f);
+            //eff.Play();
+            exploded = true;
+        }
 
         Collider[] colliders = Physics.OverlapSphere(pos, radius);
         foreach (Collider col in colliders)
