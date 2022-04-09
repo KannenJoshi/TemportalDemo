@@ -100,7 +100,7 @@ public abstract class NPC : Entity
                            Mathf.Round(position.z));
     }
 
-    private bool IsAgentAtDestination()
+    protected bool IsAgentAtDestination()
     {
         // https://answers.unity.com/questions/324589/how-can-i-tell-when-a-navmesh-has-reached-its-dest.html
         // Distance was E-07 so using approximately compare remain and stop dist
@@ -120,13 +120,15 @@ public abstract class NPC : Entity
         //return (Mathf.Approximately(agent.remainingDistance, agent.stoppingDistance) || Mathf.Approximately(Vector3.Distance(transform.position, RoundedPosition(agentDest)),agent.stoppingDistance)) && (!agent.hasPath || Mathf.Approximately(agent.velocity.sqrMagnitude, 0f));
     }
 
-    private void RotateWeapons(Vector3 targetPos)
+    protected virtual void RotateWeapons(Vector3 targetPos)
     {
         foreach (var weapon in weapons)
         {
             var dir = (targetPos - weapon.transform.position).normalized;
-            var rot = Quaternion.LookRotation(dir);
-            weapon.transform.rotation = rot;
+            var rot = Quaternion.LookRotation(dir).eulerAngles;
+            var currentRot = weapon.transform.rotation.eulerAngles;
+            currentRot.x = rot.x;
+            weapon.transform.rotation = Quaternion.Euler(currentRot);
         }
     }
 
@@ -325,20 +327,14 @@ public abstract class NPC : Entity
     
     protected virtual void AttackBehaviour()
     {
-        // Rotate to Player and Fire Weapons
-        //transform.LookAt(target.transform);
-        var pos = target.transform.position; //_lastSeenTargetPos;
+        // Rotate to Player
+        var pos = target.transform.position; 
         //pos.y = transform.position.y;
         pos.y = target.GetComponent<Entity>().TeleportThresholdTransform.position.y;
         transform.LookAt(pos);
 
-        //https://stackoverflow.com/questions/35861951/unity-navmeshagent-wont-face-the-target-object-when-reaches-stopping-distance
-        /*var pos = _lastSeenTargetPos;
-        pos.y = 0;
-        var rot = Quaternion.LookRotation(pos);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rot, agent.angularSpeed*Time.deltaTime);*/
-
-        RotateWeapons(pos);
+        // Rotate Weapons to Player and Fire Weapons
+        RotateWeapons(_lastSeenTargetPos);
         var weapon = weapons[_lastWeaponShotIndex];
         if (Time.time - _lastWeaponShotTime > fireDelay && weapon.IsReady && !weapon.IsReloading && !weapon.IsShooting)
         {
