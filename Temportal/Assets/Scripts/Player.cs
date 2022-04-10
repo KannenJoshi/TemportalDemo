@@ -5,34 +5,34 @@ using UnityEngine.VFX;
 public class Player : Entity
 {
     [SerializeField] private Transform head;
-
-    private bool isHealing;
-    private List<VisualEffect> healFX;
     [SerializeField] private int bulletTimeMaxDuration = 5;
     [SerializeField] private float bulletTimeResource = 5.0f;
     [SerializeField] private float bulletTimeRegenDelay = 3.0f;
     [SerializeField] private float bulletTimeRegenOverTime = 8.0f;
     public TimeManager timeManager;
+    
+    private bool _isHealing;
+    private List<VisualEffect> _healFX;
     private float _lastEndBulletTime;
     private bool _lastBulletTimeState;
     
     
     void Start()
     {
-        healFX = new List<VisualEffect>();
+        _healFX = new List<VisualEffect>();
         
         var hfx = GameObject.FindGameObjectsWithTag("Heal FX");
         if (hfx.Length == 0) print("No FX");
         foreach (var fx in hfx)
         {
-            healFX.Add(fx.GetComponent<VisualEffect>());
+            _healFX.Add(fx.GetComponent<VisualEffect>());
         }
         toggleHealFX(false);
     }
 
     private void toggleHealFX(bool state)
     {
-        healFX.ForEach(e => {if (state) e.Play(); else e.Stop();});
+        _healFX.ForEach(e => {if (state) e.Play(); else e.Stop();});
     }
 
     // Update is called once per frame
@@ -75,18 +75,19 @@ public class Player : Entity
     
     protected override void Heal()
     {
-        var oldIsHealing = isHealing;
-        isHealing = false;
+        var oldIsHealing = _isHealing;
+        _isHealing = false;
         if (regenerate && Hp < HpMax && Time.time > _lastHit + healAfterDamageDelay)
         {
-            isHealing = true;
-            Hp += healAmount * Time.unscaledDeltaTime;
+            _isHealing = true;
+            //Hp += healAmount * Time.unscaledDeltaTime;
+            Hp += healAmount * Time.deltaTime;
             Hp = Mathf.Min(Hp, HpMax);
         }
 
-        if (isHealing != oldIsHealing)
+        if (_isHealing != oldIsHealing)
         {
-            toggleHealFX(isHealing);
+            toggleHealFX(_isHealing);
         }
     }
 

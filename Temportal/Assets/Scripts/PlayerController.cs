@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 _inputMovement;
     private Vector2 lookDelta;
     private float upDownAngle;
+    private float _oldTimeScale = 1.0f;
 
     private Transform head;
     private Transform hand;
@@ -50,6 +51,8 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        player = GetComponent<Player>();
+        
         var portals = GameObject.FindGameObjectsWithTag("Portal");
         leftPortal = portals[0].GetComponent<Portal>();
         rightPortal = portals[1].GetComponent<Portal>();
@@ -85,7 +88,10 @@ public class PlayerController : MonoBehaviour
         }
         //isGrounded = Physics.CheckCapsule(bounds.center,new Vector3(bounds.center.x,bounds.min.y-0.1f,bounds.center.z),0.18f));
 
+        
         UpdateMove();
+
+        _oldTimeScale = Time.timeScale;
     }
     
     // Update is called once per frame
@@ -124,12 +130,18 @@ public class PlayerController : MonoBehaviour
 
         // Less Airborne movement 
         moveDir *= isGrounded ? 1 : airResistance; // Change only when new input while in air
-        
+
         // Accelerate the Player
         rb.AddForce(moveDir * _speed, ForceMode.Acceleration); //ForceMode.Acceleration
         
         // Max Speed
         rb.velocity = new Vector3(0, rb.velocity.y, 0) + Vector3.ClampMagnitude(new Vector3(rb.velocity.x, 0, rb.velocity.z), _speed); // Should not be done via velocity
+        
+        // Ignore Timescale
+        if (Mathf.Abs(Time.timeScale - _oldTimeScale) > 0)
+        {
+            rb.velocity *= Time.timeScale / _oldTimeScale;
+        }
     }
 
 
@@ -172,6 +184,8 @@ public class PlayerController : MonoBehaviour
     {
         if (callbackContext.performed && isGrounded)
         {   
+            // timeScale
+            jumpForce *= Time.timeScale / _oldTimeScale;
             rb.AddForce(new Vector3(0f, jumpForce * rb.mass, 0f), ForceMode.Impulse);
             //isGrounded = false;
         }
