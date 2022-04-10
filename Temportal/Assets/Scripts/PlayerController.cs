@@ -35,19 +35,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private CapsuleCollider capsuleCollider;
     [SerializeField] private PlayerHUD hud;
+    [SerializeField] private Player player;
     
     private Portal leftPortal;
     private Portal rightPortal;
 
     private float _speed;
     private Vector2 _inputMovement;
-    private Vector2 lookDelta;
-    private float upDownAngle;
+    private Vector2 _lookDelta;
+    private float _upDownAngle;
     private float _oldTimeScale = 1.0f;
 
-    private Transform head;
-    private Transform hand;
-    private Firearm weapon;
+    private Transform _head;
+    private Transform _hand;
+    private Firearm _weapon;
 
     private void Awake()
     {
@@ -69,13 +70,13 @@ public class PlayerController : MonoBehaviour
         leftPortal = portals[0].GetComponent<Portal>();
         rightPortal = portals[1].GetComponent<Portal>();
 
-        head = transform.GetChild(1);
-        hand = head.GetChild(0);
-        weapon = hand.GetChild(0).GetComponent<Firearm>();
-        weapon.IsReady = true;
+        _head = transform.GetChild(1);
+        _hand = _head.GetChild(0);
+        _weapon = _hand.GetChild(0).GetComponent<Firearm>();
+        _weapon.IsReady = true;
         
-        hud.SetAmmo(weapon.AmmoCount);
-        hud.SetAmmoMax(weapon.AmmoMax);
+        hud.SetAmmo(_weapon.AmmoCount);
+        hud.SetAmmoMax(_weapon.AmmoMax);
     }
 
     // FixedUpdate is called one per physics frame
@@ -86,8 +87,6 @@ public class PlayerController : MonoBehaviour
         {
             HeadCheck();
         }
-        //isGrounded = Physics.CheckCapsule(bounds.center,new Vector3(bounds.center.x,bounds.min.y-0.1f,bounds.center.z),0.18f));
-
         
         UpdateMove();
 
@@ -99,7 +98,7 @@ public class PlayerController : MonoBehaviour
     {
         UpdateLook();
         
-        hud.SetAmmo(weapon.AmmoCount);
+        hud.SetAmmo(_weapon.AmmoCount);
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -147,19 +146,19 @@ public class PlayerController : MonoBehaviour
 
      public void OnLook(InputAction.CallbackContext context)
      {
-         lookDelta = context.ReadValue<Vector2>() / Time.deltaTime;
+         _lookDelta = context.ReadValue<Vector2>() / Time.deltaTime;
      }
 
      private void UpdateLook()
      {
-         var leftRightAngle = lookDelta.x * lookSpeed * Time.deltaTime;
-         upDownAngle += lookDelta.y * -lookSpeed * Time.deltaTime;
-         upDownAngle = Mathf.Clamp(upDownAngle, lookClamp.x, lookClamp.y);
+         var leftRightAngle = _lookDelta.x * lookSpeed * Time.deltaTime;
+         _upDownAngle += _lookDelta.y * -lookSpeed * Time.deltaTime;
+         _upDownAngle = Mathf.Clamp(_upDownAngle, lookClamp.x, lookClamp.y);
 
-         var localRotation = head.transform.localRotation;
+         var localRotation = _head.transform.localRotation;
          localRotation =
-             Quaternion.Euler(new Vector3(upDownAngle, localRotation.eulerAngles.y, localRotation.eulerAngles.z));
-         head.transform.localRotation = localRotation;
+             Quaternion.Euler(new Vector3(_upDownAngle, localRotation.eulerAngles.y, localRotation.eulerAngles.z));
+         _head.transform.localRotation = localRotation;
          transform.Rotate(new Vector3(0, leftRightAngle, 0));
      }
     
@@ -193,14 +192,14 @@ public class PlayerController : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        if (context.performed && weapon.IsReady && !weapon.IsReloading && !weapon.IsShooting)
+        if (context.performed && _weapon.IsReady && !_weapon.IsReloading && !_weapon.IsShooting)
         {
-            weapon.IsShooting = true;
+            _weapon.IsShooting = true;
         }
 
         if (context.canceled)
         {
-            weapon.IsShooting = false;
+            _weapon.IsShooting = false;
         }
     }
     
@@ -211,10 +210,10 @@ public class PlayerController : MonoBehaviour
     
     public void OnReload(InputAction.CallbackContext context)
     {
-        if (context.performed && !weapon.IsReloading && !weapon.IsMagazineFull)
+        if (context.performed && !_weapon.IsReloading && !_weapon.IsMagazineFull)
         {
             //weapon.IsReloading = true;
-            weapon.Reload();
+            _weapon.Reload();
         }
     }
 
@@ -225,7 +224,7 @@ public class PlayerController : MonoBehaviour
 
     private void SetPortalLocationAndDirection(Portal portal)
     {
-        if (!Physics.Raycast(head.position, head.forward, out var hit)) return;
+        if (!Physics.Raycast(_head.position, _head.forward, out var hit)) return;
         if (!hit.transform.CompareTag("PortalWall")) return;
         
         var portalWall = hit.collider.gameObject;
