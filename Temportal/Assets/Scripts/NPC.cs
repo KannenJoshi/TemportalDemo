@@ -108,7 +108,7 @@ public abstract class NPC : Entity
         //return (Mathf.Approximately(agent.remainingDistance, agent.stoppingDistance) || Mathf.Approximately(Vector3.Distance(transform.position, RoundedPosition(_currentPatrolPoint)),agent.stoppingDistance)) && (!agent.hasPath || Mathf.Approximately(agent.velocity.sqrMagnitude, 0f));
 
         var agentDest = _currentPatrolPoint;
-        agentDest.y = 3;
+        agentDest.y = transform.position.y;
 
         var A = Math.Abs(agent.remainingDistance - agent.stoppingDistance) < TOLERANCE;
         var B = Math.Abs(Vector3.Distance(transform.position, RoundedPosition(agentDest)) - agent.stoppingDistance) < TOLERANCE;
