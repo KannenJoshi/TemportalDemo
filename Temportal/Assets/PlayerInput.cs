@@ -143,6 +143,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BulletTimeToggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""de72f019-1bfd-421c-b679-21239d09c6f7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -396,6 +405,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Joystick"",
                     ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d0ec6168-9d0e-487c-af4a-3a8cce02f2dd"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""BulletTimeToggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -996,6 +1016,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Player_ShootRightPortal = m_Player.FindAction("ShootRightPortal", throwIfNotFound: true);
         m_Player_DestroyLeftPortal = m_Player.FindAction("DestroyLeftPortal", throwIfNotFound: true);
         m_Player_DestroyRightPortal = m_Player.FindAction("DestroyRightPortal", throwIfNotFound: true);
+        m_Player_BulletTimeToggle = m_Player.FindAction("BulletTimeToggle", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1080,6 +1101,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ShootRightPortal;
     private readonly InputAction m_Player_DestroyLeftPortal;
     private readonly InputAction m_Player_DestroyRightPortal;
+    private readonly InputAction m_Player_BulletTimeToggle;
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
@@ -1097,6 +1119,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @ShootRightPortal => m_Wrapper.m_Player_ShootRightPortal;
         public InputAction @DestroyLeftPortal => m_Wrapper.m_Player_DestroyLeftPortal;
         public InputAction @DestroyRightPortal => m_Wrapper.m_Player_DestroyRightPortal;
+        public InputAction @BulletTimeToggle => m_Wrapper.m_Player_BulletTimeToggle;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1145,6 +1168,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @DestroyRightPortal.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDestroyRightPortal;
                 @DestroyRightPortal.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDestroyRightPortal;
                 @DestroyRightPortal.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDestroyRightPortal;
+                @BulletTimeToggle.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBulletTimeToggle;
+                @BulletTimeToggle.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBulletTimeToggle;
+                @BulletTimeToggle.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBulletTimeToggle;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1188,6 +1214,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @DestroyRightPortal.started += instance.OnDestroyRightPortal;
                 @DestroyRightPortal.performed += instance.OnDestroyRightPortal;
                 @DestroyRightPortal.canceled += instance.OnDestroyRightPortal;
+                @BulletTimeToggle.started += instance.OnBulletTimeToggle;
+                @BulletTimeToggle.performed += instance.OnBulletTimeToggle;
+                @BulletTimeToggle.canceled += instance.OnBulletTimeToggle;
             }
         }
     }
@@ -1357,6 +1386,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnShootRightPortal(InputAction.CallbackContext context);
         void OnDestroyLeftPortal(InputAction.CallbackContext context);
         void OnDestroyRightPortal(InputAction.CallbackContext context);
+        void OnBulletTimeToggle(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

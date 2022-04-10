@@ -8,6 +8,13 @@ public class Player : Entity
 
     private bool isHealing;
     private List<VisualEffect> healFX;
+    [SerializeField] private int bulletTimeMaxDuration = 5;
+    [SerializeField] private float bulletTimeResource = 5.0f;
+    [SerializeField] private float bulletTimeRegenDelay = 3.0f;
+    [SerializeField] private float bulletTimeRegenOverTime = 8.0f;
+    public TimeManager timeManager;
+    private float _lastEndBulletTime;
+    private bool _lastBulletTimeState;
     
     
     void Start()
@@ -31,7 +38,34 @@ public class Player : Entity
     // Update is called once per frame
     protected override void UpdateBehaviour()
     {
-        base.UpdateBehaviour();
+        // Don't change if game paused
+        if (Time.timeScale == 0f) return;
+        
+        // Regen Trigger
+        if (!timeManager.IsBulletTime && bulletTimeResource < bulletTimeMaxDuration &&
+            Time.time > _lastEndBulletTime + bulletTimeRegenDelay)
+        {
+            bulletTimeResource += BulletTimeResourceMax * Time.deltaTime / bulletTimeRegenOverTime;
+        }
+        // If in BT decrease resource meter
+        else if (timeManager.IsBulletTime)
+        {
+            bulletTimeResource -= 1 * Time.unscaledDeltaTime;
+        }
+        // Ensure within range
+        bulletTimeResource = Mathf.Clamp(bulletTimeResource, 0, bulletTimeMaxDuration);
+
+        // If depleted end
+        if (bulletTimeResource == 0) timeManager.IsBulletTime = false;
+        
+        // If got deactivated last Tick, update tracker to delay regen
+        if (timeManager.IsBulletTime == false && timeManager.IsBulletTime != _lastBulletTimeState)
+        {
+            _lastEndBulletTime = Time.time;
+        }
+        
+        // Track last state of BT
+        _lastBulletTimeState = timeManager.IsBulletTime;
     }
 
     protected override void Die()
@@ -64,4 +98,6 @@ public class Player : Entity
         //head.localRotation = Quaternion.Euler(localRot - new Vector3(torque, 0, 0));
     }
 
+    public int BulletTimeResourceMax => bulletTimeMaxDuration;
+    public float BulletTimeResource => bulletTimeResource;
 }

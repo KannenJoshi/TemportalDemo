@@ -288,6 +288,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void OnBulletTimeToggle(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            // TODO: Change so all player movement is unaffected by timescale changes including gravity and rotations, as well as bullet velocities etc. Might need to make Kinematic?
+            //player.timeManager.IsBulletTime = !player.timeManager.IsBulletTime;
+        }
+    }
+
     // 
 
     /**
