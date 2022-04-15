@@ -130,6 +130,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SwapToPrimary",
+                    "type": "Button",
+                    "id": "edc5c6dd-7f2e-49a2-9aaa-b4a336d0fc0a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwapToSecondary",
+                    "type": "Button",
+                    "id": "d511cdbd-e4b3-4417-ba3a-f110635a0d3a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -394,6 +412,28 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "BulletTimeToggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0b169d24-993e-4bb9-9aa6-5eb166048f6e",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwapToPrimary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "076ecd92-0cec-4881-ad4c-5b1772a77e44",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwapToSecondary",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

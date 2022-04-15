@@ -49,6 +49,8 @@ public class PlayerController : MonoBehaviour
     private Transform _head;
     private Transform _hand;
     private Firearm _weapon;
+    private Transform _primary;
+    private Transform _secondary;
 
     private void Awake()
     {
@@ -72,9 +74,14 @@ public class PlayerController : MonoBehaviour
 
         _head = transform.GetChild(1);
         _hand = _head.GetChild(0);
-        _weapon = _hand.GetChild(0).GetComponent<Firearm>();
+        _primary = _hand.GetChild(0);
+        _secondary = _hand.GetChild(1);
+        
+        _weapon = _primary.GetChild(0).GetComponent<Firearm>();
         _weapon.IsReady = true;
         
+        _secondary.gameObject.SetActive(false);
+
         hud.SetAmmo(_weapon.AmmoCount);
         hud.SetAmmoMax(_weapon.AmmoMax);
     }
@@ -215,6 +222,45 @@ public class PlayerController : MonoBehaviour
             //weapon.IsReloading = true;
             _weapon.Reload();
         }
+    }
+    
+    public void OnSwapPrimary(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            SwapWeapon(0);
+        }
+    }
+    
+    public void OnSwapSecondary(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            SwapWeapon(1);
+        }
+    }
+
+    private void SwapWeapon(int index)
+    {
+        if (index == 0)
+        {
+            _primary.gameObject.SetActive(true);
+            _secondary.gameObject.SetActive(false);
+            
+            _weapon = _primary.GetChild(0).GetComponent<Firearm>();
+        }
+        else
+        {
+            _primary.gameObject.SetActive(false);
+            _secondary.gameObject.SetActive(true);
+            
+            _weapon = _secondary.GetChild(0).GetComponent<Firearm>();
+            
+        }
+        
+        _weapon.IsReady = true;
+        hud.SetAmmo(_weapon.AmmoCount);
+        hud.SetAmmoMax(_weapon.AmmoMax);
     }
 
     public void OnInteract(InputAction.CallbackContext context)
