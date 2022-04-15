@@ -226,7 +226,7 @@ public class PlayerController : MonoBehaviour
     
     public void OnSwapPrimary(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !_weapon.IsReloading)
         {
             SwapWeapon(0);
         }
@@ -234,7 +234,7 @@ public class PlayerController : MonoBehaviour
     
     public void OnSwapSecondary(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !_weapon.IsReloading)
         {
             SwapWeapon(1);
         }
