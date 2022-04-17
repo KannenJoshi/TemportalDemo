@@ -23,6 +23,9 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private Image reloadCircle;
     [SerializeField] private Image primary;
     [SerializeField] private Image secondary;
+
+    [Header("Menus")]
+    [SerializeField] private GameObject pauseMenu;
     
     private Portal leftPortal;
     private Portal rightPortal;
@@ -77,5 +80,11 @@ public class PlayerHUD : MonoBehaviour
         reloadCircle.enabled = true;
         reloadCircle.fillAmount = 0.0f;
         this.reloadTime = reloadTime;
+    }
+
+    public void PauseMenu(bool isPaused)
+    {
+        pauseMenu.SetActive(isPaused);
+        //if (i
     }
 }

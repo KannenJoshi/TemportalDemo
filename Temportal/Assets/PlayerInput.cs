@@ -170,6 +170,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""ddaa9f8d-89a8-4e1a-9e30-69c8fb24cf81"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -456,6 +465,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SwapToSecondary"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2014bd65-97c5-43a1-85a5-3bdcc353f70f"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1059,6 +1079,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Player_BulletTimeToggle = m_Player.FindAction("BulletTimeToggle", throwIfNotFound: true);
         m_Player_SwapToPrimary = m_Player.FindAction("SwapToPrimary", throwIfNotFound: true);
         m_Player_SwapToSecondary = m_Player.FindAction("SwapToSecondary", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1146,6 +1167,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_BulletTimeToggle;
     private readonly InputAction m_Player_SwapToPrimary;
     private readonly InputAction m_Player_SwapToSecondary;
+    private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
@@ -1166,6 +1188,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @BulletTimeToggle => m_Wrapper.m_Player_BulletTimeToggle;
         public InputAction @SwapToPrimary => m_Wrapper.m_Player_SwapToPrimary;
         public InputAction @SwapToSecondary => m_Wrapper.m_Player_SwapToSecondary;
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1223,6 +1246,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @SwapToSecondary.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwapToSecondary;
                 @SwapToSecondary.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwapToSecondary;
                 @SwapToSecondary.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwapToSecondary;
+                @Pause.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1275,6 +1301,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @SwapToSecondary.started += instance.OnSwapToSecondary;
                 @SwapToSecondary.performed += instance.OnSwapToSecondary;
                 @SwapToSecondary.canceled += instance.OnSwapToSecondary;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
         }
     }
@@ -1447,6 +1476,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnBulletTimeToggle(InputAction.CallbackContext context);
         void OnSwapToPrimary(InputAction.CallbackContext context);
         void OnSwapToSecondary(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
