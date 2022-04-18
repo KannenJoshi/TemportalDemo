@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-    [SerializeField] private bool isBulletTime;
+    public static bool isBulletTime;
+    
     [SerializeField] private float bulletTimeScale = 0.05f;
     [SerializeField] private float enterTime = 0.5f;
     [SerializeField] private float exitTime = 2.0f;
@@ -38,10 +39,15 @@ public class TimeManager : MonoBehaviour
         Time.fixedDeltaTime = Time.timeScale * _fixedDT;
     }
 
-    public bool IsBulletTime
+    /*public bool IsBulletTime
     {
         get => isBulletTime;
         set => isBulletTime = value;
+    }*/
+    
+    public static void SetBulletTime(bool on)
+    {
+        isBulletTime = on;
     }
 
     public float BulletTimeScale => bulletTimeScale;

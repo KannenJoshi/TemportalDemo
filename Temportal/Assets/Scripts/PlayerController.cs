@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private CapsuleCollider capsuleCollider;
     [SerializeField] private PlayerHUD hud;
-    [SerializeField] private Player player;
+    //[SerializeField] private Player player;
     
     private Portal leftPortal;
     private Portal rightPortal;
@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        player = GetComponent<Player>();
+        //player = GetComponent<Player>();
         
         var portals = GameObject.FindGameObjectsWithTag("Portal");
         leftPortal = portals[0].GetComponent<Portal>();
@@ -180,8 +180,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-     public void OnLook(InputAction.CallbackContext context)
+    public void OnLook(InputAction.CallbackContext context)
      {
          if (paused) return;
          
@@ -225,10 +224,10 @@ public class PlayerController : MonoBehaviour
             isCrouching = false;
     }
     
-    public void OnJump(InputAction.CallbackContext callbackContext)
+    public void OnJump(InputAction.CallbackContext context)
     {
         if (paused) return;
-        if (callbackContext.performed && isGrounded)
+        if (context.performed && isGrounded)
         {   
             // timeScale
             jumpForce *= Time.timeScale / _oldTimeScale;
@@ -401,7 +400,7 @@ public class PlayerController : MonoBehaviour
         if (context.performed)
         {
             // TODO: Change so all player movement is unaffected by timescale changes including gravity and rotations, as well as bullet velocities etc. Might need to make Kinematic?
-            //player.timeManager.IsBulletTime = !player.timeManager.IsBulletTime;
+            TimeManager.SetBulletTime(!TimeManager.isBulletTime);
         }
     }
 
