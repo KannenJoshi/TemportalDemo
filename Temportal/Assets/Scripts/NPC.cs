@@ -42,8 +42,9 @@ public abstract class NPC : Entity
 
     [Header("Behaviour")]
     [SerializeField] private float idleRotate = 5.0f;
-    [SerializeField] private List<Vector3> patrolPoints;
+    [SerializeField] private List<Transform> patrolTransforms;
     private float _idleRotateProgress;
+    private List<Vector3> patrolPoints;
     private int _patrolPointIndex;
     private Vector3 _currentPatrolPoint;
 
@@ -71,7 +72,7 @@ public abstract class NPC : Entity
         weapons = GetComponentsInChildren<Firearm>().ToList();
         defaultWeaponRotations = new List<Quaternion>(weapons.Count);
 
-        //
+        // Calculate Weapon fire offset
         foreach (var weapon in weapons)
         {
             fireDelay += weapon.FireDelay;
@@ -79,7 +80,14 @@ public abstract class NPC : Entity
         }
         fireDelay /= weapons.Count;
         
-        //
+        // Transforms into Vector3's
+        patrolPoints = new List<Vector3>();
+        foreach (var point in patrolTransforms)
+        {
+            patrolPoints.Add(point.position);
+        }
+        
+        // If no Patrol Points
         if (patrolPoints.Count == 0)
         {
             _currentPatrolPoint = transform.position;
