@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 1920812766466603702}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 6063326265199216954}
   m_Father: {fileID: 0}
@@ -78,10 +78,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: -4076682044968921785}
-  <teleportThreshholdTransform>k__BackingField: {fileID: 3168499260691632326}
+  <TeleportThresholdTransform>k__BackingField: {fileID: 0}
   damageMultiplier: 1
   playerColour: {r: 0.27699995, g: 0.82508045, b: 1, a: 1}
   enemyColour: {r: 1, g: 0.40392157, b: 0.0627451, a: 1}
+  emission: 0.37
 --- !u!96 &-2336409579355568279
 TrailRenderer:
   serializedVersion: 2

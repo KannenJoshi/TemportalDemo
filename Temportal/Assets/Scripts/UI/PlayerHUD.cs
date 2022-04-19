@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Weapons;
 
 public class PlayerHUD : MonoBehaviour
 {
@@ -24,17 +21,30 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private Image LPortal;
     [SerializeField] private Image RPortal;
     [SerializeField] private Image reloadCircle;
+    [SerializeField] private Image primary;
+    [SerializeField] private Image secondary;
+
+    [Header("Menus")]
+    [SerializeField] private GameObject pauseMenu;
     
     private Portal leftPortal;
     private Portal rightPortal;
 
     private float reloadTime;
 
+    private GameObject primaryGun;
+    private GameObject secondaryGun;
+
     private void Awake()
     {
         var portals = GameObject.FindGameObjectsWithTag("Portal");
         leftPortal = portals[0].GetComponent<Portal>();
         rightPortal = portals[1].GetComponent<Portal>();
+
+        var player = GameObject.FindGameObjectWithTag("Player");
+        var hand = player.transform.GetChild(1).GetChild(0);
+        primaryGun = hand.GetChild(0).gameObject;
+        secondaryGun = hand.GetChild(1).gameObject;
     }
 
     private void Update()
@@ -52,6 +62,14 @@ public class PlayerHUD : MonoBehaviour
             reloadCircle.fillAmount += Time.deltaTime / reloadTime;
             if (reloadCircle.fillAmount >= 1.0f) reloadCircle.enabled = false;
         }
+        
+        tempColour = primary.color;
+        tempColour.a = primaryGun.activeSelf ? 1f : 0.5f;
+        primary.color = tempColour;
+        
+        tempColour = secondary.color;
+        tempColour.a = secondaryGun.activeSelf ? 1f : 0.5f;
+        secondary.color = tempColour;
     }
 
     public void SetAmmo(int count) { ammoCount.text = count.ToString(); }
@@ -62,5 +80,11 @@ public class PlayerHUD : MonoBehaviour
         reloadCircle.enabled = true;
         reloadCircle.fillAmount = 0.0f;
         this.reloadTime = reloadTime;
+    }
+
+    public void PauseMenu(bool isPaused)
+    {
+        pauseMenu.SetActive(isPaused);
+        //if (i
     }
 }

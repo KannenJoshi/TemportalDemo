@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,9 +9,13 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private bool isEnemyBar = true;
     private Slider slider;
 
+    private float sliderVal;
+    private float hpVal;
+
     void Awake()
     {
         slider = GetComponent<Slider>();
+        if (Camera.main != null) cam = Camera.main.transform;
         if (entity == null) entity = GetComponentInParent<Entity>();
 
         slider.maxValue = entity.HpMax;
@@ -22,7 +24,15 @@ public class HealthBar : MonoBehaviour
 
     void Update()
     {
-        slider.value = entity.Hp;
+        //slider.value = entity.Hp;
+        if (!Mathf.Approximately(entity.Hp,slider.value))
+        {
+            hpVal = entity.Hp;
+            sliderVal = slider.value;
+        }
+        
+        slider.value = Mathf.Lerp(sliderVal, hpVal, 10f * Time.unscaledDeltaTime);
+        //slider.value = slider.value +  ;
     }
     
     void LateUpdate()

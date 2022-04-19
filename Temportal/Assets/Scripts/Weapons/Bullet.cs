@@ -8,20 +8,23 @@ public class Bullet : PortalTraveller
     [SerializeField] private float damageMultiplier = 1.0f;
     [SerializeField] private Color playerColour;// = new Color(69, 210, 255);
     [SerializeField] private Color enemyColour;// = new Color(255, 103, 16);
-
-    private int damage = 10;
-    private string _parentTag;
+    [Range(0, 5)] [SerializeField] private float emission;
+    
+    protected int damage = 10;
+    protected string _parentTag;
     private TrailRenderer tr;
     private PortalTraveller pt;
+    private MeshRenderer model;
     
     // So Doesn't hit entity shooting when created
-    private bool _ignoreShooterTag = true;
+    protected bool _ignoreShooterTag = true;
 
     protected override void Awake()
     {
         base.Awake();
         tr = GetComponent<TrailRenderer>();
         pt = GetComponent<PortalTraveller>();
+        model = transform.GetChild(0).gameObject.GetComponent<MeshRenderer>();
     }
 
     void Start()
@@ -60,10 +63,15 @@ public class Bullet : PortalTraveller
     public void SetStats(int damage, string tag)
     {
         this.damage = Mathf.RoundToInt(damage * damageMultiplier);
-        this._parentTag = tag;
+        _parentTag = tag;
 
         //tr.material.color = _parentTag.Equals("Player") ? playerColour : enemyColour;
-        tr.material.SetColor("_Base", tag.Equals("Player") ? playerColour : enemyColour);
+        var colour = tag.Equals("Player") ? playerColour : enemyColour;
+        tr.material.SetColor("_Base", colour);
+        var emissiveColour = colour * Mathf.LinearToGammaSpace(emission);
+        model.material.EnableKeyword("_EMISSION");
+        model.material.SetColor("_EmissionColor", emissiveColour);
+        DynamicGI.SetEmissive(model, emissiveColour);
     }
 
     IEnumerator DelayFirstShotCollision()

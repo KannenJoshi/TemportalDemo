@@ -143,6 +143,42 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BulletTimeToggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""de72f019-1bfd-421c-b679-21239d09c6f7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwapToPrimary"",
+                    ""type"": ""Button"",
+                    ""id"": ""edc5c6dd-7f2e-49a2-9aaa-b4a336d0fc0a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwapToSecondary"",
+                    ""type"": ""Button"",
+                    ""id"": ""d511cdbd-e4b3-4417-ba3a-f110635a0d3a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""ddaa9f8d-89a8-4e1a-9e30-69c8fb24cf81"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -396,6 +432,50 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Joystick"",
                     ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d0ec6168-9d0e-487c-af4a-3a8cce02f2dd"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""BulletTimeToggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0b169d24-993e-4bb9-9aa6-5eb166048f6e"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwapToPrimary"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""076ecd92-0cec-4881-ad4c-5b1772a77e44"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwapToSecondary"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2014bd65-97c5-43a1-85a5-3bdcc353f70f"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -996,6 +1076,10 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Player_ShootRightPortal = m_Player.FindAction("ShootRightPortal", throwIfNotFound: true);
         m_Player_DestroyLeftPortal = m_Player.FindAction("DestroyLeftPortal", throwIfNotFound: true);
         m_Player_DestroyRightPortal = m_Player.FindAction("DestroyRightPortal", throwIfNotFound: true);
+        m_Player_BulletTimeToggle = m_Player.FindAction("BulletTimeToggle", throwIfNotFound: true);
+        m_Player_SwapToPrimary = m_Player.FindAction("SwapToPrimary", throwIfNotFound: true);
+        m_Player_SwapToSecondary = m_Player.FindAction("SwapToSecondary", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1080,6 +1164,10 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ShootRightPortal;
     private readonly InputAction m_Player_DestroyLeftPortal;
     private readonly InputAction m_Player_DestroyRightPortal;
+    private readonly InputAction m_Player_BulletTimeToggle;
+    private readonly InputAction m_Player_SwapToPrimary;
+    private readonly InputAction m_Player_SwapToSecondary;
+    private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
@@ -1097,6 +1185,10 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @ShootRightPortal => m_Wrapper.m_Player_ShootRightPortal;
         public InputAction @DestroyLeftPortal => m_Wrapper.m_Player_DestroyLeftPortal;
         public InputAction @DestroyRightPortal => m_Wrapper.m_Player_DestroyRightPortal;
+        public InputAction @BulletTimeToggle => m_Wrapper.m_Player_BulletTimeToggle;
+        public InputAction @SwapToPrimary => m_Wrapper.m_Player_SwapToPrimary;
+        public InputAction @SwapToSecondary => m_Wrapper.m_Player_SwapToSecondary;
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1145,6 +1237,18 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @DestroyRightPortal.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDestroyRightPortal;
                 @DestroyRightPortal.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDestroyRightPortal;
                 @DestroyRightPortal.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDestroyRightPortal;
+                @BulletTimeToggle.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBulletTimeToggle;
+                @BulletTimeToggle.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBulletTimeToggle;
+                @BulletTimeToggle.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBulletTimeToggle;
+                @SwapToPrimary.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwapToPrimary;
+                @SwapToPrimary.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwapToPrimary;
+                @SwapToPrimary.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwapToPrimary;
+                @SwapToSecondary.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwapToSecondary;
+                @SwapToSecondary.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwapToSecondary;
+                @SwapToSecondary.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwapToSecondary;
+                @Pause.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1188,6 +1292,18 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @DestroyRightPortal.started += instance.OnDestroyRightPortal;
                 @DestroyRightPortal.performed += instance.OnDestroyRightPortal;
                 @DestroyRightPortal.canceled += instance.OnDestroyRightPortal;
+                @BulletTimeToggle.started += instance.OnBulletTimeToggle;
+                @BulletTimeToggle.performed += instance.OnBulletTimeToggle;
+                @BulletTimeToggle.canceled += instance.OnBulletTimeToggle;
+                @SwapToPrimary.started += instance.OnSwapToPrimary;
+                @SwapToPrimary.performed += instance.OnSwapToPrimary;
+                @SwapToPrimary.canceled += instance.OnSwapToPrimary;
+                @SwapToSecondary.started += instance.OnSwapToSecondary;
+                @SwapToSecondary.performed += instance.OnSwapToSecondary;
+                @SwapToSecondary.canceled += instance.OnSwapToSecondary;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
         }
     }
@@ -1357,6 +1473,10 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnShootRightPortal(InputAction.CallbackContext context);
         void OnDestroyLeftPortal(InputAction.CallbackContext context);
         void OnDestroyRightPortal(InputAction.CallbackContext context);
+        void OnBulletTimeToggle(InputAction.CallbackContext context);
+        void OnSwapToPrimary(InputAction.CallbackContext context);
+        void OnSwapToSecondary(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

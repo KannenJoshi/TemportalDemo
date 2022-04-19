@@ -12,6 +12,9 @@ GameObject:
   - component: {fileID: 3790784821559499095}
   - component: {fileID: 3212664478464557892}
   - component: {fileID: 3518699675492056441}
+  - component: {fileID: 1911371949669621147}
+  - component: {fileID: 1245746589733865853}
+  - component: {fileID: 6512441564585197934}
   m_Layer: 3
   m_Name: Portal Wall
   m_TagString: PortalWall
@@ -303,3 +306,41 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3, y: 3, z: 1}
   m_Center: {x: 1.5, y: 1.5, z: -0.5}
+--- !u!208 &1911371949669621147
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2502559216215718344}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.5000001, y: 1.5000001, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 1.5000001, y: 1.5000001, z: -0.5}
+  m_TimeToStationary: 0.5
+--- !u!33 &1245746589733865853
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2502559216215718344}
+  m_Mesh: {fileID: 0}
+--- !u!114 &6512441564585197934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2502559216215718344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9253e775766c4364ab07f3618353bf76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  front: {fileID: 0}
+  back: {fileID: 0}

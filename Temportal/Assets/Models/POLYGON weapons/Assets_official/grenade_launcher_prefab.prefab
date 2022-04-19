@@ -83,6 +83,36 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 43864381308059062}
   m_Enabled: 1
+--- !u!1 &1062153449637714138
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3279229393046326971}
+  m_Layer: 0
+  m_Name: barrel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3279229393046326971
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1062153449637714138}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.0336, z: 0.366}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8787855897626506780}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3803833170785497763
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,8 +122,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8787855897626506780}
-  - component: {fileID: -5701120411804842821}
-  - component: {fileID: 8787265766671256143}
+  - component: {fileID: 7810506025775638029}
   m_Layer: 0
   m_Name: grenade_launcher_prefab
   m_TagString: Weapon
@@ -112,11 +141,12 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 3279229393046326971}
   - {fileID: 8251521317445505314}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-5701120411804842821
+--- !u!114 &7810506025775638029
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,47 +158,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da8b9cb6912275845ae06bdf94fb17c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  barrel: {fileID: 0}
-  projectile: {fileID: 0}
+  barrel: {fileID: 3279229393046326971}
+  projectile: {fileID: 6566939590726195741, guid: 40404b2776d11c74da55c28a643fff27, type: 3}
   holder: {fileID: 0}
-  damage: 10
-  magazineSize: 30
-  reloadTime: 2
-  fireRate: 5
+  damage: 30
+  magazineSize: 6
+  reloadTime: 3
+  fireRate: 1
   adsZoom: 2
-  recoilForce: 2
-  adsFireRate: 5
-  holdFire: 1
+  recoilForce: 5
+  adsFireRate: 1
+  holdFire: 0
   projectileSpeed: 1000
-  timeToLive: 10
+  timeToLive: 3
   ammoCount: 0
---- !u!114 &8787265766671256143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3803833170785497763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6d218b63982f2a4f984f4aa4c10143a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  barrel: {fileID: 0}
-  projectile: {fileID: 0}
-  holder: {fileID: 0}
-  damage: 10
-  magazineSize: 30
-  reloadTime: 2
-  fireRate: 5
-  adsZoom: 2
-  recoilForce: 2
-  adsFireRate: 5
-  holdFire: 1
-  projectileSpeed: 1000
-  timeToLive: 10
-  ammoCount: 0
-  radius: 0
 --- !u!1001 &4033534380306512440
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -178,7 +181,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -4216859302048453862, guid: 255ca986eb3068e488fdf056f3346d71, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 255ca986eb3068e488fdf056f3346d71, type: 3}
       propertyPath: m_LocalPosition.x

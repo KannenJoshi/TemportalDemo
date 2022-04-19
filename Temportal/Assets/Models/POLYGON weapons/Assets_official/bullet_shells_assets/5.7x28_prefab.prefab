@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 1494961727190713312}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 2556778295971059826}
   m_Father: {fileID: 0}
@@ -78,10 +78,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: -8500714643592958260}
-  <teleportThreshholdTransform>k__BackingField: {fileID: 5771320222913619817}
+  <TeleportThresholdTransform>k__BackingField: {fileID: 0}
   damageMultiplier: 1
   playerColour: {r: 0.27699995, g: 0.82508045, b: 1, a: 1}
   enemyColour: {r: 1, g: 0.40392157, b: 0.0627451, a: 1}
+  emission: 0.37
 --- !u!96 &-1141123921933024370
 TrailRenderer:
   serializedVersion: 2
@@ -222,7 +223,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 1ea0431e78a63bd4991410763f4b610d, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071067
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 1ea0431e78a63bd4991410763f4b610d, type: 3}
       propertyPath: m_LocalRotation.x
@@ -230,15 +231,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 1ea0431e78a63bd4991410763f4b610d, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 1ea0431e78a63bd4991410763f4b610d, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 1ea0431e78a63bd4991410763f4b610d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 1ea0431e78a63bd4991410763f4b610d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y

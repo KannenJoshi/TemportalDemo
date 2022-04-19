@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -45,6 +42,41 @@ public class PortalCamera : MonoBehaviour
         //enabled = true;
     }
 
+    void RenderPortal(ScriptableRenderContext SRC, int id, RenderTexture tempTex)
+    {
+        //if (CameraUtility.VisibleFromCamera(portals[id].Renderer, mainCamera))
+        if (portals[id].Renderer.isVisible)
+        {
+            portalCamera.targetTexture = tempTex;
+            portals[1-id].Renderer.material.SetInt("displayMask", 0);
+            
+            for (var i = recursions - 1; i >= 0; --i)
+            {
+                //portals[id].Renderer.enabled = false; 
+                portals[id].Renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+                portals[1-id].Renderer.material.SetTexture("_MainTex", tempTex);
+                
+                portalCamera.transform.position = transform.position;
+                portalCamera.transform.rotation = transform.rotation;
+                
+                var clipPlaneCameraSpace = portals[1-id].Render(i, portalCamera, SRC);
+                // If no need to use recursion then skip this iteration;
+                if (clipPlaneCameraSpace.Equals(Vector4.zero)) continue;
+                
+                var newMatrix = mainCamera.CalculateObliqueMatrix(clipPlaneCameraSpace);
+                portalCamera.projectionMatrix = newMatrix;
+
+                // Render the camera to its render target.
+                UniversalRenderPipeline.RenderSingleCamera(SRC, portalCamera);
+                
+                portals[1-id].Renderer.material.SetInt("displayMask", 1);
+
+                //portals[id].Renderer.enabled = true;
+                portals[id].Renderer.shadowCastingMode = ShadowCastingMode.On;
+            }
+        }
+    }
+
     // Update is called once per frame
     void RenderCamera(ScriptableRenderContext SRC, Camera camera)
     {
@@ -56,66 +88,7 @@ public class PortalCamera : MonoBehaviour
             return;
         }
         
-        //if (CameraUtility.VisibleFromCamera(portals[0].Renderer, mainCamera))
-        if (portals[0].Renderer.isVisible)
-        {
-            portalCamera.targetTexture = tempTexL;
-            portals[1].Renderer.material.SetInt("displayMask", 0);
-            
-            for (var i = recursions - 1; i >= 0; --i)
-            {
-                //portals[0].Renderer.enabled = false; 
-                portals[0].Renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
-                portals[1].Renderer.material.SetTexture("_MainTex", tempTexL);
-                
-                portalCamera.transform.position = transform.position;
-                portalCamera.transform.rotation = transform.rotation;
-                
-                var clipPlaneCameraSpace = portals[1].Render(i, portalCamera, SRC);
-                if (clipPlaneCameraSpace.Equals(Vector4.zero)) continue;
-                
-                var newMatrix = mainCamera.CalculateObliqueMatrix(clipPlaneCameraSpace);
-                portalCamera.projectionMatrix = newMatrix;
-
-                // Render the camera to its render target.
-                UniversalRenderPipeline.RenderSingleCamera(SRC, portalCamera);
-                
-                portals[1].Renderer.material.SetInt("displayMask", 1);
-
-                //portals[0].Renderer.enabled = true;
-                portals[0].Renderer.shadowCastingMode = ShadowCastingMode.On;
-            }
-        }
-
-        //if (CameraUtility.VisibleFromCamera(portals[1].Renderer, mainCamera))
-        if (portals[1].Renderer.isVisible)
-        {
-            portalCamera.targetTexture = tempTexR;
-            portals[0].Renderer.material.SetInt("displayMask", 0);
-            
-            for (var i = recursions - 1; i >= 0; --i)
-            {
-                //portals[1].Renderer.enabled = false;
-                portals[1].Renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
-                portals[0].Renderer.material.SetTexture("_MainTex", tempTexR);
-                
-                portalCamera.transform.position = transform.position;
-                portalCamera.transform.rotation = transform.rotation;
-                
-                var clipPlaneCameraSpace = portals[0].Render(i, portalCamera, SRC);
-                if (clipPlaneCameraSpace.Equals(Vector4.zero)) continue;
-                
-                var newMatrix = mainCamera.CalculateObliqueMatrix(clipPlaneCameraSpace);
-                portalCamera.projectionMatrix = newMatrix;
-
-                // Render the camera to its render target.
-                UniversalRenderPipeline.RenderSingleCamera(SRC, portalCamera);
-
-                portals[0].Renderer.material.SetInt("displayMask", 1);
-
-                //portals[1].Renderer.enabled = true;
-                portals[1].Renderer.shadowCastingMode = ShadowCastingMode.On;
-            }
-        }
+        RenderPortal(SRC, 0, tempTexL);
+        RenderPortal(SRC, 1, tempTexR);
     }
 }

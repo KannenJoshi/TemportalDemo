@@ -32,6 +32,7 @@ Transform:
   - {fileID: 6466313545566651235}
   - {fileID: 2917012485099481585}
   - {fileID: 8103688252070821726}
+  - {fileID: 5544294305085995270}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -49,6 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   barrel: {fileID: 0}
   projectile: {fileID: 0}
+  holder: {fileID: 0}
   damage: 10
   magazineSize: 30
   reloadTime: 2
@@ -60,6 +62,36 @@ MonoBehaviour:
   projectileSpeed: 1000
   timeToLive: 10
   ammoCount: 0
+--- !u!1 &3998445661122561805
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5544294305085995270}
+  m_Layer: 0
+  m_Name: barrel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5544294305085995270
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3998445661122561805}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.0604, z: 0.663}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 684161438172492669}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &684161439267898905
 PrefabInstance:
   m_ObjectHideFlags: 0

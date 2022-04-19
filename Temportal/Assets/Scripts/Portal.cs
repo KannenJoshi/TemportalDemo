@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Cinemachine;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -14,7 +13,7 @@ public class Portal : MonoBehaviour
 {
     [field: SerializeField] public Color Colour { get; private set; }
     [field: SerializeField] public Portal OtherPortal { get; private set; }
-    [field: SerializeField] public Collider Wall { get; set; }
+    [field: SerializeField] public PortalWall Wall { get; set; }
     public Renderer Renderer { get; private set; }
     private MeshFilter ScreenMeshFilter { get; set; }
     private GameObject _clone;
@@ -100,6 +99,11 @@ public class Portal : MonoBehaviour
 
     public void RemovePortal()
     {
+        if (Wall)
+        {
+            if (Equals(Wall.Front)) Wall.Front = null;
+            else Wall.Back = null;
+        }
         Wall = null;
         gameObject.SetActive(false);
         IsPlaced = false;
@@ -114,7 +118,7 @@ public class Portal : MonoBehaviour
         var traveller = other.GetComponent<PortalTraveller>();
         if (traveller != null && OtherPortal.IsPlaced)
         {
-            Physics.IgnoreCollision(other, Wall, true);
+            Physics.IgnoreCollision(other, Wall.Collider, true);
             traveller.EnterPortal();
             _travellers.Add(traveller);
         }
@@ -126,7 +130,7 @@ public class Portal : MonoBehaviour
         var traveller = other.GetComponent<PortalTraveller>();
         if (traveller && _travellers.Contains(traveller))
         {
-            Physics.IgnoreCollision(other, Wall, false);
+            Physics.IgnoreCollision(other, Wall.Collider, false);
             traveller.ExitPortal();
             _travellers.Remove(traveller);
         }
