@@ -7,25 +7,48 @@ public class PostProcessingController : MonoBehaviour
 {
     [SerializeField] private Volume postProcessingVolume;
     [SerializeField] private float chromaticAberrationIntensity = 0.5f;
-    [SerializeField] private float saturation = -50f;
+    [SerializeField] private float colourSaturation = -50f;
+    [SerializeField] private float vignetteIntensity = 0.45f;
+    [SerializeField] private float vignetteIntensityMaxIncrement = 0.5f;
+    [SerializeField] private Player player;
     
     private ChromaticAberration chroma;
     private ColorAdjustments colourAdjust;
+    private Vignette vignette;
+    private Color defaultVignetteColour;
     
     private void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        
         postProcessingVolume.profile.TryGet(out chroma);
         postProcessingVolume.profile.TryGet(out colourAdjust);
+        postProcessingVolume.profile.TryGet(out vignette);
+
+        if (vignette) defaultVignetteColour = vignette.color.value;
     }
 
     private void Update()
     {
         if (PauseMenu.IsPaused) return;
-        if (chroma == null || colourAdjust == null) return;
 
-        var val = 0f;
+        var bt = TimeManager.isBulletTime;
+        var windUp = bt ? TimeManager.EnterTime : TimeManager.ExitTime;
+        var val = (1f/windUp) * Time.unscaledDeltaTime;
         
-        if (TimeManager.isBulletTime)
+        // Bullet Time
+        ChromaticAberration(bt, val);
+        ColourAdjustment(bt, val*colourSaturation);
+        
+        // Player
+        Vignette(player.Hp, player.HpMax);
+    }
+    
+    private void ChromaticAberration(bool bt, float val)
+    {
+        if (chroma == null) return;
+        
+        if (bt)
         {
             if (!chroma.IsActive())
             {
@@ -33,33 +56,13 @@ public class PostProcessingController : MonoBehaviour
                 chroma.active = true;
             }
             
-            if (!colourAdjust.active)
-            {
-                colourAdjust.saturation.value = 0f;
-                colourAdjust.active = true;
-            }
-
-            val = (1f/TimeManager.EnterTime) * Time.unscaledDeltaTime;
-            
             if (!Mathf.Approximately(chroma.intensity.value, chromaticAberrationIntensity))
             {
-                //var val = TimeManager.EnterTime * (Time.timeScale / TimeManager.BulletTimeScale);
                 chroma.intensity.value = Mathf.Clamp(chroma.intensity.value + val, 0f, chromaticAberrationIntensity);
             }
-            
-            if (!Mathf.Approximately(colourAdjust.saturation.value, saturation))
-            {
-                //var val = TimeManager.EnterTime * (Time.timeScale / TimeManager.BulletTimeScale);
-                val *= saturation;
-                colourAdjust.saturation.value = Mathf.Clamp(colourAdjust.saturation.value + val, 0f, saturation);
-            }
-            
         }
-        else if (!TimeManager.isBulletTime)
+        else
         {
-            //var val = TimeManager.ExitTime * (Time.timeScale / TimeManager.BulletTimeScale);
-            val = (1f/TimeManager.ExitTime) * Time.unscaledDeltaTime;
-            
             if (!Mathf.Approximately(chroma.intensity.value, 0f))
             {
                 chroma.intensity.value = Mathf.Clamp(chroma.intensity.value - val, 0f, chromaticAberrationIntensity);
@@ -69,17 +72,58 @@ public class PostProcessingController : MonoBehaviour
                 chroma.intensity.value = 0f;
                 chroma.active = false;
             }
+        }
+    }
+    
+    private void ColourAdjustment(bool bt, float val)
+    {
+        if (colourAdjust == null) return;
+        
+        if (bt)
+        {
+            if (!colourAdjust.active)
+            {
+                colourAdjust.saturation.value = 0f;
+                colourAdjust.active = true;
+            }
             
+            if (!Mathf.Approximately(colourAdjust.saturation.value, colourSaturation))
+            {
+                //var val = TimeManager.EnterTime * (Time.timeScale / TimeManager.BulletTimeScale);
+                colourAdjust.saturation.value = Mathf.Clamp(colourAdjust.saturation.value + val, 0f, colourSaturation);
+            }
+        }
+        else
+        {
             if (!Mathf.Approximately(colourAdjust.saturation.value, 0f))
             {
-                val *= saturation;
-                colourAdjust.saturation.value = Mathf.Clamp(colourAdjust.saturation.value - val, 0f, saturation);
+                val *= colourSaturation;
+                colourAdjust.saturation.value = Mathf.Clamp(colourAdjust.saturation.value - val, 0f, colourSaturation);
             }
             else if (colourAdjust.IsActive())
             {
                 colourAdjust.saturation.value = 0f;
                 colourAdjust.active = false;
             }
+        }
+    }
+    
+    private void Vignette(float hp, float hpMax)
+    {
+        if (vignette == null) return;
+
+        var hpHalf = hpMax / 2f;
+        var val = 1 - (hp / hpHalf);
+
+        if (hp < hpHalf)
+        {
+            vignette.color.value = Color.red * val;
+            vignette.intensity.value = vignetteIntensity + vignetteIntensityMaxIncrement * val;
+        }
+        else if (!vignette.color.value.Equals(defaultVignetteColour))
+        {
+            vignette.color.value = defaultVignetteColour;
+            vignette.intensity.value = vignetteIntensity;
         }
     }
 }
