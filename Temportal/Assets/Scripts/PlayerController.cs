@@ -160,6 +160,17 @@ public class PlayerController : MonoBehaviour
         moveDir = new Vector3(_inputMovement.x, 0f, _inputMovement.y);
         moveDir = transform.TransformDirection(moveDir);
         
+        // Slope
+        // https://www.youtube.com/watch?v=cTIAhwlvW9M
+        if (Physics.Raycast(transform.position + 0.1f*transform.forward, Vector3.down, out RaycastHit slope,
+                capsuleCollider.center.y + .5f))
+        {
+            if (slope.normal != Vector3.up)
+            {
+                moveDir = Vector3.ProjectOnPlane(moveDir, slope.normal);
+            }
+        }
+        
         // Speed of Player by applying the multipliers
         _speed = moveSpeed;
         _speed *= isCrouching ? crouchMultiplier : isRunning ? runMultiplier : 1;
