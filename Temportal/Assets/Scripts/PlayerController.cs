@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 _lookDelta;
     private float _upDownAngle;
     private float _oldTimeScale = 1.0f;
-    private bool paused;
+    //private bool paused;
 
     private Transform _head;
     private Transform _hand;
@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour
     // FixedUpdate is called one per physics frame
     private void FixedUpdate()
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
         
         GroundedCheck();
         if (!isGrounded)
@@ -106,7 +106,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
         
         UpdateLook();
         
@@ -117,8 +117,8 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed)
         {
-            paused = !paused;
-            if (paused)
+            PauseMenu.IsPaused = !PauseMenu.IsPaused;
+            /*if (PauseMenu.IsPaused)
             {
                 _oldTimeScale = Time.timeScale;
                 Time.timeScale = 0;
@@ -133,13 +133,13 @@ public class PlayerController : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
             }
-            hud.PauseMenu(paused);
+            hud.PauseMenu(PauseMenu.IsPaused);*/
         }
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
         _inputMovement = context.ReadValue<Vector2>().normalized;
         // Less Airborne movement input
         //_inputMovement *= isGrounded ? 1 : airResistance;
@@ -182,9 +182,9 @@ public class PlayerController : MonoBehaviour
 
     public void OnLook(InputAction.CallbackContext context)
      {
-         if (paused) return;
+         if (PauseMenu.IsPaused) return;
          
-         // When unpaused, chance dT is 0 so returns NaN
+         // When unPauseMenu.IsPaused, chance dT is 0 so returns NaN
          if (Time.deltaTime == 0)
              _lookDelta = Vector2.zero;
          else
@@ -198,7 +198,6 @@ public class PlayerController : MonoBehaviour
          _upDownAngle = Mathf.Clamp(_upDownAngle, lookClamp.x, lookClamp.y);
 
          var localRotation = _head.transform.localRotation;
-         print(_upDownAngle);
          localRotation =
              Quaternion.Euler(new Vector3(_upDownAngle, localRotation.eulerAngles.y, localRotation.eulerAngles.z));
          _head.transform.localRotation = localRotation;
@@ -208,7 +207,7 @@ public class PlayerController : MonoBehaviour
     
     public void OnRun(InputAction.CallbackContext context)
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
         if (context.performed) 
             isRunning = true;
         else if (context.canceled) 
@@ -217,7 +216,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnCrouch(InputAction.CallbackContext context)
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
         if (context.performed) 
             isCrouching = true;
         else if (context.canceled) 
@@ -226,7 +225,7 @@ public class PlayerController : MonoBehaviour
     
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
         if (context.performed && isGrounded)
         {   
             // timeScale
@@ -238,7 +237,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
         if (context.performed && _weapon.IsReady && !_weapon.IsReloading && !_weapon.IsShooting)
         {
             _weapon.IsShooting = true;
@@ -252,12 +251,12 @@ public class PlayerController : MonoBehaviour
     
     public void OnSecondaryFire(InputAction.CallbackContext context)
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
     }
     
     public void OnReload(InputAction.CallbackContext context)
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
         if (context.performed && !_weapon.IsReloading && !_weapon.IsMagazineFull)
         {
             //weapon.IsReloading = true;
@@ -267,7 +266,7 @@ public class PlayerController : MonoBehaviour
     
     public void OnSwapPrimary(InputAction.CallbackContext context)
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
         if (context.performed && !_weapon.IsReloading)
         {
             SwapWeapon(0);
@@ -276,7 +275,7 @@ public class PlayerController : MonoBehaviour
     
     public void OnSwapSecondary(InputAction.CallbackContext context)
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
         if (context.performed && !_weapon.IsReloading)
         {
             SwapWeapon(1);
@@ -308,7 +307,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnInteract(InputAction.CallbackContext context)
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
     }
 
     private void SetPortalLocationAndDirection(Portal portal)
@@ -359,7 +358,7 @@ public class PlayerController : MonoBehaviour
     }
     public void OnPortalPlaceLeft(InputAction.CallbackContext context)
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
         if (context.performed)
         {
             // REFACTOR TO MAKE SPLAD DO PLACE TOO, NOT RETURN BOOL
@@ -369,7 +368,7 @@ public class PlayerController : MonoBehaviour
     
     public void OnPortalPlaceRight(InputAction.CallbackContext context)
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
         if (context.performed)
         {
             SetPortalLocationAndDirection(rightPortal);
@@ -378,7 +377,7 @@ public class PlayerController : MonoBehaviour
     
     public void OnPortalRemoveLeft(InputAction.CallbackContext context)
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
         if (context.performed && leftPortal.IsPlaced)
         {
             leftPortal.RemovePortal();
@@ -387,7 +386,7 @@ public class PlayerController : MonoBehaviour
     
     public void OnPortalRemoveRight(InputAction.CallbackContext context)
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
         if (context.performed && rightPortal.IsPlaced)
         {
             rightPortal.RemovePortal();
@@ -396,7 +395,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnBulletTimeToggle(InputAction.CallbackContext context)
     {
-        if (paused) return;
+        if (PauseMenu.IsPaused) return;
         if (context.performed)
         {
             // TODO: Change so all player movement is unaffected by timescale changes including gravity and rotations, as well as bullet velocities etc. Might need to make Kinematic?
