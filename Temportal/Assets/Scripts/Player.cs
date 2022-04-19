@@ -9,8 +9,7 @@ public class Player : Entity
     [SerializeField] private float bulletTimeResource = 5.0f;
     [SerializeField] private float bulletTimeRegenDelay = 3.0f;
     [SerializeField] private float bulletTimeRegenOverTime = 8.0f;
-    public TimeManager timeManager;
-    
+
     private bool _isHealing;
     private List<VisualEffect> _healFX;
     private float _lastEndBulletTime;
@@ -42,13 +41,13 @@ public class Player : Entity
         if (Time.timeScale == 0f) return;
         
         // Regen Trigger
-        if (!timeManager.IsBulletTime && bulletTimeResource < bulletTimeMaxDuration &&
+        if (!TimeManager.isBulletTime && bulletTimeResource < bulletTimeMaxDuration &&
             Time.time > _lastEndBulletTime + bulletTimeRegenDelay)
         {
             bulletTimeResource += BulletTimeResourceMax * Time.deltaTime / bulletTimeRegenOverTime;
         }
         // If in BT decrease resource meter
-        else if (timeManager.IsBulletTime)
+        else if (TimeManager.isBulletTime)
         {
             bulletTimeResource -= 1 * Time.unscaledDeltaTime;
         }
@@ -56,16 +55,16 @@ public class Player : Entity
         bulletTimeResource = Mathf.Clamp(bulletTimeResource, 0, bulletTimeMaxDuration);
 
         // If depleted end
-        if (bulletTimeResource == 0) timeManager.IsBulletTime = false;
+        if (bulletTimeResource == 0) TimeManager.isBulletTime = false;
         
         // If got deactivated last Tick, update tracker to delay regen
-        if (timeManager.IsBulletTime == false && timeManager.IsBulletTime != _lastBulletTimeState)
+        if (TimeManager.isBulletTime == false && TimeManager.isBulletTime != _lastBulletTimeState)
         {
             _lastEndBulletTime = Time.time;
         }
         
         // Track last state of BT
-        _lastBulletTimeState = timeManager.IsBulletTime;
+        _lastBulletTimeState = TimeManager.isBulletTime;
     }
 
     protected override void Die()

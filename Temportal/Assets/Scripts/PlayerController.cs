@@ -187,7 +187,7 @@ public class PlayerController : MonoBehaviour
         // Ignore Timescale
         if (Mathf.Abs(Time.timeScale - _oldTimeScale) > 0)
         {
-            rb.velocity *= Time.timeScale / _oldTimeScale;
+            rb.velocity *= _oldTimeScale / Time.timeScale;
         }
     }
 
@@ -240,7 +240,7 @@ public class PlayerController : MonoBehaviour
         if (context.performed && isGrounded)
         {   
             // timeScale
-            jumpForce *= Time.timeScale / _oldTimeScale;
+            //jumpForce *= Time.timeScale / _oldTimeScale;
             rb.AddForce(new Vector3(0f, jumpForce * rb.mass, 0f), ForceMode.Impulse);
             //isGrounded = false;
         }

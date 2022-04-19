@@ -17,7 +17,7 @@ public enum AIState
 [RequireComponent(typeof(Rigidbody))]
 public abstract class NPC : Entity
 {
-    private readonly float TOLERANCE = 0.00001f;
+    private readonly float TOLERANCE = 0.0001f;
     
     [Header("AI State")]
     [SerializeField] protected AIState initialState;

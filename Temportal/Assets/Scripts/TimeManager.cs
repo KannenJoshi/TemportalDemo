@@ -7,9 +7,9 @@ public class TimeManager : MonoBehaviour
 {
     public static bool isBulletTime;
     
-    [SerializeField] private float bulletTimeScale = 0.05f;
-    [SerializeField] private float enterTime = 0.5f;
-    [SerializeField] private float exitTime = 2.0f;
+    [SerializeField] private static float bulletTimeScale = 0.05f;
+    [SerializeField] private static float enterTime = 0.5f;
+    [SerializeField] private static float exitTime = 2.0f;
 
     private float _fixedDT;
 
@@ -38,19 +38,13 @@ public class TimeManager : MonoBehaviour
         Time.timeScale = Mathf.Clamp(Time.timeScale + dTS, bulletTimeScale, 1f);
         Time.fixedDeltaTime = Time.timeScale * _fixedDT;
     }
-
-    /*public bool IsBulletTime
-    {
-        get => isBulletTime;
-        set => isBulletTime = value;
-    }*/
     
     public static void SetBulletTime(bool on)
     {
         isBulletTime = on;
     }
 
-    public float BulletTimeScale => bulletTimeScale;
-    public float EnterTime => enterTime;
-    public float ExitTime => exitTime;
+    public static float BulletTimeScale => bulletTimeScale;
+    public static float EnterTime => enterTime;
+    public static float ExitTime => exitTime;
 }
