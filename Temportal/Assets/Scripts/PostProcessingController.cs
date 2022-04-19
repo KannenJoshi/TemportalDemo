@@ -7,7 +7,7 @@ public class PostProcessingController : MonoBehaviour
 {
     [SerializeField] private Volume postProcessingVolume;
     [SerializeField] private float chromaticAberrationIntensity = 0.5f;
-    [SerializeField] private float colourSaturation = -50f;
+    [SerializeField] private float colourSaturation = 50f;
     [SerializeField] private float vignetteIntensity = 0.45f;
     [SerializeField] private float vignetteIntensityMaxIncrement = 0.5f;
     [SerializeField] private Player player;
@@ -84,7 +84,7 @@ public class PostProcessingController : MonoBehaviour
             if (!colourAdjust.active)
             {
                 colourAdjust.saturation.value = 0f;
-                colourAdjust.active = true;
+                //colourAdjust.active = true;
             }
             
             if (!Mathf.Approximately(colourAdjust.saturation.value, colourSaturation))
@@ -103,7 +103,7 @@ public class PostProcessingController : MonoBehaviour
             else if (colourAdjust.IsActive())
             {
                 colourAdjust.saturation.value = 0f;
-                colourAdjust.active = false;
+                //colourAdjust.active = false;
             }
         }
     }
@@ -114,11 +114,27 @@ public class PostProcessingController : MonoBehaviour
 
         var hpHalf = hpMax / 2f;
         var val = 1 - (hp / hpHalf);
+        //var current = vignette.intensity.value;
+        //var goal = vignetteIntensity + vignetteIntensityMaxIncrement * val;
 
         if (hp < hpHalf)
         {
             vignette.color.value = Color.red * val;
-            vignette.intensity.value = vignetteIntensity + vignetteIntensityMaxIncrement * val;
+            vignette.intensity.value = vignetteIntensity + vignetteIntensityMaxIncrement * val;;
+            
+            // Lerp Intensity and Colour
+            /*
+            // Lerp Direction and Time
+            val *= 5f * Mathf.Sign(goal - current);
+            val *= Time.unscaledDeltaTime;
+                 
+            if (!Mathf.Approximately(current, goal))
+            {
+                vignette.intensity.value += val;
+            }
+            
+            if (!Mathf.Approximately(
+            */
         }
         else if (!vignette.color.value.Equals(defaultVignetteColour))
         {
