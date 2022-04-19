@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -35,6 +36,7 @@ public class PauseMenu : MonoBehaviour
     public void ResumeGame()
     {
         UnPause();
+        StartCoroutine(HideMouse());
     }
 
     public void OpenOptions()
@@ -74,5 +76,12 @@ public class PauseMenu : MonoBehaviour
         Cursor.visible = false;
         
         _pauseScreen.SetActive(false);
+    }
+
+    IEnumerator HideMouse()
+    {
+        yield return new WaitForSecondsRealtime(0.05f);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 }
