@@ -226,7 +226,7 @@ GameObject:
   - component: {fileID: 9012474050989696558}
   - component: {fileID: 9012474050989696559}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Movement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -370,7 +370,7 @@ GameObject:
   - component: {fileID: 9012474051440310343}
   - component: {fileID: 9012474051440310336}
   m_Layer: 5
-  m_Name: Text (TMP) (2)
+  m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -423,19 +423,19 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'GUN CONTROLS
+  m_text: 'WEAPON CONTROLS
 
 
     LClick - Shoot
 
-    RClick - Aim [WIP]
+    RClick - Aim [TBA]
 
-    1, 2 -
-    Swap to Primary/Secondary Weapon
+    1, 2
+    - Swap to Primary/Secondary Weapon
 
     R - Reload
 
-    F - Pick Up Gun [WIP]'
+    F - Pick Up Gun [TBA]'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 60560ff6e7c7ed0419f0c80f4dd42c7a, type: 2}
   m_sharedMaterial: {fileID: -3916077466498897424, guid: 60560ff6e7c7ed0419f0c80f4dd42c7a, type: 2}
@@ -516,7 +516,7 @@ GameObject:
   - component: {fileID: 9012474051947776858}
   - component: {fileID: 9012474051947776859}
   m_Layer: 5
-  m_Name: Text (TMP) (1)
+  m_Name: Temportal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -578,7 +578,7 @@ MonoBehaviour:
     Destroy Blue/Orange Portal
 
 
-    Tab - Bullet Time'
+    Tab - Bullet Time [WIP]'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 60560ff6e7c7ed0419f0c80f4dd42c7a, type: 2}
   m_sharedMaterial: {fileID: -3916077466498897424, guid: 60560ff6e7c7ed0419f0c80f4dd42c7a, type: 2}
