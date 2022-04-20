@@ -31,6 +31,8 @@ public class ExplosiveBullet : Bullet
             //Destroy(eff, eff.main.duration);
             //eff.Simulate(0.25f);
             //eff.Play();
+            
+            //https://forum.unity.com/threads/how-to-scale-particle-system.476616/
             var main = eff.main;
             main.scalingMode = ParticleSystemScalingMode.Local;
             eff.transform.localScale = new Vector3(radius, radius, radius);
