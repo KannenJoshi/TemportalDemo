@@ -26,25 +26,25 @@ public abstract class NPC : Entity
 
     [Header("Detection")]
     [SerializeField] private Transform head;
-    [SerializeField] private GameObject target;
+    [SerializeField] protected GameObject target;
     [SerializeField] private LayerMask losLayer;
     [SerializeField] private float sightRange = 20.0f;
     [SerializeField] private float sightAngle = 120.0f;
     [SerializeField] private float attackRange = 10.0f;
     [SerializeField] private float alertTime = 5.0f;
     [SerializeField] private float thinkRate = 0.2f;
-    [SerializeField]private float _lastThinkTime;
-    [SerializeField]private Vector3 _lastSeenTargetPos;
-    [SerializeField]private float _lastSeenTargetTime;
-    [SerializeField]private bool _canSeeTarget;
-    [SerializeField]private bool _canAttackTarget;
-    [SerializeField]private bool _trackingTarget;
+    [SerializeField] private float _lastThinkTime;
+    [SerializeField] private Vector3 _lastSeenTargetPos;
+    [SerializeField] private float _lastSeenTargetTime;
+    [SerializeField] private bool _canSeeTarget;
+    [SerializeField] private bool _canAttackTarget;
+    [SerializeField] private bool _trackingTarget;
 
     [Header("Behaviour")]
     [SerializeField] private float idleRotate = 5.0f;
     [SerializeField] private List<Transform> patrolTransforms;
+    [SerializeField] private List<Vector3> patrolPoints;
     private float _idleRotateProgress;
-    private List<Vector3> patrolPoints;
     private int _patrolPointIndex;
     private Vector3 _currentPatrolPoint;
 
@@ -52,6 +52,10 @@ public abstract class NPC : Entity
     [SerializeField] private float weaponOffsetDelay;
     private float _lastWeaponShotTime;
     private int _lastWeaponShotIndex;
+
+    [Header("Game")]
+    [SerializeField] private int scoreForKilling;
+    
     
     private NavMeshAgent agent;
     private List<Firearm> weapons;
@@ -62,6 +66,8 @@ public abstract class NPC : Entity
     {
         base.Awake();
         agent = GetComponent<NavMeshAgent>();
+        
+        patrolPoints = new List<Vector3>();
     }
 
     void Start()
@@ -73,18 +79,34 @@ public abstract class NPC : Entity
         defaultWeaponRotations = new List<Quaternion>(weapons.Count);
 
         // Calculate Weapon fire offset
-        foreach (var weapon in weapons)
+        if (weaponOffsetDelay > 0f)
         {
-            fireDelay += weapon.FireDelay;
-            defaultWeaponRotations.Add(weapon.transform.rotation);
+            fireDelay = weaponOffsetDelay;
         }
-        fireDelay /= weapons.Count;
-        
-        // Transforms into Vector3's
-        patrolPoints = new List<Vector3>();
-        foreach (var point in patrolTransforms)
+        else
         {
-            patrolPoints.Add(point.position);
+            foreach (var weapon in weapons)
+            {
+                fireDelay += weapon.FireDelay;
+                defaultWeaponRotations.Add(weapon.transform.rotation);
+            }
+            fireDelay /= weapons.Count;
+        }
+
+        // If given Transforms initially, convert to patrol points
+        if (patrolTransforms.Count > 0)
+        {
+            patrolTransforms.ForEach(e => patrolPoints.Add(e.position));
+        }
+        
+    }
+
+    public void SetPatrolPoints(List<Vector3> patrolList)
+    {
+        patrolPoints = new List<Vector3>();
+        foreach (var point in patrolList)
+        {
+            patrolPoints.Add(RoundedPosition(point));
         }
         
         // If no Patrol Points
@@ -97,136 +119,136 @@ public abstract class NPC : Entity
 
     protected void ChangeState(AIState newState)
     {
-        previousState = currentState;
-        currentState = newState;
+    previousState = currentState;
+    currentState = newState;
     }
 
     private static Vector3 RoundedPosition(Vector3 position)
     {
-        return new Vector3(Mathf.Round(position.x),
-                           Mathf.Round(position.y),
-                           Mathf.Round(position.z));
+    return new Vector3(Mathf.Round(position.x),
+                       Mathf.Round(position.y),
+                       Mathf.Round(position.z));
     }
 
     protected bool IsAgentAtDestination()
     {
-        // https://answers.unity.com/questions/324589/how-can-i-tell-when-a-navmesh-has-reached-its-dest.html
-        // Distance was E-07 so using approximately compare remain and stop dist
-        // WAS BROKEN BECAUSE OF HEIGHT DIFFERENCE
-        //return (Mathf.Approximately(agent.remainingDistance, agent.stoppingDistance) || Mathf.Approximately(Vector3.Distance(transform.position, RoundedPosition(_currentPatrolPoint)),agent.stoppingDistance)) && (!agent.hasPath || Mathf.Approximately(agent.velocity.sqrMagnitude, 0f));
+    // https://answers.unity.com/questions/324589/how-can-i-tell-when-a-navmesh-has-reached-its-dest.html
+    // Distance was E-07 so using approximately compare remain and stop dist
+    // WAS BROKEN BECAUSE OF HEIGHT DIFFERENCE
+    //return (Mathf.Approximately(agent.remainingDistance, agent.stoppingDistance) || Mathf.Approximately(Vector3.Distance(transform.position, RoundedPosition(_currentPatrolPoint)),agent.stoppingDistance)) && (!agent.hasPath || Mathf.Approximately(agent.velocity.sqrMagnitude, 0f));
 
-        var agentDest = _currentPatrolPoint;
-        agentDest.y = transform.position.y;
+    var agentDest = _currentPatrolPoint;
+    agentDest.y = transform.position.y;
 
-        var A = Math.Abs(agent.remainingDistance - agent.stoppingDistance) < TOLERANCE;
-        var B = Math.Abs(Vector3.Distance(transform.position, RoundedPosition(agentDest)) - agent.stoppingDistance) < TOLERANCE;
+    var A = Math.Abs(agent.remainingDistance - agent.stoppingDistance) < TOLERANCE;
+    var B = Math.Abs(Vector3.Distance(transform.position, RoundedPosition(agentDest)) - agent.stoppingDistance) < TOLERANCE;
 
-        var C = !agent.hasPath;
-        var D = Mathf.Approximately(agent.velocity.sqrMagnitude, 0f);
-        
-        return (A || B) && (C || D);
-        //return (Mathf.Approximately(agent.remainingDistance, agent.stoppingDistance) || Mathf.Approximately(Vector3.Distance(transform.position, RoundedPosition(agentDest)),agent.stoppingDistance)) && (!agent.hasPath || Mathf.Approximately(agent.velocity.sqrMagnitude, 0f));
+    var C = !agent.hasPath;
+    var D = Mathf.Approximately(agent.velocity.sqrMagnitude, 0f);
+
+    return (A || B) && (C || D);
+    //return (Mathf.Approximately(agent.remainingDistance, agent.stoppingDistance) || Mathf.Approximately(Vector3.Distance(transform.position, RoundedPosition(agentDest)),agent.stoppingDistance)) && (!agent.hasPath || Mathf.Approximately(agent.velocity.sqrMagnitude, 0f));
     }
 
     protected virtual void RotateWeapons(Vector3 targetPos)
     {
-        foreach (var weapon in weapons)
-        {
-            var dir = (targetPos - weapon.transform.position).normalized;
-            var rot = Quaternion.LookRotation(dir).eulerAngles;
-            var currentRot = weapon.transform.rotation.eulerAngles;
-            currentRot.x = rot.x;
-            weapon.transform.rotation = Quaternion.Euler(currentRot);
-        }
+    foreach (var weapon in weapons)
+    {
+        var dir = (targetPos - weapon.transform.position).normalized;
+        var rot = Quaternion.LookRotation(dir).eulerAngles;
+        var currentRot = weapon.transform.rotation.eulerAngles;
+        currentRot.x = rot.x;
+        weapon.transform.rotation = Quaternion.Euler(currentRot);
+    }
     }
 
     private void ScanForTarget()
     {
-        var targetCollider = target.GetComponent<CapsuleCollider>();
-        // Distance and Direction to Previous Position
-        var distance = Vector3.Distance(transform.position, target.transform.position);
-        var direction = transform.forward;
-        var directionToPlayer = (target.transform.position + targetCollider.center - transform.position).normalized;
+    var targetCollider = target.GetComponent<CapsuleCollider>();
+    // Distance and Direction to Previous Position
+    var distance = Vector3.Distance(transform.position, target.transform.position);
+    var direction = transform.forward;
+    var directionToPlayer = (target.transform.position + targetCollider.center - transform.position).normalized;
 
-        _canSeeTarget = false;
-        _canAttackTarget = false;
-        
-        // If out of sight range or not within the angle
-        if (distance <= sightRange && Vector3.Angle(transform.forward, directionToPlayer) <= sightAngle / 2)
-        {
-            direction = directionToPlayer;
-        }
-        
-        Debug.DrawRay(head.position, direction*sightRange, Color.green, thinkRate);
+    _canSeeTarget = false;
+    _canAttackTarget = false;
 
-        if (Physics.Raycast(head.position, direction, out RaycastHit hit, sightRange, losLayer, QueryTriggerInteraction.Collide))
+    // If out of sight range or not within the angle
+    if (distance <= sightRange && Vector3.Angle(transform.forward, directionToPlayer) <= sightAngle / 2)
+    {
+        direction = directionToPlayer;
+    }
+
+    Debug.DrawRay(head.position, direction*sightRange, Color.green, thinkRate);
+
+    if (Physics.Raycast(head.position, direction, out RaycastHit hit, sightRange, losLayer, QueryTriggerInteraction.Collide))
+    {
+        // If finds the Target
+        if (hit.transform.CompareTag(target.tag))
         {
-            // If finds the Target
-            if (hit.transform.CompareTag(target.tag))
-            {
-                _trackingTarget = true;
-                _canSeeTarget = true;
-                _canAttackTarget = distance <= attackRange;
-                
-                var c = (CapsuleCollider) hit.collider;
-                _lastSeenTargetPos = hit.transform.position + c.center;
-                _lastSeenTargetTime = Time.time;
-            }
-            // If target being tracked but cannot see directly and NPC looking at Portal
-            else if (hit.transform.CompareTag("Portal") && _trackingTarget && !_canSeeTarget)
-            {
-                // Head into the portal
-                _lastSeenTargetPos = hit.transform.position;
-                // Without, might timeout before reaches portal
-                //_lastSeenTargetTime = Time.time;
-                _lastSeenTargetTime += Time.deltaTime;
-                agent.stoppingDistance = 0.0f;
-            }
+            _trackingTarget = true;
+            _canSeeTarget = true;
+            _canAttackTarget = distance <= attackRange;
+            
+            var c = (CapsuleCollider) hit.collider;
+            _lastSeenTargetPos = hit.transform.position + c.center;
+            _lastSeenTargetTime = Time.time;
         }
+        // If target being tracked but cannot see directly and NPC looking at Portal
+        else if (hit.transform.CompareTag("Portal") && _trackingTarget && !_canSeeTarget)
+        {
+            // Head into the portal
+            _lastSeenTargetPos = hit.transform.position;
+            // Without, might timeout before reaches portal
+            //_lastSeenTargetTime = Time.time;
+            _lastSeenTargetTime += Time.deltaTime;
+            agent.stoppingDistance = 0.0f;
+        }
+    }
     }
 
     private Vector3 NextPatrolPoint()
     {
-        _patrolPointIndex++;
-        _patrolPointIndex %= patrolPoints.Count;
-        return RoundedPosition( patrolPoints[_patrolPointIndex] );
+    _patrolPointIndex++;
+    _patrolPointIndex %= patrolPoints.Count;
+    return RoundedPosition( patrolPoints[_patrolPointIndex] );
     }
 
     protected virtual void Idle()
     {
-        _idleRotateProgress = 0;
-        ChangeState(AIState.IDLE);
+    _idleRotateProgress = 0;
+    ChangeState(AIState.IDLE);
     }
 
     protected virtual void Patrol()
     {
-        agent.stoppingDistance = 0.0f;
-        agent.SetDestination(RoundedPosition(_currentPatrolPoint));
-        ChangeState(AIState.PATROL);
+    agent.stoppingDistance = 0.0f;
+    agent.SetDestination(RoundedPosition(_currentPatrolPoint));
+    ChangeState(AIState.PATROL);
     }
 
     protected virtual void Chase()
     {
-        for(int i = 0; i < weapons.Count; i++)
-        {
-            weapons[i].transform.localRotation = defaultWeaponRotations[i];
-        }
-        ChangeState(AIState.CHASE);
+    for(int i = 0; i < weapons.Count; i++)
+    {
+    weapons[i].transform.localRotation = defaultWeaponRotations[i];
+    }
+    ChangeState(AIState.CHASE);
     }
 
     protected virtual void Attack()
     {
-        foreach (var w in weapons)
-        {
-            w.IsReady = true;
-        }
-        agent.stoppingDistance = attackRange;
-        ChangeState(AIState.ATTACK);
+    foreach (var w in weapons)
+    {
+    w.IsReady = true;
+    }
+    agent.stoppingDistance = attackRange;
+    ChangeState(AIState.ATTACK);
     }
 
     /*
-     * VIRTUALS
-     */
+    * VIRTUALS
+    */
     
     // TO BE EXECUTED EVERY `THINKRATE` SECONDS
     protected virtual void AIThink()
@@ -394,5 +416,6 @@ public abstract class NPC : Entity
     protected override void Die()
     {
         base.Die();
+        ScoreCounter.AddScore(scoreForKilling);
     }
 }

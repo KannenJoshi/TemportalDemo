@@ -22,6 +22,8 @@ public class Drone : NPC
     {
         base.Awake();
         
+        target = GameObject.FindGameObjectWithTag("Player");
+        
         var c = new Color();
         
         if (defaultEyeColour.Equals(c))
