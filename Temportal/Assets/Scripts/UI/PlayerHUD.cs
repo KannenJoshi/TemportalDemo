@@ -16,6 +16,7 @@ public class PlayerHUD : MonoBehaviour
     [Header("Numbers")]
     [SerializeField] private TextMeshProUGUI ammoCount;
     [SerializeField] private TextMeshProUGUI ammoMax;
+    [SerializeField] private TextMeshProUGUI score;
 
     [Header("Indicators")]
     [SerializeField] private Image LPortal;
@@ -49,6 +50,7 @@ public class PlayerHUD : MonoBehaviour
 
     private void Update()
     {
+        // Portal Indicator
         var tempColour = LPortal.color;
         tempColour.a = leftPortal.IsPlaced ? 1f : 0.2f;
         LPortal.color = tempColour;
@@ -57,12 +59,14 @@ public class PlayerHUD : MonoBehaviour
         tempColour.a = rightPortal.IsPlaced ? 1f : 0.2f;
         RPortal.color = tempColour;
 
+        // Reload Circle
         if (reloadCircle.enabled)
         {
-            reloadCircle.fillAmount += Time.deltaTime / reloadTime;
+            reloadCircle.fillAmount += Time.unscaledDeltaTime / reloadTime;
             if (reloadCircle.fillAmount >= 1.0f) reloadCircle.enabled = false;
         }
         
+        // Gun Equipped
         tempColour = primary.color;
         tempColour.a = primaryGun.activeSelf ? 1f : 0.5f;
         primary.color = tempColour;
@@ -70,6 +74,9 @@ public class PlayerHUD : MonoBehaviour
         tempColour = secondary.color;
         tempColour.a = secondaryGun.activeSelf ? 1f : 0.5f;
         secondary.color = tempColour;
+
+        // Score
+        score.text = "Score: " + ScoreCounter.Score;
     }
 
     public void SetAmmo(int count) { ammoCount.text = count.ToString(); }
