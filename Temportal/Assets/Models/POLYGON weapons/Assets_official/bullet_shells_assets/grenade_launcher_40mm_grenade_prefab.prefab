@@ -192,7 +192,7 @@ MonoBehaviour:
   emission: 0.37
   radius: 5
   explosiveForce: 1500
-  explosionEffect: {fileID: 0}
+  explosionEffect: {fileID: 1337729480899844986, guid: f56f50e0bfb11684a897f3b15c45dbf9, type: 3}
   selfDamageMultiplier: 0.2
   damageAtEdgeScale: 2
 --- !u!1001 &1276909037848950140

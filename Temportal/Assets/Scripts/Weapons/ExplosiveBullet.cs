@@ -31,6 +31,10 @@ public class ExplosiveBullet : Bullet
             //Destroy(eff, eff.main.duration);
             //eff.Simulate(0.25f);
             //eff.Play();
+            var main = eff.main;
+            main.scalingMode = ParticleSystemScalingMode.Local;
+            eff.transform.localScale = new Vector3(radius, radius, radius);
+            
             exploded = true;
         }
 
