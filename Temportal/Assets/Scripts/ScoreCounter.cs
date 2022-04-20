@@ -13,13 +13,13 @@ public class ScoreCounter : MonoBehaviour
     //https://answers.unity.com/questions/1534931/how-to-increase-value-of-for-example-gold-every-se.html
     private float _timer;
     
-    void Awake()
+    private void Awake()
     {
         Score = 0;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (PauseMenu.IsPaused || GameOverMenu.IsGameOver) return;
 

@@ -17,6 +17,7 @@ public class Drone : NPC
     [SerializeField] private Light light;
     [SerializeField] private Color defaultLightColour;
     [SerializeField] private Color[] lightColoursForStates;
+    private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 
     protected override void Awake()
     {
@@ -55,7 +56,7 @@ public class Drone : NPC
     {
         var i = !fetchedEyeColour ? emissionIntensity : 1;
         var col = eyeColoursForStates[index] * i / eyeColoursForStates[index].grayscale;
-        eye.material.SetColor("_EmissionColor", col);
+        eye.material.SetColor(EmissionColor, col);
         light.color = lightColoursForStates[index];
     }
     
