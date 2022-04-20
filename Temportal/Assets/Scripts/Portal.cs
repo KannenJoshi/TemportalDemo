@@ -69,7 +69,7 @@ public class Portal : MonoBehaviour
     public Vector4 Render(int iterationID, Camera portalCam, ScriptableRenderContext SRC)
     {
         // check if need and iterID bit I added
-        //if (iterationID != 0 && !CameraUtility.BoundsOverlap(ScreenMeshFilter, OtherPortal.ScreenMeshFilter, portalCam)) return Vector4.zero;
+        //if (iterationID != 0 && CameraUtility.BoundsOverlap(ScreenMeshFilter, OtherPortal.ScreenMeshFilter, portalCam)) return Vector4.zero;
 
         // Get Position of this iteration by applying transform repeatedly
         for (var i = 0; i <= iterationID; ++i)

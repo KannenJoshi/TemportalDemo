@@ -15,7 +15,9 @@ public class PortalCamera : MonoBehaviour
     private RenderTexture tempTexR;
     
     private Camera mainCamera;
-    
+    private static readonly int DisplayMask = Shader.PropertyToID("displayMask");
+    private static readonly int MainTex = Shader.PropertyToID("_MainTex");
+
     private void Awake()
     {
         mainCamera = GetComponent<Camera>();
@@ -48,13 +50,13 @@ public class PortalCamera : MonoBehaviour
         if (portals[id].Renderer.isVisible)
         {
             portalCamera.targetTexture = tempTex;
-            portals[1-id].Renderer.material.SetInt("displayMask", 0);
+            portals[1-id].Renderer.material.SetInt(DisplayMask, 0);
             
             for (var i = recursions - 1; i >= 0; --i)
             {
                 //portals[id].Renderer.enabled = false; 
                 portals[id].Renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
-                portals[1-id].Renderer.material.SetTexture("_MainTex", tempTex);
+                portals[1-id].Renderer.material.SetTexture(MainTex, tempTex);
                 
                 portalCamera.transform.position = transform.position;
                 portalCamera.transform.rotation = transform.rotation;
@@ -69,7 +71,7 @@ public class PortalCamera : MonoBehaviour
                 // Render the camera to its render target.
                 UniversalRenderPipeline.RenderSingleCamera(SRC, portalCamera);
                 
-                portals[1-id].Renderer.material.SetInt("displayMask", 1);
+                portals[1-id].Renderer.material.SetInt(DisplayMask, 1);
 
                 //portals[id].Renderer.enabled = true;
                 portals[id].Renderer.shadowCastingMode = ShadowCastingMode.On;
@@ -83,8 +85,8 @@ public class PortalCamera : MonoBehaviour
         // If both portals placed, and a portal visible from Player Cam, render them
         if (!portals[0].IsPlaced || !portals[1].IsPlaced)
         {
-            portals[0].Renderer.material.SetInt("displayMask", 0);
-            portals[1].Renderer.material.SetInt("displayMask", 0);
+            portals[0].Renderer.material.SetInt(DisplayMask, 0);
+            portals[1].Renderer.material.SetInt(DisplayMask, 0);
             return;
         }
         
