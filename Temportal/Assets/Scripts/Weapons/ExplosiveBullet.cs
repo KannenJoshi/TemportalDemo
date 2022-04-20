@@ -44,6 +44,8 @@ public class ExplosiveBullet : Bullet
             {
                 var objEntity = obj.GetComponent<Entity>();
                 var objAI = obj.GetComponent<NPC>();
+
+                var dmg = 0.5f;
                 
                 if (objEntity != null)
                 {
@@ -53,7 +55,7 @@ public class ExplosiveBullet : Bullet
                     // Adjust according to https://www.desmos.com/calculator/snz1npz55j
                     var x = Vector3.Distance(obj.transform.position, pos);
                     var s = damageAtEdgeScale;
-                    var dmg = damage - ((damage + s * s) / (s * radius)) * x;
+                    dmg = damage - ((damage + s * s) / (s * radius)) * x;
                     dmg *= multiplier;
                     dmg += s;
                     objEntity.ApplyDamage(Mathf.RoundToInt(dmg));
@@ -62,7 +64,8 @@ public class ExplosiveBullet : Bullet
                 // ENABLE WHEN ENEMY HIT GROUND CHECK
                 //if (objAI != null) objAI.enabled = false;
                 
-                objRb.AddExplosionForce(explosiveForce, pos, radius, 0.5f, ForceMode.Impulse);
+                //objRb.AddExplosionForce(explosiveForce, pos, radius, 0.5f, ForceMode.Impulse);
+                objRb.AddExplosionForce(explosiveForce, pos, radius, dmg, ForceMode.Impulse);
 
             }
         }
