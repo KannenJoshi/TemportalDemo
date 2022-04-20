@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -23,14 +24,17 @@ public class PauseMenu : MonoBehaviour
     }
 
     private static GameObject _pauseScreen;
-    
-    [SerializeField] private GameObject options;
 
-    private static float _oldTimeScale;
+    private static float _oldTimeScale = 1f;
     
     private void Awake()
     {
         _pauseScreen = transform.GetChild(0).gameObject;
+    }
+
+    private void Start()
+    {
+        UnPause();
     }
 
     public void ResumeGame()
@@ -38,15 +42,10 @@ public class PauseMenu : MonoBehaviour
         UnPause();
         StartCoroutine(HideMouse());
     }
-
-    public void OpenOptions()
+    
+    public void MainMenu()
     {
-        options.SetActive(true);
-    }
-
-    public void CloseOptions()
-    {
-        options.SetActive(false);
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
     public void QuitGame()

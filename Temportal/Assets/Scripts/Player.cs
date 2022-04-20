@@ -69,7 +69,7 @@ public class Player : Entity
 
     protected override void Die()
     {
-        
+        GameOverMenu.GameOver();
     }
     
     protected override void Heal()
