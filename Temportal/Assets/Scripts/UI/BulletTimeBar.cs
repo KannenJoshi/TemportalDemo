@@ -13,7 +13,7 @@ public class BulletTimeBar : MonoBehaviour
     void Awake()
     {
         slider = GetComponent<Slider>();
-        if (player == null) player = GameObject.FindWithTag("Player").GetComponent<Player>();
+        if (player == null) player = Player.Instance.GetComponent<Player>();
 
         slider.maxValue = player.BulletTimeResourceMax;
         slider.minValue = 0;
@@ -21,6 +21,8 @@ public class BulletTimeBar : MonoBehaviour
 
     void Update()
     {
+        //if (PauseMenu.IsPaused || GameOverMenu.IsGameOver) return;
+        
         if (!Mathf.Approximately(player.BulletTimeResource,slider.value))
         {
             bulletTimeVal = player.BulletTimeResource;

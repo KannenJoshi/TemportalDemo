@@ -23,7 +23,7 @@ public class Player : Entity
     {
         base.Awake();
         
-        if (_instance != null && _instance != this)
+        if (_instance != null && _instance != gameObject)
         {
             Destroy(this.gameObject);
         } else {
@@ -53,7 +53,7 @@ public class Player : Entity
     protected override void UpdateBehaviour()
     {
         // Don't change if game paused
-        if (Time.timeScale == 0f) return;
+        if (PauseMenu.IsPaused || GameOverMenu.IsGameOver) return;
         
         // Regen Trigger
         if (!TimeManager.isBulletTime && bulletTimeResource < bulletTimeMaxDuration &&
@@ -89,6 +89,8 @@ public class Player : Entity
     
     protected override void Heal()
     {
+        if (PauseMenu.IsPaused || GameOverMenu.IsGameOver) return;
+        
         var oldIsHealing = _isHealing;
         _isHealing = false;
         if (regenerate && Hp < HpMax && Time.time > _lastHit + healAfterDamageDelay)

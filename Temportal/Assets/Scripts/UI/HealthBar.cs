@@ -19,11 +19,14 @@ public class HealthBar : MonoBehaviour
         if (entity == null) entity = GetComponentInParent<Entity>();
 
         slider.maxValue = entity.HpMax;
+        slider.value = entity.HpMax;
         slider.minValue = 0;
     }
 
     void Update()
     {
+        if (Mathf.Approximately(slider.value, 0f) && Mathf.Approximately(entity.Hp,0f)) return;
+        
         //slider.value = entity.Hp;
         if (!Mathf.Approximately(entity.Hp,slider.value))
         {

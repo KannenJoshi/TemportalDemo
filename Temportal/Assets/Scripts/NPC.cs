@@ -73,12 +73,12 @@ public abstract class NPC : Entity
         patrolPoints = new List<Vector3>();
         
         //Debug.LogError(GameObject.FindGameObjectWithTag("Player"));
-        Debug.LogError(target);
-        Debug.LogError(Player.Instance);
+        //Debug.LogError(target);
+        //Debug.LogError(Player.Instance);
         //target = target == null ? GameObject.FindGameObjectWithTag("Player") : target;
         target = target == null ? Player.Instance : target;
         
-        Debug.LogError(target);
+        //Debug.LogError(target);
         
         
         targetCollider = target.GetComponent<CapsuleCollider>();
@@ -167,9 +167,7 @@ public abstract class NPC : Entity
         // Distance and Direction to Previous Position
         var distance = Vector3.Distance(transform.position, target.transform.position);
         var direction = transform.forward;
-        Debug.LogError(target);
         var directionToPlayer = ((target.transform.position + targetCollider.center) - transform.position).normalized;
-        Debug.LogError(directionToPlayer);
 
         _canSeeTarget = false;
         _canAttackTarget = false;
