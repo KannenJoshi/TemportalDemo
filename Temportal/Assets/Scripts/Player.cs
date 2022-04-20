@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -14,8 +15,22 @@ public class Player : Entity
     private List<VisualEffect> _healFX;
     private float _lastEndBulletTime;
     private bool _lastBulletTimeState;
-    
-    
+
+    private static GameObject _instance;
+    public static GameObject Instance => _instance;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        } else {
+            _instance = gameObject;
+        }
+    }
+
     void Start()
     {
         _healFX = new List<VisualEffect>();

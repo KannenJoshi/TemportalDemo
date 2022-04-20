@@ -20,17 +20,6 @@ public abstract class PortalTraveller : MonoBehaviour
             TeleportThresholdTransform = transform;
         }
     }
-    
-    void Start()
-    {
-        //if (TeleportThresholdTransform == null) TeleportThresholdTransform = transform;
-        
-    }
-    
-    void Update()
-    {
-        
-    }
 
     // When Touch Portal
     public virtual void EnterPortal()

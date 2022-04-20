@@ -101,7 +101,9 @@ MonoBehaviour:
   idleRotate: 10
   patrolTransforms: []
   patrolPoints: []
-  weaponOffsetDelay: 0
+  weapons:
+  - {fileID: 7898212447435316203}
+  - {fileID: 7274247408588531714}
   scoreForKilling: 50
   eye: {fileID: 4950387179373381949}
   emissionIntensity: 3.9
@@ -111,7 +113,7 @@ MonoBehaviour:
   - {r: 0.014064133, g: 0.8113208, b: 0.003826994, a: 0}
   - {r: 1, g: 0.6443302, b: 0, a: 0}
   - {r: 1, g: 0, b: 0, a: 0}
-  light: {fileID: 5230736582411342836}
+  spotlight: {fileID: 5230736582411342836}
   defaultLightColour: {r: 1, g: 0.86666673, b: 0.23137257, a: 0}
   lightColoursForStates:
   - {r: 1, g: 0.86666673, b: 0.23137257, a: 0}
@@ -550,6 +552,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 684161438172492669, guid: 0adf61a16068ca64aa8126389fcf44dd, type: 3}
   m_PrefabInstance: {fileID: 3582514121151010648}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7898212447435316203 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6641599727264959667, guid: 0adf61a16068ca64aa8126389fcf44dd, type: 3}
+  m_PrefabInstance: {fileID: 3582514121151010648}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da8b9cb6912275845ae06bdf94fb17c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &9027166210124017246 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5544294305085995270, guid: 0adf61a16068ca64aa8126389fcf44dd, type: 3}
@@ -685,6 +698,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 684161438172492669, guid: 0adf61a16068ca64aa8126389fcf44dd, type: 3}
   m_PrefabInstance: {fileID: 4096273146880730289}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7274247408588531714 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6641599727264959667, guid: 0adf61a16068ca64aa8126389fcf44dd, type: 3}
+  m_PrefabInstance: {fileID: 4096273146880730289}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da8b9cb6912275845ae06bdf94fb17c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8370407143908777399 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5544294305085995270, guid: 0adf61a16068ca64aa8126389fcf44dd, type: 3}

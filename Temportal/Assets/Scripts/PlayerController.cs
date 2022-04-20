@@ -57,9 +57,11 @@ public class PlayerController : MonoBehaviour
     {
         //player = GetComponent<Player>();
         
-        var portals = GameObject.FindGameObjectsWithTag("Portal");
-        leftPortal = portals[0].GetComponent<Portal>();
-        rightPortal = portals[1].GetComponent<Portal>();
+        //var portals = GameObject.FindGameObjectsWithTag("Portal");
+        //leftPortal = portals[0].GetComponent<Portal>();
+        //rightPortal = portals[1].GetComponent<Portal>();
+        //leftPortal = GameObject.Find("LPortal").GetComponent<Portal>();
+        //rightPortal = GameObject.Find("RPortal").GetComponent<Portal>();
     }
     
     private void Start()
@@ -69,9 +71,11 @@ public class PlayerController : MonoBehaviour
         
         hud.enabled = true;
         
-        var portals = GameObject.FindGameObjectsWithTag("Portal");
-        leftPortal = portals[0].GetComponent<Portal>();
-        rightPortal = portals[1].GetComponent<Portal>();
+        // var portals = GameObject.FindGameObjectsWithTag("Portal");
+        // leftPortal = portals[0].GetComponent<Portal>();
+        // rightPortal = portals[1].GetComponent<Portal>();
+        leftPortal = GameObject.Find("LPortal").GetComponent<Portal>();
+        rightPortal = GameObject.Find("RPortal").GetComponent<Portal>();
 
         _head = transform.GetChild(1);
         _hand = _head.GetChild(0);

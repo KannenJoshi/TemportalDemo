@@ -19,7 +19,7 @@ public class PostProcessingController : MonoBehaviour
     
     private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        //player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         
         postProcessingVolume.profile.TryGet(out chroma);
         postProcessingVolume.profile.TryGet(out colourAdjust);

@@ -121,7 +121,7 @@ namespace Weapons
         {
             //new Bullet(projectileSpeed, projectileRange); //: Needs collider, die on collision with any surface, die when past range
             GameObject newBullet = Instantiate(projectile, barrel.position, barrel.rotation);
-            newBullet.GetComponent<Bullet>().SetStats(this.damage, transform.parent.tag);
+            newBullet.GetComponent<Bullet>().SetStats(this.damage, transform.root.tag);
         
             Rigidbody brb = newBullet.GetComponent<Rigidbody>();
             brb.AddForce(newBullet.transform.forward.normalized * projectileSpeed * brb.mass + barrel.forward);

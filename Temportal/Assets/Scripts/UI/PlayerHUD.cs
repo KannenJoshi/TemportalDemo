@@ -33,19 +33,22 @@ public class PlayerHUD : MonoBehaviour
 
     private float reloadTime;
 
-    private GameObject primaryGun;
-    private GameObject secondaryGun;
+    [SerializeField] private GameObject primaryGun;
+    [SerializeField] private GameObject secondaryGun;
+    //[SerializeField] private GameObject player;
 
-    private void Awake()
+    private void Start()
     {
-        var portals = GameObject.FindGameObjectsWithTag("Portal");
-        leftPortal = portals[0].GetComponent<Portal>();
-        rightPortal = portals[1].GetComponent<Portal>();
+        //var portals = GameObject.FindGameObjectsWithTag("Portal");
+        //leftPortal = portals[0].GetComponent<Portal>();
+        //rightPortal = portals[1].GetComponent<Portal>();
+        leftPortal = GameObject.Find("LPortal").GetComponent<Portal>();
+        rightPortal = GameObject.Find("RPortal").GetComponent<Portal>();
 
-        var player = GameObject.FindGameObjectWithTag("Player");
-        var hand = player.transform.GetChild(1).GetChild(0);
+        //var player = GameObject.FindGameObjectWithTag("Player");
+        /*Transform hand = player.transform.GetChild(1).GetChild(0);
         primaryGun = hand.GetChild(0).gameObject;
-        secondaryGun = hand.GetChild(1).gameObject;
+        secondaryGun = hand.GetChild(1).gameObject;*/
     }
 
     private void Update()

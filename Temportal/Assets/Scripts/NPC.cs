@@ -39,7 +39,8 @@ public abstract class NPC : Entity
     [SerializeField] private bool _canSeeTarget;
     [SerializeField] private bool _canAttackTarget;
     [SerializeField] private bool _trackingTarget;
-
+    private CapsuleCollider targetCollider;
+    
     [Header("Behaviour")]
     [SerializeField] private float idleRotate = 5.0f;
     [SerializeField] private List<Transform> patrolTransforms;
@@ -49,57 +50,56 @@ public abstract class NPC : Entity
     private Vector3 _currentPatrolPoint;
 
     [Header("Weapons")]
-    [SerializeField] private float weaponOffsetDelay;
     private float _lastWeaponShotTime;
     private int _lastWeaponShotIndex;
+    
+    [SerializeField] private List<Firearm> weapons;
 
     [Header("Game")]
     [SerializeField] private int scoreForKilling;
     
     
     private NavMeshAgent agent;
-    private List<Firearm> weapons;
     private float fireDelay = 0.0f;
     private List<Quaternion> defaultWeaponRotations;
     
     protected override void Awake()
     {
         base.Awake();
+        
+        currentState = previousState = initialState;
         agent = GetComponent<NavMeshAgent>();
         
         patrolPoints = new List<Vector3>();
-    }
-
-    void Start()
-    {
-        currentState = previousState = initialState;
         
-        target = target == null ? GameObject.FindGameObjectWithTag("Player") : target;
-        weapons = GetComponentsInChildren<Firearm>().ToList();
-        defaultWeaponRotations = new List<Quaternion>(weapons.Count);
-
+        //Debug.LogError(GameObject.FindGameObjectWithTag("Player"));
+        Debug.LogError(target);
+        Debug.LogError(Player.Instance);
+        //target = target == null ? GameObject.FindGameObjectWithTag("Player") : target;
+        target = target == null ? Player.Instance : target;
+        
+        Debug.LogError(target);
+        
+        
+        targetCollider = target.GetComponent<CapsuleCollider>();
+        //weapons = GetComponentsInChildren<Firearm>().ToList();
+        defaultWeaponRotations = new List<Quaternion>();
+        
         // Calculate Weapon fire offset
-        if (weaponOffsetDelay > 0f)
+        foreach (var weapon in weapons)
         {
-            fireDelay = weaponOffsetDelay;
+            fireDelay += weapon.FireDelay;
+            defaultWeaponRotations.Add(weapon.transform.rotation);
         }
-        else
-        {
-            foreach (var weapon in weapons)
-            {
-                fireDelay += weapon.FireDelay;
-                defaultWeaponRotations.Add(weapon.transform.rotation);
-            }
-            fireDelay /= weapons.Count;
-        }
+        fireDelay /= weapons.Count;
 
         // If given Transforms initially, convert to patrol points
         if (patrolTransforms.Count > 0)
         {
             patrolTransforms.ForEach(e => patrolPoints.Add(e.position));
         }
-        
     }
+    
 
     public void SetPatrolPoints(List<Vector3> patrolList)
     {
@@ -164,11 +164,12 @@ public abstract class NPC : Entity
 
     private void ScanForTarget()
     {
-        var targetCollider = target.GetComponent<CapsuleCollider>();
         // Distance and Direction to Previous Position
         var distance = Vector3.Distance(transform.position, target.transform.position);
         var direction = transform.forward;
-        var directionToPlayer = (target.transform.position + targetCollider.center - transform.position).normalized;
+        Debug.LogError(target);
+        var directionToPlayer = ((target.transform.position + targetCollider.center) - transform.position).normalized;
+        Debug.LogError(directionToPlayer);
 
         _canSeeTarget = false;
         _canAttackTarget = false;
@@ -229,10 +230,10 @@ public abstract class NPC : Entity
 
     protected virtual void Chase()
     {
-        for(int i = 0; i < weapons.Count; i++)
+        /*for(int i = 0; i < weapons.Count; i++)
         {
             weapons[i].transform.localRotation = defaultWeaponRotations[i];
-        }
+        }*/
         ChangeState(AIState.CHASE);
     }
 
