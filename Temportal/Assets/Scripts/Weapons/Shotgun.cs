@@ -28,7 +28,7 @@ public class Shotgun : Firearm
             for (int i = 0; i < bulletsPerClick; i++)
             {
                 // TODO: Create Bullet(Vector3 origin, Quaternion direction, int speed, int maxRange): Needs collider, die on collision with any surface, die when past range
-                var a = 1;
+                //var a = 1;
             }
         }
         

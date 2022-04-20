@@ -36,14 +36,18 @@ namespace Weapons
         void Awake()
         {
             holder = transform.root.gameObject.GetComponent<Rigidbody>();
+            
+            _timeBetweenShots = 1 / fireRate;
         }
     
         void Start()
         {
-            _timeBetweenShots = 1 / fireRate;
             ammoCount = magazineSize;
 
-            hud = GameObject.Find("HUD").GetComponent<PlayerHUD>();
+            if (transform.root.CompareTag("Player"))
+            {
+                hud = GameObject.Find("HUD").GetComponent<PlayerHUD>();
+            }
         }
 
         // Update is called once per frame
@@ -94,7 +98,7 @@ namespace Weapons
         {
             // TODO: NEED TO CHECK ???
             IsReloading = true;
-            hud.ShowReload(ReloadTime);
+            if (transform.root.CompareTag("Player")) hud.ShowReload(ReloadTime);
             StartCoroutine(ReloadDelay());
         }
 
@@ -136,7 +140,7 @@ namespace Weapons
 
         protected IEnumerator ReloadDelay()
         {
-            yield return new WaitForSeconds(reloadTime);
+            yield return new WaitForSecondsRealtime(reloadTime);
             ammoCount = magazineSize;
             IsReloading = false;
         }
