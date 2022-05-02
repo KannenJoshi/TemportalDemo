@@ -167,15 +167,15 @@ public abstract class NPC : Entity
         // Distance and Direction to Previous Position
         var distance = Vector3.Distance(transform.position, target.transform.position);
         var direction = transform.forward;
-        var directionToPlayer = ((target.transform.position + targetCollider.center) - transform.position).normalized;
+        var directionToTarget = ((target.transform.position + targetCollider.center) - transform.position).normalized;
 
         _canSeeTarget = false;
         _canAttackTarget = false;
 
         // If out of sight range or not within the angle
-        if (distance <= sightRange && Vector3.Angle(transform.forward, directionToPlayer) <= sightAngle / 2)
+        if (distance <= sightRange && Vector3.Angle(transform.forward, directionToTarget) <= sightAngle / 2)
         {
-            direction = directionToPlayer;
+            direction = directionToTarget;
         }
 
         Debug.DrawRay(head.position, direction*sightRange, Color.green, thinkRate);
