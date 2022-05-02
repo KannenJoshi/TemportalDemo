@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent (typeof (Rigidbody))]
-public abstract class PortalTraveller : MonoBehaviour
+public class PortalTraveller : MonoBehaviour
 {
     [SerializeField] public Rigidbody rb;
     [field: SerializeField] public Transform TeleportThresholdTransform { get; private set; }
