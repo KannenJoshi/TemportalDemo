@@ -5,19 +5,19 @@ namespace UI
 {
     public class ControlsMenu : MonoBehaviour
     {
-        [SerializeField] private GameObject controlsScreen;
+        [SerializeField] private static GameObject controlsScreen;
 
         private void Awake()
         {
             controlsScreen = transform.GetChild(0).gameObject;
         }
 
-        public void OpenMenu()
+        public static void OpenMenu()
         {
             controlsScreen.SetActive(true);
         }
         
-        public void CloseMenu()
+        public static void CloseMenu()
         {
             controlsScreen.SetActive(false);
         }

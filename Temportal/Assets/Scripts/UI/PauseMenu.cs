@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
+using UI;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+    [SerializeField] private GameObject controlsScreen;
     private static bool _isPaused;
 
     public static bool IsPaused
@@ -70,6 +72,8 @@ public class PauseMenu : MonoBehaviour
     {
         _isPaused = false;
         Time.timeScale = _oldTimeScale;
+        
+        ControlsMenu.CloseMenu();
                 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
