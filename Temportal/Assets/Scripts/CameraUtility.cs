@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem.Interactions;
 
 // https://github.com/SebLague/Portals/tree/53ff52abc836837eb248ffce980345fa645d817f/Assets/Scripts/Core
 public static class CameraUtility {
@@ -23,7 +24,7 @@ public static class CameraUtility {
 
         var near = GetScreenRectFromBounds (nearObject, camera);
         var far = GetScreenRectFromBounds (farObject, camera);
-
+        
         // ensure far object is indeed further away than near object
         if (far.zMax > near.zMin) {
             // Doesn't overlap on x axis
@@ -35,8 +36,10 @@ public static class CameraUtility {
                 return false;
             }
             // Overlaps
+            Debug.Log("Overlaps");
             return true;
         }
+
         return false;
     }
 

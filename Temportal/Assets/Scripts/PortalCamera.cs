@@ -47,36 +47,46 @@ public class PortalCamera : MonoBehaviour
     void RenderPortal(ScriptableRenderContext SRC, int id, RenderTexture tempTex)
     {
         //if (CameraUtility.VisibleFromCamera(portals[id].Renderer, mainCamera))
-        if (portals[id].Renderer.isVisible)
-        {
-            portalCamera.targetTexture = tempTex;
-            portals[1-id].Renderer.material.SetInt(DisplayMask, 0);
+        if (!portals[id].Renderer.isVisible) return;
+        
+        portalCamera.targetTexture = tempTex;
+        portals[1-id].Renderer.material.SetInt(DisplayMask, 0);
+
+        /*int limit = !CameraUtility.VisibleFromCamera(portals[1-id].Renderer, portalCamera)
+                ? recursions - 1
+                : 0;*/
+
+        portals[id].Renderer.enabled = false;
+        portals[id].Renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+        portals[1-id].Renderer.material.SetTexture(MainTex, tempTex);
             
-            for (var i = recursions - 1; i >= 0; --i)
-            {
-                //portals[id].Renderer.enabled = false; 
-                portals[id].Renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
-                portals[1-id].Renderer.material.SetTexture(MainTex, tempTex);
+        for (var i = recursions - 1; i >= 0; --i)
+        {
+            portalCamera.transform.position = transform.position;
+            portalCamera.transform.rotation = transform.rotation;
                 
-                portalCamera.transform.position = transform.position;
-                portalCamera.transform.rotation = transform.rotation;
+            var clipPlaneCameraSpace = portals[1-id].Render(i, portalCamera, SRC);
+            // If no need to use recursion then skip this iteration;
+            if (clipPlaneCameraSpace.Equals(Vector4.zero)) continue;
                 
-                var clipPlaneCameraSpace = portals[1-id].Render(i, portalCamera, SRC);
-                // If no need to use recursion then skip this iteration;
-                if (clipPlaneCameraSpace.Equals(Vector4.zero)) continue;
+            var newMatrix = mainCamera.CalculateObliqueMatrix(clipPlaneCameraSpace);
+            portalCamera.projectionMatrix = newMatrix;
                 
-                var newMatrix = mainCamera.CalculateObliqueMatrix(clipPlaneCameraSpace);
-                portalCamera.projectionMatrix = newMatrix;
+            if (i > 0 && !CameraUtility.BoundsOverlap (portals[id].ScreenMeshFilter, portals[1-id].ScreenMeshFilter, portalCamera)) continue;
 
-                // Render the camera to its render target.
-                UniversalRenderPipeline.RenderSingleCamera(SRC, portalCamera);
+            //if (i > 0 && !CameraUtility.BoundsOverlap (portals[id].ScreenMeshFilter, portals[1-id].ScreenMeshFilter, portalCamera)) continue;
+            //if (i > 0 && !CameraUtility.VisibleFromCamera(portals[1-id].Renderer, portalCamera)) continue;
                 
-                portals[1-id].Renderer.material.SetInt(DisplayMask, 1);
+            // Render the camera to its render target.
+            UniversalRenderPipeline.RenderSingleCamera(SRC, portalCamera);
+                
+            portals[1-id].Renderer.material.SetInt(DisplayMask, 1);
 
-                //portals[id].Renderer.enabled = true;
-                portals[id].Renderer.shadowCastingMode = ShadowCastingMode.On;
-            }
+            //
+                
         }
+        portals[id].Renderer.enabled = true;
+        portals[id].Renderer.shadowCastingMode = ShadowCastingMode.On;
     }
 
     // Update is called once per frame
