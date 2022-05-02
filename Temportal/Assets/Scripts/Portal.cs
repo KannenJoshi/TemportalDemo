@@ -15,7 +15,7 @@ public class Portal : MonoBehaviour
     [field: SerializeField] public Portal OtherPortal { get; private set; }
     [field: SerializeField] public PortalWall Wall { get; set; }
     public Renderer Renderer { get; private set; }
-    private MeshFilter ScreenMeshFilter { get; set; }
+    public MeshFilter ScreenMeshFilter { get; private set; }
     private GameObject _clone;
     private List<PortalTraveller> _travellers = new List<PortalTraveller>();
 
@@ -69,7 +69,8 @@ public class Portal : MonoBehaviour
     public Vector4 Render(int iterationID, Camera portalCam, ScriptableRenderContext SRC)
     {
         // check if need and iterID bit I added
-        //if (iterationID != 0 && CameraUtility.BoundsOverlap(ScreenMeshFilter, OtherPortal.ScreenMeshFilter, portalCam)) return Vector4.zero;
+        //if (iterationID > 0 && !CameraUtility.BoundsOverlap(ScreenMeshFilter, OtherPortal.ScreenMeshFilter, portalCam)) return Vector4.zero;
+        //if (iterationID > 0 && !CameraUtility.VisibleFromCamera(OtherPortal.Renderer, portalCam)) return Vector4.zero;
 
         // Get Position of this iteration by applying transform repeatedly
         for (var i = 0; i <= iterationID; ++i)
