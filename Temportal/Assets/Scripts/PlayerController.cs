@@ -176,9 +176,12 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(transform.position + 0.1f*transform.forward, Vector3.down, out RaycastHit slope,
                 capsuleCollider.center.y + .5f))
         {
-            if (slope.normal != Vector3.up)
+            float angle = Vector3.Angle(slope.normal, Vector3.up);
+            if (!Mathf.Approximately(Mathf.Abs(angle), 0f))
             {
                 moveDir = Vector3.ProjectOnPlane(moveDir, slope.normal);
+                // Adjust speed to match walking
+                moveDir *= 1 / Mathf.Cos(Mathf.Deg2Rad * angle);
             }
         }
         
