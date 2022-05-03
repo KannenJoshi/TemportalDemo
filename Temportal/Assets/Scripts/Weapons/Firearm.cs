@@ -124,7 +124,7 @@ namespace Weapons
             newBullet.GetComponent<Bullet>().SetStats(this.damage, transform.root.tag);
         
             Rigidbody brb = newBullet.GetComponent<Rigidbody>();
-            brb.AddForce(newBullet.transform.forward.normalized * projectileSpeed * brb.mass + barrel.forward);
+            brb.AddForce(newBullet.transform.forward.normalized * projectileSpeed * brb.mass / Time.timeScale + barrel.forward);
         
             Destroy(newBullet, timeToLive);
         }
