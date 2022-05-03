@@ -35,8 +35,6 @@ public static class CameraUtility {
             if (far.yMax < near.yMin || far.yMin > near.yMax) {
                 return false;
             }
-            // Overlaps
-            Debug.Log("Overlaps");
             return true;
         }
 
