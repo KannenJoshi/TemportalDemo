@@ -28,15 +28,23 @@ public class TimeManager : MonoBehaviour
         var dTS = 0.0f;
         if (isBulletTime)
         {
+            if (Time.fixedDeltaTime > bulletTimeScale * _fixedDT)
+            {
+                Time.fixedDeltaTime = bulletTimeScale * _fixedDT;
+            }
             dTS -= (1f / enterTime) * Time.unscaledDeltaTime;
         }
         else
         {
+            if (Time.fixedDeltaTime < _fixedDT)
+            {
+                Time.fixedDeltaTime = _fixedDT;
+            }
             dTS += (1f / exitTime) * Time.unscaledDeltaTime;
         }
 
         Time.timeScale = Mathf.Clamp(Time.timeScale + dTS, bulletTimeScale, 1f);
-        Time.fixedDeltaTime = Time.timeScale * _fixedDT;
+        //Time.fixedDeltaTime = Time.timeScale * _fixedDT;
     }
     
     public static void SetBulletTime(bool on)
