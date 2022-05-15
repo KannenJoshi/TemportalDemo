@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -32,10 +33,14 @@ public abstract class Entity : PortalTraveller
     {
         if (hp <= 0) Die();
 
-        CorrectRotation();
         UpdateBehaviour();
         
         Heal();
+    }
+
+    private void FixedUpdate()
+    {
+        CorrectRotation();
     }
 
     public void ApplyDamage(int damage)
