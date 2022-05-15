@@ -106,6 +106,8 @@ public abstract class Entity : PortalTraveller
     
     protected virtual void Heal()
     {
+        if (PauseMenu.IsPaused || GameOverMenu.IsGameOver) return;
+        
         if (regenerate && hp < hpMax && Time.time > _lastHit + healAfterDamageDelay)
         {
             hp += healAmount * Time.deltaTime;
