@@ -29,7 +29,7 @@ namespace Weapons
         [SerializeField] protected int ammoCount;
 
         private float _timeBetweenShots;
-        // TODO: Set bullet prefab to be default here
+        private float _lastShotTime;
 
         private PlayerHUD hud;
 
@@ -62,6 +62,17 @@ namespace Weapons
             // AIMING
             if (IsAiming) _timeBetweenShots = 1 / adsFireRate;
             else _timeBetweenShots = 1 / fireRate;
+            
+            // BETWEEN SHOTS
+            if (!IsReloading && !IsReady)
+            {
+                _lastShotTime += Time.unscaledDeltaTime;
+                if (_lastShotTime > _timeBetweenShots)
+                {
+                    IsReady = true;
+                    _lastShotTime = 0f;
+                }
+            } 
 
             // SHOOTING
             if (IsShooting && !IsReloading)
@@ -114,7 +125,7 @@ namespace Weapons
             // TODO: NEED TO CHECK ???
             IsReady = false;
             // DONT DO COROUTINE
-            StartCoroutine(StaggerShots());
+            //StartCoroutine(StaggerShots());
         }
 
         protected virtual void CreateProjectile()
