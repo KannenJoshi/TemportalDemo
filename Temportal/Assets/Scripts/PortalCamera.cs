@@ -56,12 +56,14 @@ public class PortalCamera : MonoBehaviour
                 ? recursions - 1
                 : 0;*/
 
-        portals[id].Renderer.enabled = false;
+        //portals[id].Renderer.enabled = false;
         portals[id].Renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
-        portals[1-id].Renderer.material.SetTexture(MainTex, tempTex);
+        
             
         for (var i = recursions - 1; i >= 0; --i)
         {
+            portals[1-id].Renderer.material.SetTexture(MainTex, tempTex);
+            
             portalCamera.transform.position = transform.position;
             portalCamera.transform.rotation = transform.rotation;
                 
@@ -72,7 +74,7 @@ public class PortalCamera : MonoBehaviour
             var newMatrix = mainCamera.CalculateObliqueMatrix(clipPlaneCameraSpace);
             portalCamera.projectionMatrix = newMatrix;
                 
-            if (i > 0 && !CameraUtility.BoundsOverlap (portals[id].ScreenMeshFilter, portals[1-id].ScreenMeshFilter, portalCamera)) continue;
+            //if (i > 0 && !CameraUtility.BoundsOverlap (portals[id].ScreenMeshFilter, portals[1-id].ScreenMeshFilter, portalCamera)) continue;
 
             //if (i > 0 && !CameraUtility.BoundsOverlap (portals[id].ScreenMeshFilter, portals[1-id].ScreenMeshFilter, portalCamera)) continue;
             //if (i > 0 && !CameraUtility.VisibleFromCamera(portals[1-id].Renderer, portalCamera)) continue;
@@ -85,7 +87,7 @@ public class PortalCamera : MonoBehaviour
             //
                 
         }
-        portals[id].Renderer.enabled = true;
+        //portals[id].Renderer.enabled = true;
         portals[id].Renderer.shadowCastingMode = ShadowCastingMode.On;
     }
 
