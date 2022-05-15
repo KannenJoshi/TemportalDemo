@@ -10,7 +10,7 @@ public class ScoreCounter : MonoBehaviour
     [SerializeField] private float scoreIncrementDelay = 1f;
     [SerializeField] private int scoreIncrementAmount = 1;
     
-    //https://answers.unity.com/questions/1534931/how-to-increase-value-of-for-example-gold-every-se.html
+    //Adapted https://answers.unity.com/questions/1534931/how-to-increase-value-of-for-example-gold-every-se.html
     private float _timer;
     
     private void Awake()

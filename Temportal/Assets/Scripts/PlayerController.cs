@@ -129,6 +129,7 @@ public class PlayerController : MonoBehaviour
         if (context.performed)
         {
             PauseMenu.IsPaused = !PauseMenu.IsPaused;
+            // Moved to Time Manager
             /*if (IsStopped())
             {
                 _oldTimeScale = Time.timeScale;
