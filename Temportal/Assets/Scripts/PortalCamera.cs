@@ -47,7 +47,7 @@ public class PortalCamera : MonoBehaviour
     void RenderPortal(ScriptableRenderContext SRC, int id, RenderTexture tempTex)
     {
         //if (CameraUtility.VisibleFromCamera(portals[id].Renderer, mainCamera))
-        if (!portals[id].Renderer.isVisible) return;
+        if (!portals[id].Renderer.isVisible && !CameraUtility.VisibleFromCamera(portals[id].Renderer, Camera.main)) return;
         
         portalCamera.targetTexture = tempTex;
         portals[1-id].Renderer.material.SetInt(DisplayMask, 0);
@@ -58,7 +58,6 @@ public class PortalCamera : MonoBehaviour
 
         //portals[id].Renderer.enabled = false;
         portals[id].Renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
-        
             
         for (var i = recursions - 1; i >= 0; --i)
         {
