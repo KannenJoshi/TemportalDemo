@@ -36,7 +36,7 @@ public class TimeManager : MonoBehaviour
         }
         else
         {
-            if (Time.fixedDeltaTime < _fixedDT)
+            if (Mathf.Approximately(Time.timeScale, 1f))
             {
                 Time.fixedDeltaTime = _fixedDT;
             }
